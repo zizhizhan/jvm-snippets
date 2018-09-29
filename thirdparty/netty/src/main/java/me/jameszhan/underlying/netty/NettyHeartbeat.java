@@ -1,4 +1,4 @@
-package me.jameszhan.samples.heartbeat;
+package me.jameszhan.underlying.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
