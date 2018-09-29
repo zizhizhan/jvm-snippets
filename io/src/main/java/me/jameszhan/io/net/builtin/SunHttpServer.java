@@ -17,9 +17,9 @@ import java.net.InetSocketAddress;
  *         Date: 16/3/10
  *         Time: AM12:43
  */
-public class WebServer {
+public class SunHttpServer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebServer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SunHttpServer.class);
 
     /**
      * curl -i http://127.0.0.1:7778/app/index.htm
@@ -30,6 +30,7 @@ public class WebServer {
     public static void main(String[] args) throws IOException {
         HttpServerProvider httpServerProvider = HttpServerProvider.provider();
         InetSocketAddress addr = new InetSocketAddress(7778);
+
         HttpServer httpServer = httpServerProvider.createHttpServer(addr, 1);
 
         httpServer.createContext("/app/", (exchange) -> {
