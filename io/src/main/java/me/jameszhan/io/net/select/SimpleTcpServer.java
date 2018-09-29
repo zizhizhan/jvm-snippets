@@ -1,4 +1,4 @@
-package me.jameszhan.net;
+package me.jameszhan.io.net.select;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -20,12 +20,12 @@ import java.util.Set;
  *         Date: 16/3/10
  *         Time: AM12:33
  */
-public class TcpServer {
+public class SimpleTcpServer {
 
     private Selector sel;
     private ServerSocketChannel ssc;
 
-    public TcpServer() {
+    public SimpleTcpServer() {
 
     }
 
@@ -114,7 +114,7 @@ public class TcpServer {
 
     public static void main(String[] args) {
         try {
-            new TcpServer().startup();
+            new SimpleTcpServer().startup();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

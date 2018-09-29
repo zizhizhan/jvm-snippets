@@ -1,4 +1,4 @@
-package me.jameszhan.net;
+package me.jameszhan.io.net.select;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +15,9 @@ import java.net.Socket;
  *         Date: 16/3/10
  *         Time: AM12:32
  */
-public class TcpClient {
+public class SimpleTcpClient {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(TcpClient.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(SimpleTcpClient.class);
 
     public static void main(String[] args) throws Exception {
         Socket socket = new Socket("localhost", 8868);
