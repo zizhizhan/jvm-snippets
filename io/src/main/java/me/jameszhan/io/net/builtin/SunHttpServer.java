@@ -24,7 +24,7 @@ public class SunHttpServer {
     /**
      * curl -i http://127.0.0.1:7778/app/index.htm
      *
-     * @param args
+     * @param args main arguments
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
