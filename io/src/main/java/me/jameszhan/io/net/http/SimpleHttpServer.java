@@ -1,4 +1,4 @@
-package me.jameszhan.dirty.http;
+package me.jameszhan.io.net.http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +25,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created with IntelliJ IDEA.
  *
  * @author zizhi.zhzzh
- *         Date: 16/3/9
- *         Time: PM11:35
+ * Date: 16/3/9
+ * Time: PM11:35
  */
-public class WebServer {
+public class SimpleHttpServer {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(WebServer.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(SimpleHttpServer.class);
 
     private String webroot;
     private int port;
@@ -39,8 +39,7 @@ public class WebServer {
 
     private Executor executor;
 
-    public WebServer() {
-
+    public SimpleHttpServer() {
         ResourceBundle bundle = ResourceBundle.getBundle("server", Locale.CHINESE);
 
         port = Integer.parseInt(bundle.getString("server.port"));
@@ -50,94 +49,86 @@ public class WebServer {
         executor = Executors.newFixedThreadPool(threads);
     }
 
-    public void startup() {
+    public void startup() throws IOException {
         if (started.compareAndSet(false, true)) {
             LOGGER.info("Server Information: ");
-            LOGGER.info("port : " + port);
-            LOGGER.info("max threads: " + threads);
-            LOGGER.info("webroot: " + webroot);
+            LOGGER.info("port: {}", port);
+            LOGGER.info("max threads: {}", threads);
+            LOGGER.info("webroot: {}", webroot);
 
-            ServerSocket server;
-            try {
-                server = new ServerSocket(port);
+            try (ServerSocket serverSocket = new ServerSocket(port)) {
                 while (started.get()) {
-                    Socket socket = server.accept();
-                    executor.execute(new Processor(socket));
+                    executor.execute(new Processor(serverSocket.accept(), webroot));
                 }
-            } catch (IOException ex) {
-                LOGGER.error(ex.getMessage());
             }
         }
     }
 
-    public void setExecutor(Executor executor) {
-        this.executor = executor;
-    }
+//    public void setExecutor(Executor executor) {
+//        this.executor = executor;
+//    }
 
-    public static void main(String[] args) {
-        WebServer server = new WebServer();
-        server.startup();
-    }
-
-    public class Processor implements Runnable {
+    private static class Processor implements Runnable {
         private Socket socket;
-        private InputStream in;
-        private PrintStream out;
+        private String webRoot;
 
-        public Processor(Socket socket) {
+        Processor(Socket socket, String webRoot) {
             this.socket = socket;
-            try {
-                this.in = this.socket.getInputStream();
-                this.out = new PrintStream(socket.getOutputStream());
+            this.webRoot = webRoot;
+        }
 
-                LOGGER.info("SocketAddress: {} => {}, InetAddress: {} => {}, Port: {} => {}, BufferSize Send: {}, " +
-                                "Received: {}, Linger: {}, Timeout: {}, trafficClass: {}",
-                        socket.getLocalSocketAddress(), socket.getRemoteSocketAddress(),
-                        socket.getLocalAddress(), socket.getInetAddress(),
-                        socket.getLocalPort(), socket.getPort(),
-                        socket.getSendBufferSize(),  socket.getReceiveBufferSize(),
-                        socket.getSoLinger(), socket.getSoTimeout(),
-                        socket.getTrafficClass());
+        @Override
+        public void run() {
+            try {
+                LOGGER.info("\nSocketAddress: {} => {} \nInetAddress: {} => {} \nPort: {} => {} \nBufferSize Send: {} \n"
+                                + "Received: {} \nLinger: {} \nTimeout: {} \ntrafficClass: {}",
+                    socket.getLocalSocketAddress(), socket.getRemoteSocketAddress(), socket.getLocalAddress(),
+                    socket.getInetAddress(), socket.getLocalPort(), socket.getPort(), socket.getSendBufferSize(),
+                    socket.getReceiveBufferSize(), socket.getSoLinger(), socket.getSoTimeout(), socket.getTrafficClass());
+
+                try (InputStream in = socket.getInputStream()) {
+                    String fileName = parseHttp(in);
+                    try (PrintStream out = new PrintStream(socket.getOutputStream())) {
+                        if (fileName != null) {
+                            sendFile(fileName, out);
+                        } else {
+                            sendErrorMessage(400, "Client query Error", out);
+                        }
+                    }
+                }
+
             } catch (IOException e) {
                 LOGGER.info("UnexpectedError: {}.", e.getMessage(), e);
             }
         }
 
-        @Override
-        public void run() {
-            String fileName = parseHttp(in);
-            sendFile(fileName);
-        }
-
-        public String parseHttp(InputStream in) {
+        String parseHttp(InputStream in) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String fileName = null;
             try {
                 String line = br.readLine();
+                LOGGER.info("Request: {}", line);
                 String[] content = line.split(" ");
                 if (content.length != 3) {
-                    sendErrorMessage(400, "Client query Error");
                     return null;
                 }
                 fileName = content[1];
-                LOGGER.info("Method: " + content[0] + "; fileName: "
-                        + content[1] + "; http version: " + content[2]);
-                while (!(line = br.readLine()).equals("") || line.equals(null)) {
-                    LOGGER.info(line);
+                LOGGER.info("Method: {}; fileName: {}; http version: {}", content[0], content[1], content[2]);
+                while ((line = br.readLine()) != null && !"".equalsIgnoreCase(line)) {
+                    LOGGER.info("-> {}", line);
                 }
             } catch (IOException ex) {
-                LOGGER.info(ex.getMessage());
+                LOGGER.info("Unexpected Error.", ex);
             }
-
             return fileName;
-
         }
 
-        public void sendFile(String fileName) {
-            File file = new File(webroot + fileName);
-
-            try {
-                InputStream in = new FileInputStream(file);
+        void sendFile(String fileName, PrintStream out) {
+            File file = new File(webRoot + fileName);
+            if (file.isDirectory()) {
+                file = new File(file, "index.html");
+            }
+            try (InputStream in = new FileInputStream(file)) {
                 byte[] content = new byte[(int) file.length()];
                 int size = in.read(content);
                 LOGGER.info("Read {} size: {}.", content, size);
@@ -149,17 +140,16 @@ public class WebServer {
                 out.write(content);
                 out.flush();
                 out.close();
-                in.close();
-
             } catch (FileNotFoundException ex) {
                 LOGGER.info(ex.getMessage());
-                sendErrorMessage(404, "File Not Found");
+                sendErrorMessage(404, String.format("%s Not Found", fileName), out);
             } catch (IOException ex) {
-                LOGGER.info(ex.getMessage());
+                LOGGER.info("Unexpected Error", ex);
+                sendErrorMessage(500, ex.getMessage(), out);
             }
         }
 
-        private void sendErrorMessage(int errCode, String errMsg) {
+        private void sendErrorMessage(int errCode, String errMsg, PrintStream out) {
             out.println("HTTP/1.1 " + errCode + " " + errMsg);
             out.println("content-type: text/html");
             out.println();
@@ -173,7 +163,6 @@ public class WebServer {
             out.println("</html>");
             out.flush();
             out.close();
-
         }
     }
 }
