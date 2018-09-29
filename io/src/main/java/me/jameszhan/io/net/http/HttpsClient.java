@@ -1,4 +1,4 @@
-package me.jameszhan.dirty.http;
+package me.jameszhan.io.net.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;

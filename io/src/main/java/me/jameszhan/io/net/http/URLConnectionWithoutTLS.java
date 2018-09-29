@@ -1,4 +1,4 @@
-package me.jameszhan.dirty.http;
+package me.jameszhan.io.net.http;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -13,7 +13,7 @@ import java.util.Map;
  *         Date: 16/3/9
  *         Time: PM11:27
  */
-public class HttpDownloads {
+public class URLConnectionWithoutTLS {
 
     public static void main(String[] args) {
 
