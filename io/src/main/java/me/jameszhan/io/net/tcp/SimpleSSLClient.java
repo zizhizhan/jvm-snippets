@@ -25,7 +25,6 @@ public class SimpleSSLClient {
         if (sslContext != null) {
             SSLSocketFactory factory = sslContext.getSocketFactory();
             try (SSLSocket socket = (SSLSocket) factory.createSocket("127.0.0.1", SimpleSSLServer.PORT)) {
-
                 LOGGER.info("{} start handshake ...", socket);
                 socket.startHandshake();
                 try (DataOutputStream out = new DataOutputStream(socket.getOutputStream())) {
