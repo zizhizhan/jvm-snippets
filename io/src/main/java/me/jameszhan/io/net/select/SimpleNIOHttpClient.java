@@ -83,6 +83,7 @@ public class SimpleNIOHttpClient {
                             if (length > 0) {
                                 LOGGER.info("Read Response Expect {} Actual {}.", buf.limit(), length);
                                 sb.append(new String(buf.array(), buf.position(), buf.limit(), UTF_8));
+                                buf.clear();
                             } else {
                                 break LOOP;
                             }

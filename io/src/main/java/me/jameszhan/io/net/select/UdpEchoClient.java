@@ -1,6 +1,10 @@
 package me.jameszhan.io.net.select;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -20,67 +24,68 @@ import java.util.Set;
  *         Date: 16/3/10
  *         Time: AM12:35
  */
-public class UdpEchoClient extends Thread{
+public class UdpEchoClient {
 
-    public void run(){
-        this.setName("client");
-        try{
-            DatagramChannel client = DatagramChannel.open();
-            client.configureBlocking(false);
-            client.connect(new InetSocketAddress("localhost", 6666));
+    private static final Logger LOGGER = LoggerFactory.getLogger(UdpEchoClient.class);
+    private static final Charset UTF_8 = Charset.forName("UTF-8");
 
-            Selector sel = Selector.open();
-            client.register(sel, SelectionKey.OP_READ, new Object());
-            client.write(Charset.defaultCharset().encode("Hello World"));
+    private String host;
+    private int port;
 
-            ByteBuffer buf = ByteBuffer.allocate(1024);
-
-            for(;;){
-                int op = sel.select();
-                switch(op){
-                    case -1:
-                        System.out.println("select error!");
-                        break;
-
-                    case 0:
-                        System.out.print("select timeout");
-                        break;
-
-                    default:
-                        Set<SelectionKey> keys = sel.selectedKeys();
-                        Iterator<SelectionKey> itor = keys.iterator();
-                        while(itor.hasNext()){
-                            SelectionKey key = itor.next();
-                            itor.remove();
-                            if(key.isReadable()){
-                                DatagramChannel channel = (DatagramChannel) key.channel();
-                                SocketAddress addr = channel.receive(buf);
-                                buf.flip();
-                                CharBuffer text = Charset.defaultCharset().decode(buf);
-                                String msg = text.toString();
-                                System.out.println("Receive msg: " + msg + " from " + addr.toString());
-                                buf.clear();
-
-                                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                                String line = br.readLine();
-                                ByteBuffer bb = Charset.defaultCharset().encode(line);
-                                channel.write(bb);
-                            }
-                            //if(key.isWritable()){
-                            //System.out.println("is writable");
-                            //}
-                        }
-                        break;
-                }
-            }
-
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
+    public UdpEchoClient(String host, int port) {
+        this.host = host;
+        this.port = port;
     }
 
-    public static void main(String[] args) {
-        new UdpEchoClient().start();
+    public void start() throws IOException  {
+        DatagramChannel datagramChannel = DatagramChannel.open();
+        datagramChannel.configureBlocking(false);
+        datagramChannel.connect(new InetSocketAddress(host, port));
+
+        Selector selector = Selector.open();
+        datagramChannel.register(selector, SelectionKey.OP_READ, new Object());
+
+        datagramChannel.write(UTF_8.encode("Initialize Message"));
+        ByteBuffer buf = ByteBuffer.allocate(1024);
+
+        LOOP:
+        for (;;) {
+            int op = selector.select();
+            switch (op) {
+                case -1:
+                    LOGGER.warn("Select Error for {}.", datagramChannel);
+                    break;
+                case 0:
+                    LOGGER.debug("Select Timeout for {}.", datagramChannel);
+                    break;
+                default:
+                    Set<SelectionKey> selectionKeys = selector.selectedKeys();
+                    Iterator<SelectionKey> iterator = selectionKeys.iterator();
+                    while(iterator.hasNext()){
+                        SelectionKey selectionKey = iterator.next();
+                        iterator.remove();
+                        if(selectionKey.isReadable()){
+                            DatagramChannel channel = (DatagramChannel) selectionKey.channel();
+                            SocketAddress address = channel.receive(buf);
+                            buf.flip();
+
+                            CharBuffer text = UTF_8.decode(buf);
+                            LOGGER.info("Received message {} from {}.", text, address);
+                            buf.clear();
+
+                            BufferedReader br = new BufferedReader(new InputStreamReader(System.in, UTF_8));
+                            String line = br.readLine();
+                            channel.write(UTF_8.encode(line));
+
+                            if ("quit".equalsIgnoreCase(line)) {
+                                break LOOP;
+                            }
+                        } else {
+                            LOGGER.warn("Unexpected SelectionKey: {}.", selectionKey);
+                        }
+                    }
+            }
+        }
     }
 
 }
