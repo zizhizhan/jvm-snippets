@@ -18,8 +18,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created with IntelliJ IDEA.
  *
  * @author zizhi.zhzzh
- *         Date: 16/3/10
- *         Time: AM12:18
+ * Date: 16/3/10
+ * Time: AM12:18
  */
 public class TcpEchoServer {
 
@@ -82,17 +82,16 @@ public class TcpEchoServer {
 
                             String text = IOUtils.readFully(buffer, socketChannel, true);
                             if (text != null) {
-                                socketChannel.write(ByteBuffer.wrap(text.getBytes(IOUtils.UTF_8)));
+                                socketChannel.register(selector, SelectionKey.OP_WRITE, text);
                             }
                         }
 
-
-//                        if(selectionKey.isWritable()){
-//                            System.out.println("writeable");
-//                            SocketChannel socket = (SocketChannel) selectionKey.channel();
-//                            socket.write(Charset.defaultCharset().encode("4566"));
-//                        }
-
+                        if (selectionKey.isWritable() && selectionKey.attachment() != null) {
+                            SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+                            String text = (String) selectionKey.attachment();
+                            selectionKey.attach(null);
+                            socketChannel.write(ByteBuffer.wrap(text.getBytes(IOUtils.UTF_8)));
+                        }
 
                         iterator.remove();
                     }
