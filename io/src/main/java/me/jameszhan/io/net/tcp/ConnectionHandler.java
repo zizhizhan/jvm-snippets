@@ -1,4 +1,4 @@
-package me.jameszhan.io.net.framework;
+package me.jameszhan.io.net.tcp;
 
 import me.jameszhan.io.net.select.IOUtils;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package me.jameszhan.io.net.framework;
+package me.jameszhan.io.net.tcp;
 
 import java.io.InputStream;
 import java.io.OutputStream;
