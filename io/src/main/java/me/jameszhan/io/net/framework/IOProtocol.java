@@ -10,7 +10,7 @@ import java.io.OutputStream;
  *         Date: 16/3/9
  *         Time: PM11:52
  */
-public interface ISimpleSocketServerProtocol {
+public interface IOProtocol {
 
     void handle(InputStream in, OutputStream out);
 
