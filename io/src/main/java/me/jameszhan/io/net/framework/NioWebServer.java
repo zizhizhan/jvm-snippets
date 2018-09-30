@@ -1,16 +1,18 @@
 package me.jameszhan.io.net.framework;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,124 +23,106 @@ import java.util.Set;
  */
 public class NioWebServer {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(NioWebServer.class);
+    private static final String DEFAULT_HOST = "0.0.0.0";
+
     private Selector selector;
+    private int port;
+    private AtomicBoolean running = new AtomicBoolean(false);
 
-    public void startup(SocketAddress localAddress) throws Exception {
-        selector = Selector.open();
-        // ServerSocketChannel handle =
-        open(localAddress);
-
-        for (;;) {
-            int selected = selector.select();
-            System.out.println("next loop!");
-
-            switch (selected) {
-                case -1:
-                    System.out.println("select error!");
-                    break;
-
-                case 0:
-                    System.out.print("select timeout");
-                    break;
-
-                default:
-                    Set<SelectionKey> keys = selector.selectedKeys();
-                    Iterator<SelectionKey> itor = keys.iterator();
-                    while (itor.hasNext()) {
-                        SelectionKey key = itor.next();
-                        if (key.isAcceptable()) {
-                            ServerSocketChannel ssc = (ServerSocketChannel) key
-                                    .channel();
-                            SocketChannel sc = ssc.accept();
-                            sc.configureBlocking(false);
-                            sc.register(selector, SelectionKey.OP_READ);
-                        }
-                        if (key.isReadable()) {
-                            SocketChannel socket = (SocketChannel) key.channel();
-
-                            final boolean hasFragmentation = true;
-                            ByteBuffer buf = ByteBuffer.allocate(8);
-                            int readBytes = 0;
-                            int ret;
-
-                            try {
-
-                                if (hasFragmentation) {
-                                    while ((ret = socket.read(buf)) > 0) {
-                                        readBytes += ret;
-                                        if (!buf.hasRemaining()) {
-                                            break;
-                                        }
-                                    }
-                                } else {
-                                    ret = socket.read(buf);
-                                    if (ret > 0) {
-                                        readBytes = ret;
-                                    }
-                                }
-                            } finally {
-                                buf.flip();
-                            }
-                            System.out.println(readBytes);
-                            if (readBytes > 0) {
-                                System.out.println(Charset.defaultCharset().decode(
-                                        buf));
-                                socket.write(buf);
-                            }
-                        }
-					/*
-					 * if(key.isWritable()){ System.out.println("writeable");
-					 * SocketChannel socket = (SocketChannel) key.channel();
-					 * socket.write(Charset.defaultCharset().encode("4566")); }
-					 */
-
-                        itor.remove();
-                    }
-                    break;
-            }
-        }
+    public NioWebServer(int port) {
+        this.port = port;
     }
 
-    protected ServerSocketChannel open(SocketAddress localAddress) throws Exception {
-        ServerSocketChannel channel = ServerSocketChannel.open();
-        boolean success = false;
+    public void startup() throws IOException {
+        initialize();
+        process();
+    }
+
+    private void initialize() {
         try {
-
-            channel.configureBlocking(false);
-            ServerSocket socket = channel.socket();
-            socket.setReuseAddress(true);
-
-            socket.bind(localAddress);
-
-            channel.register(selector, SelectionKey.OP_ACCEPT);
-            success = true;
-        } finally {
-            if (!success) {
-                close(channel);
+            this.selector = Selector.open();
+            initializeServerSocketChannel();
+            running.compareAndSet(false, true);
+        } catch (IOException e) {
+            LOGGER.info("Initialize Server with Unexpected Error.", e);
+            if (!running.get()) {
+                IOUtils.close(this.selector);
             }
         }
-        return channel;
     }
 
-    protected SocketChannel accept(ServerSocketChannel handle) throws Exception {
-        SelectionKey key = handle.keyFor(selector);
+    private void process() throws IOException {
+        while (running.get()) {
+            int readyOps = selector.select();
+            LOGGER.debug("Loop with readyOps {}.", readyOps);
+            switch (readyOps) {
+                case -1:
+                    LOGGER.warn("Select Error for {}.", selector.selectedKeys());
+                    break;
+                case 0:
+                    LOGGER.debug("Select Timeout for {}.", selector.selectedKeys());
+                    break;
+                default:
+                    Set<SelectionKey> selectionKeys = selector.selectedKeys();
+                    Iterator<SelectionKey> iterator = selectionKeys.iterator();
+                    while (iterator.hasNext()) {
+                        SelectionKey selectionKey = iterator.next();
 
-        if ((key == null) || (!key.isValid()) || (!key.isAcceptable())) {
-            return null;
+                        if (selectionKey.isAcceptable()) {
+                            ServerSocketChannel serverSocketChannel = (ServerSocketChannel) selectionKey.channel();
+                            SocketChannel socketChannel = serverSocketChannel.accept();
+                            socketChannel.configureBlocking(false);
+                            socketChannel.register(selector, SelectionKey.OP_READ);
+                        }
+
+                        if (selectionKey.isReadable()) {
+                            SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+                            ByteBuffer buffer = ByteBuffer.allocate(8192);
+
+                            String text = IOUtils.readFully(buffer, socketChannel, true);
+                            if (text != null) {
+                                socketChannel.write(ByteBuffer.wrap(text.getBytes(IOUtils.UTF_8)));
+                            }
+                        }
+
+
+//                        if(selectionKey.isWritable()){
+//                            System.out.println("writeable");
+//                            SocketChannel socket = (SocketChannel) selectionKey.channel();
+//                            socket.write(Charset.defaultCharset().encode("4566"));
+//                        }
+
+
+                        iterator.remove();
+                    }
+
+            }
         }
-
-        return handle.accept();
     }
 
-    protected void close(ServerSocketChannel handle) throws Exception {
-        SelectionKey key = handle.keyFor(selector);
-        if (key != null) {
-            key.cancel();
+    private void initializeServerSocketChannel() throws IOException {
+        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+        boolean initialized = false;
+        try {
+            serverSocketChannel.configureBlocking(false);
+            serverSocketChannel.socket().setReuseAddress(true);
+
+            serverSocketChannel.socket().bind(new InetSocketAddress(DEFAULT_HOST, port));
+            serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+            initialized = true;
+        } finally {
+            if (!initialized) {
+                SelectionKey selectionKey = serverSocketChannel.keyFor(selector);
+                if (selectionKey != null) {
+                    selectionKey.cancel();
+                }
+                serverSocketChannel.close();
+            }
         }
-        handle.close();
     }
 
     public static void main(String[] args) throws Exception {
-        new NioWebServer().startup(new InetSocketAddress("localhost", 8888));
+        new NioWebServer(8888).startup();
     }
 }
