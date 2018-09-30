@@ -1,4 +1,4 @@
-package me.jameszhan.dirty.http;
+package me.jameszhan.io.net.select;
 
 
 import java.io.IOException;
