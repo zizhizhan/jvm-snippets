@@ -18,7 +18,7 @@ import java.util.Set;
  *         Date: 16/3/10
  *         Time: AM12:20
  */
-public class HelloClient {
+public class TcpEchoClient {
 
     public static void main(String[] args) throws IOException {
         Selector selector = Selector.open();
