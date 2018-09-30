@@ -48,7 +48,6 @@ public class UdpEchoServer {
 
         LOOP:
         for (; ;) {
-            LOGGER.info("----------------------------");
             int op = selector.select();
             switch (op) {
                 case -1:

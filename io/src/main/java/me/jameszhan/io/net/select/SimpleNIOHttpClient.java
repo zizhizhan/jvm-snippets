@@ -65,7 +65,7 @@ public class SimpleNIOHttpClient {
                     Iterator<SelectionKey> iterator = keys.iterator();
                     while (iterator.hasNext()) {
                         selectionKey = iterator.next();
-                        LOGGER.info("Current SelectionKey: {}", buildSelectionKeyInfo(selectionKey));
+                        LOGGER.info("Current SelectionKey: {}", SimpleTcpServer.buildSelectionKeyInfo(selectionKey));
 
                         if (selectionKey.isWritable()) {
                             SelectableChannel selectableChannel = selectionKey.channel();
@@ -92,19 +92,6 @@ public class SimpleNIOHttpClient {
                     }
             }
         }
-        return sb.toString();
-    }
-
-    private static String buildSelectionKeyInfo(SelectionKey sk) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n").append("InterestOps: ").append("\t").append(sk.interestOps());
-        sb.append("\n").append("ReadyOps: ").append("\t").append(sk.readyOps());
-        sb.append("\n").append("Valid: ").append("\t").append(sk.isValid());
-        sb.append("\n").append("Acceptable: ").append("\t").append(sk.isAcceptable());
-        sb.append("\n").append("Connectable: ").append("\t").append(sk.isConnectable());
-        sb.append("\n").append("Writable: ").append("\t").append(sk.isWritable());
-        sb.append("\n").append("Readable: ").append("\t").append(sk.isReadable());
-        sb.append("\n").append("Attachment: ").append("\t").append(sk.attachment()).append("\n");
         return sb.toString();
     }
 }
