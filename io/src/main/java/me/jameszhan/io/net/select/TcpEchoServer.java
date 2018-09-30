@@ -21,16 +21,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *         Date: 16/3/10
  *         Time: AM12:18
  */
-public class NioWebServer {
+public class TcpEchoServer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NioWebServer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TcpEchoServer.class);
     private static final String DEFAULT_HOST = "0.0.0.0";
 
     private Selector selector;
     private int port;
     private AtomicBoolean running = new AtomicBoolean(false);
 
-    public NioWebServer(int port) {
+    public TcpEchoServer(int port) {
         this.port = port;
     }
 
@@ -123,6 +123,6 @@ public class NioWebServer {
     }
 
     public static void main(String[] args) throws Exception {
-        new NioWebServer(8888).startup();
+        new TcpEchoServer(8888).startup();
     }
 }
