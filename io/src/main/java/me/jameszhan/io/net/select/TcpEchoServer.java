@@ -11,6 +11,8 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -32,6 +34,17 @@ public class TcpEchoServer {
 
     public TcpEchoServer(int port) {
         this.port = port;
+    }
+
+    public void start() throws IOException {
+        initialize();
+        new Thread(() -> {
+            try {
+                process();
+            } catch (IOException e) {
+                LOGGER.info("Unexpected process error.", e);
+            }
+        }).start();
     }
 
     public void startup() throws IOException {
@@ -73,7 +86,8 @@ public class TcpEchoServer {
                             ServerSocketChannel serverSocketChannel = (ServerSocketChannel) selectionKey.channel();
                             SocketChannel socketChannel = serverSocketChannel.accept();
                             socketChannel.configureBlocking(false);
-                            socketChannel.register(selector, SelectionKey.OP_READ);
+                            socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE,
+                                    new LinkedList<String>());
                         }
 
                         if (selectionKey.isReadable()) {
@@ -82,15 +96,22 @@ public class TcpEchoServer {
 
                             String text = IOUtils.readFully(buffer, socketChannel, true);
                             if (text != null) {
-                                socketChannel.register(selector, SelectionKey.OP_WRITE, text);
+                                Queue<String> queue = (Queue<String>) selectionKey.attachment();
+                                queue.offer(text);
                             }
                         }
 
-                        if (selectionKey.isWritable() && selectionKey.attachment() != null) {
+                        if (selectionKey.isWritable()) {
+                            Queue<String> queue = (Queue<String>)selectionKey.attachment();
                             SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
-                            String text = (String) selectionKey.attachment();
-                            selectionKey.attach(null);
-                            socketChannel.write(ByteBuffer.wrap(text.getBytes(IOUtils.UTF_8)));
+                            String text ;
+                            while ((text = queue.poll()) != null) {
+                                socketChannel.write(ByteBuffer.wrap(text.getBytes(IOUtils.UTF_8)));
+                                if ("exit".equalsIgnoreCase(text)) {
+                                    LOGGER.info("Server ready to shutdown");
+                                    running.compareAndSet(true, false);
+                                }
+                            }
                         }
 
                         iterator.remove();
@@ -121,7 +142,4 @@ public class TcpEchoServer {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        new TcpEchoServer(8888).startup();
-    }
 }

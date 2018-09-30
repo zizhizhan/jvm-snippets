@@ -1,15 +1,19 @@
 package me.jameszhan.io.net.select;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,88 +24,85 @@ import java.util.Set;
  */
 public class TcpEchoClient {
 
-    public static void main(String[] args) throws IOException {
-        Selector selector = Selector.open();
-        SocketChannel channel = SocketChannel.open();
-        channel.connect(new InetSocketAddress("localhost", 8888));
-        channel.configureBlocking(false);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TcpEchoClient.class);
 
+    private Selector selector;
+    private String host;
+    private int port;
+    private AtomicBoolean running;
 
-        channel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+    public TcpEchoClient(String host, int port) {
+        this.host = host;
+        this.port = port;
+        this.running = new AtomicBoolean();
+    }
 
+    public void start() throws IOException {
+        initialize();
+        process();
+    }
 
-        for(;;){
-            int selected = selector.select();
-
-            System.out.println(selected);
-
-
-            switch (selected) {
-                case -1:
-                    System.out.println("select error!");
-                    break;
-
-                case 0:
-                    System.out.print("select timeout");
-                    break;
-
-                default:
-                    Set<SelectionKey> keys = selector.selectedKeys();
-                    Iterator<SelectionKey> itor = keys.iterator();
-                    while (itor.hasNext()) {
-                        SelectionKey key = itor.next();
-                        if (key.isAcceptable()) {
-                            ServerSocketChannel ssc = (ServerSocketChannel) key
-                                    .channel();
-                            SocketChannel sc = ssc.accept();
-                            sc.configureBlocking(false);
-                            sc.register(selector, SelectionKey.OP_READ);
-                        }
-                        if (key.isReadable()) {
-                            SocketChannel socket = (SocketChannel) key.channel();
-
-                            final boolean hasFragmentation = true;
-                            ByteBuffer buf = ByteBuffer.allocate(8);
-                            int readBytes = 0;
-                            int ret;
-
-                            try {
-
-                                if (hasFragmentation) {
-                                    while ((ret = socket.read(buf)) > 0) {
-                                        readBytes += ret;
-                                        if (!buf.hasRemaining()) {
-                                            break;
-                                        }
-                                    }
-                                } else {
-                                    ret = socket.read(buf);
-                                    if (ret > 0) {
-                                        readBytes = ret;
-                                    }
-                                }
-                            } finally {
-                                buf.flip();
-                            }
-                            System.out.println(readBytes);
-                            if (readBytes > 0) {
-                                System.out.println(Charset.defaultCharset().decode(
-                                        buf));
-                                socket.write(buf);
-                            }
-                        }
-                        if (key.isWritable()) {
-                            System.out.println("writeable");
-                            channel.write(Charset.defaultCharset().encode(
-                                    "HelloWorld!"));
-                        }
-                        itor.remove();
-                    }
-                    break;
+    private void initialize() {
+        try {
+            this.selector = Selector.open();
+            SocketChannel socketChannel = SocketChannel.open();
+            socketChannel.connect(new InetSocketAddress(host, port));
+            socketChannel.configureBlocking(false);
+            socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+            running.compareAndSet(false, true);
+        } catch (IOException e) {
+            LOGGER.info("Initialize Client with Unexpected Error.", e);
+            if (!running.get()) {
+                IOUtils.close(this.selector);
             }
         }
+    }
 
+    private void process() throws IOException {
+        while (running.get()) {
+            int readyOps = selector.select();
+            LOGGER.debug("Loop with readyOps {}.", readyOps);
+            switch (readyOps) {
+                case -1:
+                    LOGGER.warn("Select Error for {}.", selector.selectedKeys());
+                    break;
+                case 0:
+                    LOGGER.debug("Select Timeout for {}.", selector.selectedKeys());
+                    break;
+                default:
+                    Set<SelectionKey> selectionKeys = selector.selectedKeys();
+                    Iterator<SelectionKey> iterator = selectionKeys.iterator();
+                    while (iterator.hasNext()) {
+                        SelectionKey selectionKey = iterator.next();
 
+                        if (selectionKey.isReadable()) {
+                            SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+                            ByteBuffer buffer = ByteBuffer.allocate(8192);
+
+                            String text = IOUtils.readFully(buffer, socketChannel, true);
+                            if (text != null) {
+                                LOGGER.info("Server Echo: {}", text);
+                            }
+                        }
+
+                        if (selectionKey.isWritable()) {
+                            SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in, IOUtils.UTF_8));
+                            String line = reader.readLine();
+
+                            socketChannel.write(IOUtils.UTF_8.encode(line));
+                            socketChannel.finishConnect();
+                            if ("exit".equalsIgnoreCase(line)) {
+                                LOGGER.info("Client ready to shutdown");
+                                running.compareAndSet(true, false);
+                            }
+                        }
+
+                        iterator.remove();
+                    }
+
+            }
+        }
     }
 
 }
