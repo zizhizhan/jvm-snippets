@@ -1,4 +1,4 @@
-package me.jameszhan.dirty.http;
+package me.jameszhan.io.net.framework;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
