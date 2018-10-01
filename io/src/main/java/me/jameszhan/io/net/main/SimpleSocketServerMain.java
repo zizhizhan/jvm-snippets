@@ -1,7 +1,6 @@
 package me.jameszhan.io.net.main;
 
-import com.google.common.io.ByteStreams;
-import me.jameszhan.io.net.select.IOUtils;
+import me.jameszhan.io.util.IOUtils;
 import me.jameszhan.io.net.tcp.SimpleSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

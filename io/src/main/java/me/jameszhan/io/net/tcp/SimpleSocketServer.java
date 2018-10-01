@@ -1,6 +1,6 @@
 package me.jameszhan.io.net.tcp;
 
-import me.jameszhan.io.net.select.IOUtils;
+import me.jameszhan.io.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
