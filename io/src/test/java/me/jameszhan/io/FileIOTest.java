@@ -1,5 +1,7 @@
 package me.jameszhan.io;
 
+import me.jameszhan.io.util.IOUtils;
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
 /**
@@ -48,5 +52,19 @@ public class FileIOTest {
         }
     }
 
+    @Test
+    public void randomAccessFile() throws IOException {
+        String message = "Hello World!\n";
+        try (FileChannel fc = new RandomAccessFile("/tmp/nio.txt", "rw").getChannel()) {
+            fc.position(fc.size());
+            fc.write(ByteBuffer.wrap(message.getBytes(IOUtils.UTF_8)));
 
+            fc.position(0);
+            ByteBuffer bb = ByteBuffer.allocate(1024);
+            fc.read(bb);
+            bb.flip();
+
+            Assert.assertEquals(message, new String(bb.array(), bb.position(), bb.limit(), IOUtils.UTF_8));
+        }
+    }
 }
