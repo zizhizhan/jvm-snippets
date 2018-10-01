@@ -5,28 +5,25 @@ import com.google.broadcast.LifecycleEvent;
 import com.google.broadcast.LifecycleListener;
 
 
-
 public class LifecycleSupport {
-	
+
+    private Lifecycle lifecycle;
+    private LifecycleListener listeners[] = new LifecycleListener[0];
+    private final Object listenersLock = new Object(); // Lock object for changes to listeners
+
     public LifecycleSupport(Lifecycle lifecycle) {
-        super();
         this.lifecycle = lifecycle;
     }
 
-    private Lifecycle lifecycle = null;
-    private LifecycleListener listeners[] = new LifecycleListener[0];    
-    private final Object listenersLock = new Object(); // Lock object for changes to listeners
-
     public void addLifecycleListener(LifecycleListener listener) {
-
-      synchronized (listenersLock) {
-          LifecycleListener results[] =
-            new LifecycleListener[listeners.length + 1];
-          for (int i = 0; i < listeners.length; i++)
-              results[i] = listeners[i];
-          results[listeners.length] = listener;
-          listeners = results;
-      }
+        synchronized (listenersLock) {
+            LifecycleListener results[] = new LifecycleListener[listeners.length + 1];
+            for (int i = 0; i < listeners.length; i++) {
+                results[i] = listeners[i];
+            }
+            results[listeners.length] = listener;
+            listeners = results;
+        }
     }
 
     public LifecycleListener[] findLifecycleListeners() {
@@ -36,13 +33,13 @@ public class LifecycleSupport {
     public void fireLifecycleEvent(String type, Object data) {
         LifecycleEvent event = new LifecycleEvent(lifecycle, type, data);
         LifecycleListener interested[] = listeners;
-        for (int i = 0; i < interested.length; i++)
+        for (int i = 0; i < interested.length; i++) {
             interested[i].lifecycle(event);
+        }
     }
 
 
     public void removeLifecycleListener(LifecycleListener listener) {
-
         synchronized (listenersLock) {
             int n = -1;
             for (int i = 0; i < listeners.length; i++) {
@@ -53,16 +50,15 @@ public class LifecycleSupport {
             }
             if (n < 0)
                 return;
-            LifecycleListener results[] =
-              new LifecycleListener[listeners.length - 1];
+            LifecycleListener results[] = new LifecycleListener[listeners.length - 1];
             int j = 0;
             for (int i = 0; i < listeners.length; i++) {
-                if (i != n)
+                if (i != n) {
                     results[j++] = listeners[i];
+                }
             }
             listeners = results;
         }
-
     }
 
 

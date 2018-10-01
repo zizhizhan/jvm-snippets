@@ -234,8 +234,7 @@ public class SocketConnector {
 		return false;
 	}
 	
-	private static void printKeyInfo(SelectionKey sk){ 
-		
+	private static void printKeyInfo(SelectionKey sk){
 		String s = new String(); 
 		s = "Att: " + (sk.attachment() == null ? "no" : "yes"); 
 		s += ", Read: " + sk.isReadable(); 

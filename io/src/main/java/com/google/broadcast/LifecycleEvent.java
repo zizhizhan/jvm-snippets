@@ -3,26 +3,20 @@ package com.google.broadcast;
 import java.util.EventObject;
 
 
-
 public class LifecycleEvent extends EventObject {
-	
-   
-	private static final long serialVersionUID = 1L;
 
-	public LifecycleEvent(Lifecycle lifecycle, String type) {
+    private static final long serialVersionUID = 1L;
 
+    public LifecycleEvent(Lifecycle lifecycle, String type) {
         this(lifecycle, type, null);
-
     }
 
-	
-    public LifecycleEvent(Lifecycle lifecycle, String type, Object data) {
 
+    public LifecycleEvent(Lifecycle lifecycle, String type, Object data) {
         super(lifecycle);
         this.lifecycle = lifecycle;
         this.type = type;
         this.data = data;
-
     }
 
     private Object data = null;

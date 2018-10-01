@@ -41,8 +41,5 @@ public class NioSession {
 	public SocketChannel getChannel() {
 		return ch;
 	}
-	
-	
-	
 
 }

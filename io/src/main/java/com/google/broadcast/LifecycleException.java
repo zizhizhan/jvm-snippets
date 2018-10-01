@@ -2,37 +2,27 @@ package com.google.broadcast;
 
 public class LifecycleException extends Exception {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    protected String message = null;
+    protected Throwable throwable = null;
 
     public LifecycleException() {
-
         this(null, null);
-
     }
 
     public LifecycleException(String message) {
-
         this(message, null);
-
     }
 
     public LifecycleException(Throwable throwable) {
-
         this(null, throwable);
-
     }
 
     public LifecycleException(String message, Throwable throwable) {
-
         super();
         this.message = message;
         this.throwable = throwable;
-
     }
-
-    protected String message = null;
-
-    protected Throwable throwable = null;
 
     public String getMessage() {
         return (message);
@@ -43,7 +33,7 @@ public class LifecycleException extends Exception {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer("LifecycleException:  ");
+        StringBuilder sb = new StringBuilder("LifecycleException:  ");
         if (message != null) {
             sb.append(message);
             if (throwable != null) {
