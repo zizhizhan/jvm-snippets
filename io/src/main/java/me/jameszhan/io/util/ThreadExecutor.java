@@ -1,14 +1,12 @@
-package me.jameszhan.io.framework.reactor;
+package me.jameszhan.io.util;
 
 import java.util.concurrent.Executor;
 
 public class ThreadExecutor implements Executor{
-	
+
 	@Override
 	public void execute(Runnable command) {
-		Thread t = new Thread(command);			
-		t.start();	
-		//command.run();
+		new Thread(command).start();
 	}
 
 }

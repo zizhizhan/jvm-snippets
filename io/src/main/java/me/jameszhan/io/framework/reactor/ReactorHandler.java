@@ -2,11 +2,9 @@ package me.jameszhan.io.framework.reactor;
 
 import java.nio.channels.SelectableChannel;
 
-
-
 public interface ReactorHandler {
-	
-	Session getSession();
+
+    Session getSession();
 
     SelectableChannel[] getChannels();
 
