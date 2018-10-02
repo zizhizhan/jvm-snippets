@@ -35,4 +35,8 @@ public class LifecycleEvent extends EventObject {
         return (this.type);
     }
 
+    @Override
+    public String toString() {
+        return "LifecycleEvent{source=" + source + ", type=" + type + ", data=" + data + "}";
+    }
 }
