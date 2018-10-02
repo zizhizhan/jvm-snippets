@@ -1,4 +1,4 @@
-package me.jameszhan.io.framework.broadcast;
+package me.jameszhan.io.lifecycle;
 
 
 public interface Lifecycle {

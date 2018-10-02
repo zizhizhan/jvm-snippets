@@ -1,4 +1,4 @@
-package me.jameszhan.io.framework.broadcast;
+package me.jameszhan.io.lifecycle;
 
 public class LifecycleSupport {
     private Lifecycle lifecycle;
@@ -25,9 +25,6 @@ public class LifecycleSupport {
         synchronized (listenersLock) {
             int length = listeners.length;
             LifecycleListener[] results = new LifecycleListener[length + 1];
-//            for (int i = 0; i < listeners.length; i++) {
-//                results[i] = listeners[i];
-//            }
             System.arraycopy(listeners, 0, results, 0, length);
             results[length] = listener;
             listeners = results;

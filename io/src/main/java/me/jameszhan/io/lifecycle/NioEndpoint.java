@@ -1,4 +1,4 @@
-package me.jameszhan.io.framework.broadcast;
+package me.jameszhan.io.lifecycle;
 
 import me.jameszhan.io.util.IOUtils;
 import org.slf4j.Logger;
