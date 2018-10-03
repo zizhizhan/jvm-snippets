@@ -12,7 +12,6 @@
     <artifactId>thirdparty</artifactId>
     <packaging>pom</packaging>
 
-
     <properties>
         <netty.version>4.1.29.Final</netty.version>
         <jetty.version>8.1.2.v20120308</jetty.version>
@@ -25,66 +24,12 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-common</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-resolver</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-buffer</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-transport</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-handler</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-codec-http</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-codec-http2</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-example</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.mortbay.jetty.npn</groupId>
-                <artifactId>npn-boot</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
 
         </dependencies>
     </dependencyManagement>
 
 
     <modules>
-        <module>netty</module>
     </modules>
 
 </project>
