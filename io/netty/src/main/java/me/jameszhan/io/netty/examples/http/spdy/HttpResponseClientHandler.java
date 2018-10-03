@@ -4,8 +4,6 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import me.jameszhan.io.netty.examples.http.snoop.HttpSnoopClientHandler;
-import me.jameszhan.io.netty.http.snoop.HttpSnoopClientHandler;
-import me.jameszhan.thirdparty.netty.http.snoop.HttpSnoopClientHandler;
 import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpUtil;
 import io.netty.handler.codec.http.HttpObject;

@@ -10,8 +10,6 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import me.jameszhan.io.netty.examples.telnet.TelnetClient;
-import me.jameszhan.io.netty.telnet.TelnetClient;
-import me.jameszhan.thirdparty.netty.telnet.TelnetClient;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

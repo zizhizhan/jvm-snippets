@@ -9,7 +9,7 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
-import me.jameszhan.thirdparty.netty.telnet.TelnetServer;
+import me.jameszhan.io.netty.examples.telnet.TelnetServer;
 
 /**
  * Simple SSL chat server modified from {@link TelnetServer}.

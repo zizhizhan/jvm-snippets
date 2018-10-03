@@ -2,8 +2,6 @@ package me.jameszhan.io.netty.examples.http2.helloworld.frame.server;
 
 import io.netty.channel.ChannelHandlerContext;
 import me.jameszhan.io.netty.examples.http2.helloworld.server.HelloWorldHttp1Handler;
-import me.jameszhan.io.netty.http2.helloworld.server.HelloWorldHttp1Handler;
-import me.jameszhan.thirdparty.netty.http2.helloworld.server.HelloWorldHttp1Handler;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http2.Http2FrameCodecBuilder;

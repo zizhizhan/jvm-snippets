@@ -6,10 +6,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
@@ -54,8 +51,11 @@ public class FileIOTest {
 
     @Test
     public void randomAccessFile() throws IOException {
+        String filePath = "/tmp/nio.txt";
+        new File(filePath).delete();
+
         String message = "Hello World!\n";
-        try (FileChannel fc = new RandomAccessFile("/tmp/nio.txt", "rw").getChannel()) {
+        try (FileChannel fc = new RandomAccessFile(filePath, "rw").getChannel()) {
             fc.position(fc.size());
             fc.write(ByteBuffer.wrap(message.getBytes(IOUtils.UTF_8)));
 
