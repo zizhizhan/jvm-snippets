@@ -13,7 +13,7 @@ import java.io.IOException;
  */
 public class App {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Dispatcher dispatcher = new ThreadDispatcher(Runtime.getRuntime().availableProcessors());
         Reactor reactor = new Reactor(dispatcher);
         ChannelHandler loggingHandler = new LoggingHandler();
@@ -21,6 +21,9 @@ public class App {
                 .register(Reactors.newTcpChannel(8888, loggingHandler))
                 .register(Reactors.newUdpChannel(8889, loggingHandler))
                 .start();
+
+        Thread.sleep(180000);
+        reactor.stop();
     }
 
 }
