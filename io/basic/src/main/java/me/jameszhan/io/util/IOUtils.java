@@ -55,7 +55,7 @@ public final class IOUtils {
                 closeable.close();
             }
         } catch (IOException e) {
-            LOGGER.info("Ignore close error.", e);
+            LOGGER.warn("Ignore close error.", e);
         }
     }
 
