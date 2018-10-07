@@ -1,6 +1,5 @@
 package me.jameszhan.nio.reactor;
 
-import me.jameszhan.io.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +12,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Time: 下午8:46
  */
 public class Reactor {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Reactor.class);
     private final ExecutorService reactorMain = Executors.newSingleThreadExecutor();
     private final Selector selector;
@@ -37,6 +38,15 @@ public class Reactor {
         this.running = new AtomicBoolean();
     }
 
+    public Reactor register(Channel channel) throws IOException {
+        SelectionKey key = channel.getSelectableChannel().register(selector, channel.interestOps());
+        key.attach(channel);
+        if (channel instanceof AbstractChannel) {
+            ((AbstractChannel)channel).setReactor(this);
+        }
+        return this;
+    }
+
     public void start() {
         reactorMain.execute(() -> {
             try {
@@ -49,13 +59,28 @@ public class Reactor {
         });
     }
 
-    public Reactor register(Channel channel) throws IOException {
-        SelectionKey key = channel.getSelectableChannel().register(selector, channel.interestOps());
-        key.attach(channel);
-        if (channel instanceof AbstractChannel) {
-            ((AbstractChannel)channel).setReactor(this);
-        }
-        return this;
+    public void stop() throws InterruptedException, IOException {
+        running.compareAndSet(true, false);
+        reactorMain.shutdownNow();
+        selector.wakeup();
+        reactorMain.awaitTermination(6, TimeUnit.SECONDS);
+        selector.close();
+        dispatcher.stop();
+        LOGGER.info("Reactor stopped");
+    }
+
+    /**
+     * Queues the change of operations request of a channel, which will change the interested operations of the channel
+     * sometime in future.
+     *
+     * This is a non-blocking method and does not guarantee that the operations have changed when this method returns.
+     *
+     * @param key the key for which operations have to be changed.
+     * @param interestedOps the new interest operations.
+     */
+    public void changeOps(SelectionKey key, int interestedOps) {
+        pendingCommands.add(new ChangeKeyOpsCommand(key, interestedOps));
+        selector.wakeup();
     }
 
     private void eventLoop() throws IOException {
@@ -110,7 +135,7 @@ public class Reactor {
             }
         } catch (IOException e) {
             LOGGER.error("Unexpected Error onChannelReadable {}.", key, e);
-            IOUtils.close(key.channel());
+            Reactors.close(key.channel());
         }
     }
 
@@ -126,10 +151,10 @@ public class Reactor {
             } else {
                 LOGGER.warn("SelectionKey {} closed.", key);
             }
-            IOUtils.close(key.channel());
+            Reactors.close(key.channel());
         } catch (IOException e) {
             LOGGER.error("Unexpected Error onChannelReadable {}.", key, e);
-            IOUtils.close(key.channel());
+            Reactors.close(key.channel());
         }
     }
 
@@ -145,20 +170,6 @@ public class Reactor {
             command.run();
             iterator.remove();
         }
-    }
-
-    /**
-     * Queues the change of operations request of a channel, which will change the interested operations of the channel
-     * sometime in future.
-     *
-     * This is a non-blocking method and does not guarantee that the operations have changed when this method returns.
-     *
-     * @param key the key for which operations have to be changed.
-     * @param interestedOps the new interest operations.
-     */
-    public void changeOps(SelectionKey key, int interestedOps) {
-        pendingCommands.add(new ChangeKeyOpsCommand(key, interestedOps));
-        selector.wakeup();
     }
 
     /**

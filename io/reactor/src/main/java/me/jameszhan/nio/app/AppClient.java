@@ -104,7 +104,7 @@ public class AppClient {
 
         private void sendLogRequests(PrintWriter writer, InputStream inputStream) throws IOException {
             for (int i = 0; i < 4; i++) {
-                writer.println(clientName + " - Log request: " + i);
+                writer.println(clientName + "-request-" + i);
                 writer.flush();
 
                 byte[] data = new byte[1024];
@@ -144,8 +144,7 @@ public class AppClient {
         public void run() {
             try (DatagramSocket socket = new DatagramSocket()) {
                 for (int i = 0; i < 4; i++) {
-
-                    String message = clientName + " - Log request: " + i;
+                    String message = clientName + "-request-" + i;
                     DatagramPacket request = new DatagramPacket(message.getBytes(), message.getBytes().length, remoteAddress);
 
                     socket.send(request);
@@ -158,7 +157,6 @@ public class AppClient {
                     } else {
                         LOGGER.info("{} received {}.", clientName, new String(reply.getData(), 0, reply.getLength()));
                     }
-
                     artificialDelayOf(100);
                 }
             } catch (IOException e1) {

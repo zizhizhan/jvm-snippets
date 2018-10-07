@@ -1,6 +1,6 @@
 package me.jameszhan.nio.app;
 
-import me.jameszhan.io.util.IOUtils;
+import me.jameszhan.nio.reactor.Reactors;
 import me.jameszhan.nio.reactor.Channel;
 import me.jameszhan.nio.reactor.ChannelHandler;
 import me.jameszhan.nio.reactor.UdpChannel;
@@ -19,7 +19,7 @@ import java.nio.channels.SelectionKey;
  */
 public class LoggingHandler implements ChannelHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingHandler.class);
-    private static final byte[] ACK = "acknowledge successfully".getBytes(IOUtils.UTF_8);
+    private static final byte[] ACK = "acknowledge successfully".getBytes(Reactors.UTF_8);
 
     @Override
     public void handleChannelRead(Channel channel, Object readObject, SelectionKey key) {
@@ -56,7 +56,7 @@ public class LoggingHandler implements ChannelHandler {
     }
 
     private static void doLogging(ByteBuffer data) {
-        LOGGER.info(new String(data.array(), 0, data.limit(), IOUtils.UTF_8));
+        LOGGER.info(new String(data.array(), 0, data.limit(), Reactors.UTF_8));
     }
 
 }
