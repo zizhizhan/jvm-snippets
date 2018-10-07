@@ -1,13 +1,12 @@
-package me.jameszhan.io.net.reactor;
+package me.jameszhan.nio.reactor;
 
 import me.jameszhan.io.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.EOFException;
 import java.io.IOException;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
@@ -42,6 +41,7 @@ public class Reactor {
         reactorMain.execute(() -> {
             try {
                 LOGGER.info("Reactor started, waiting for events...");
+                running.compareAndSet(false, true);
                 eventLoop();
             } catch (IOException e) {
                 LOGGER.error("exception in event loop", e);
@@ -67,7 +67,6 @@ public class Reactor {
 
             // Synchronous pendingCommands first
             processPendingCommands();
-
             int op = selector.select();
             switch (op) {
                 case -1:
@@ -87,7 +86,7 @@ public class Reactor {
                         }
                         processKey(key);
                     }
-                    selectionKeys.clear(); // TODO
+                    selectionKeys.clear();
             }
         }
     }
@@ -105,8 +104,10 @@ public class Reactor {
     private void onChannelAcceptable(SelectionKey key) {
         try {
             SocketChannel socketChannel = ((Channel) key.attachment()).accept(key);
-            SelectionKey readKey = socketChannel.register(selector, SelectionKey.OP_READ);
-            readKey.attach(key.attachment());
+            if (socketChannel != null) {
+                SelectionKey readKey = socketChannel.register(selector, SelectionKey.OP_READ);
+                readKey.attach(key.attachment());
+            }
         } catch (IOException e) {
             LOGGER.error("Unexpected Error onChannelReadable {}.", key, e);
             IOUtils.close(key.channel());
@@ -118,6 +119,14 @@ public class Reactor {
             // reads the incoming data in context of reactor main loop. Can this be improved?
             Object readObject = ((Channel) key.attachment()).read(key);
             dispatcher.onChannelReadEvent((Channel) key.attachment(), readObject, key);
+        } catch (EOFException e) {
+            SelectableChannel sc = key.channel();
+            if (sc instanceof SocketChannel) {
+                LOGGER.info("Socket {} closed.", ((SocketChannel) sc).socket());
+            } else {
+                LOGGER.warn("SelectionKey {} closed.", key);
+            }
+            IOUtils.close(key.channel());
         } catch (IOException e) {
             LOGGER.error("Unexpected Error onChannelReadable {}.", key, e);
             IOUtils.close(key.channel());

@@ -1,4 +1,4 @@
-package me.jameszhan.io.net.reactor;
+package me.jameszhan.nio.reactor;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -22,6 +22,8 @@ public interface Channel extends Closeable {
     Object read(SelectionKey key) throws IOException;
 
     void flush(SelectionKey key) throws IOException;
+
+    void write(Object data, SelectionKey key);
 
     SelectableChannel getSelectableChannel();
 

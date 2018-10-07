@@ -1,5 +1,6 @@
-package me.jameszhan.io.net.reactor;
+package me.jameszhan.nio.reactor;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectableChannel;
@@ -31,10 +32,10 @@ public class TcpChannel extends AbstractChannel {
     public Object read(SelectionKey key) throws IOException {
         SocketChannel socketChannel = (SocketChannel) key.channel();
         ByteBuffer buffer = ByteBuffer.allocate(1024);
-        int read = socketChannel.read(buffer);
+        int length = socketChannel.read(buffer);
         buffer.flip();
-        if (read == -1) {
-            throw new IOException("Socket closed");
+        if (length == -1) {
+            throw new EOFException("Socket closed");
         }
         return buffer;
     }
@@ -42,11 +43,6 @@ public class TcpChannel extends AbstractChannel {
     @Override
     public int interestOps() {
         return SelectionKey.OP_ACCEPT;
-    }
-
-    @Override
-    public void close() throws IOException {
-
     }
 
     /**

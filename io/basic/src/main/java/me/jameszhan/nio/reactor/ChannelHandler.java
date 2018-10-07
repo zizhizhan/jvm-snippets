@@ -1,4 +1,4 @@
-package me.jameszhan.io.net.reactor;
+package me.jameszhan.nio.reactor;
 
 import java.nio.channels.SelectionKey;
 

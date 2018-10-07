@@ -1,4 +1,4 @@
-package me.jameszhan.io.net.reactor;
+package me.jameszhan.nio.reactor;
 
 import java.nio.channels.SelectionKey;
 
@@ -16,4 +16,8 @@ public class DirectDispatcher implements Dispatcher {
         channel.getHandler().handleChannelRead(channel, readObject, key);
     }
 
+    @Override
+    public void stop() throws InterruptedException {
+        // DO NOTHING
+    }
 }
