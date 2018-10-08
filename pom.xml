@@ -113,6 +113,7 @@
     <modules>
         <module>io</module>
         <module>memory</module>
+        <module>pattern</module>
         <module>thirdparty</module>
     </modules>
 

@@ -98,7 +98,7 @@
 
     <modules>
         <module>basic</module>
-        <module>reactor</module>
+        <module>nio-reactor</module>
         <module>netty</module>
     </modules>
 
