@@ -1,6 +1,7 @@
 package me.jameszhan.pattern.reactor;
 
 import java.nio.channels.SelectionKey;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Create by zhiqiangzhan@gmail.com
@@ -9,20 +10,27 @@ import java.nio.channels.SelectionKey;
  * Date: 2018/10/8
  * Time: 上午10:42
  */
-public class Event {
-    private final int type;
-    private final SelectionKey source;
+public abstract class Event {
+    private static final AtomicLong ID_GEN = new AtomicLong();
+    private final long id;
+    private final Object source;
+    private final SelectionKey data;
 
-    public Event(int type, SelectionKey source) {
-        this.type = type;
+    public Event(Object source, SelectionKey data) {
+        this.id = ID_GEN.incrementAndGet();
         this.source = source;
+        this.data = data;
     }
 
-    public int getType() {
-        return type;
+    public long getId() {
+        return id;
     }
 
-    public SelectionKey getSource() {
+    public Object getSource() {
         return source;
+    }
+
+    public SelectionKey getData() {
+        return data;
     }
 }

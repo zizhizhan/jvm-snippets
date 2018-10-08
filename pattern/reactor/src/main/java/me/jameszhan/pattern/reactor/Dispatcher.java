@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public interface Dispatcher {
 
-    void registerHandler(Handler handler);
+    Dispatcher registerHandler(Handler handler) throws IOException;
 
     void removeHandler(Handler handler);
 

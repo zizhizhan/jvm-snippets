@@ -21,8 +21,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Demultiplexer {
     private static final Logger LOGGER = LoggerFactory.getLogger(Demultiplexer.class);
     private final AtomicBoolean running;
-    private final Selector selector;
     private final EventBus eventBus;
+    final Selector selector;
 
     public Demultiplexer() throws IOException {
         this.selector = Selector.open();
@@ -45,9 +45,6 @@ public class Demultiplexer {
                 running.compareAndSet(true, false);
                 break;
             }
-
-            // Synchronous pendingCommands first
-            // processPendingCommands();
             int op = selector.select();
             switch (op) {
                 case -1:
@@ -74,11 +71,11 @@ public class Demultiplexer {
 
     private void dispatch(SelectionKey key) throws IOException {
         if (key.isAcceptable()) {
-            eventBus.post(new Event(SelectionKey.OP_ACCEPT, key));
+            eventBus.post(new AcceptEvent(this, key));
         } else if (key.isReadable()) {
-            eventBus.post(new Event(SelectionKey.OP_READ, key));
+            eventBus.post(new ReadEvent(this, key));
         } else if (key.isWritable()) {
-            eventBus.post(new Event(SelectionKey.OP_WRITE, key));
+            eventBus.post(new WriteEvent(this, key));
         }
     }
 }
