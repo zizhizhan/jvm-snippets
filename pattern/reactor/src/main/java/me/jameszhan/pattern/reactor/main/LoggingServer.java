@@ -26,7 +26,7 @@ public class LoggingServer {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingServer.class);
 
     public static void main(String[] args) throws IOException {
-        Dispatcher dispatcher = new InitiationDispatcher();
+        Dispatcher dispatcher = new InitiationDispatcher(Runtime.getRuntime().availableProcessors());
         LoggingAcceptor loggingAcceptor = new LoggingAcceptor();
         dispatcher.registerHandler(newTcpHandler(8886, loggingAcceptor))
                 .registerHandler(newTcpHandler(8887, loggingAcceptor))

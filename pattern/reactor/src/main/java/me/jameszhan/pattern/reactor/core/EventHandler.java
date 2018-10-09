@@ -15,9 +15,11 @@ public interface EventHandler {
 
     void handle(AcceptEvent e) throws IOException;
 
-    void handle(ReadEvent e) throws IOException;
+    Object handle(ReadEvent e) throws IOException;
 
     void handle(WriteEvent e) throws IOException;
+
+    InboundHandler getInboundHandler();
 
     void write(Object data, SelectionKey key);
 

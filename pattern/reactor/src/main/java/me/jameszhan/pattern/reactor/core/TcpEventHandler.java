@@ -21,7 +21,7 @@ public class TcpEventHandler extends ConcreteEventHandler {
         super(channel, inboundHandler);
     }
 
-    public void handle(ReadEvent event) throws IOException {
+    public Object handle(ReadEvent event) throws IOException {
         SelectionKey key = event.getData();
         SocketChannel socketChannel = (SocketChannel) key.channel();
         ByteBuffer buffer = ByteBuffer.allocate(1024);
@@ -30,7 +30,7 @@ public class TcpEventHandler extends ConcreteEventHandler {
         if (length == -1) {
             throw new EOFException("Socket closed");
         }
-        inboundHandler.read(buffer, key);
+        return buffer;
     }
 
     public void handle(AcceptEvent event) throws IOException {

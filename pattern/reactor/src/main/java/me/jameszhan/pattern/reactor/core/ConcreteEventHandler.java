@@ -39,6 +39,10 @@ public abstract class ConcreteEventHandler implements EventHandler {
         }
     }
 
+    public InboundHandler getInboundHandler() {
+        return inboundHandler;
+    }
+
     public void write(Object data, SelectionKey key) {
         Queue<Object> pendingWrites = this.channelToPendingWrites.get(key.channel());
         if (pendingWrites == null) {

@@ -21,14 +21,14 @@ public class UdpEventHandler extends ConcreteEventHandler {
     }
 
     @Override
-    public void handle(ReadEvent e) throws IOException {
+    public Object handle(ReadEvent e) throws IOException {
         SelectionKey key = e.getData();
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         SocketAddress sender = ((DatagramChannel) key.channel()).receive(buffer);
         buffer.flip();
         DatagramPacket packet = new DatagramPacket(buffer);
         packet.setSender(sender);
-        inboundHandler.read(packet, key);
+        return packet;
     }
 
     @Override

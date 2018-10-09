@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -27,17 +29,23 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class InitiationDispatcher implements Dispatcher {
     private static final Logger LOGGER = LoggerFactory.getLogger(InitiationDispatcher.class);
-
     private final List<EventHandler> handlers = new CopyOnWriteArrayList<>();
     private final AtomicBoolean running;
     private final EventBus eventBus;
     private final Selector selector;
+    private final Executor executor;
 
-    public InitiationDispatcher() throws IOException {
+    public InitiationDispatcher(int poolSize) throws IOException {
         this.selector = Selector.open();
         this.running = new AtomicBoolean();
         this.eventBus = new EventBus();
         this.eventBus.register(this);
+        if (poolSize > 0) {
+            this.executor = Executors.newFixedThreadPool(poolSize);
+        } else {
+            this.executor = Runnable::run;
+        }
+
     }
 
     @Override
@@ -73,8 +81,12 @@ public class InitiationDispatcher implements Dispatcher {
     @Subscribe
     public void dispatchEvent(ReadEvent event) {
         SelectionKey key = event.getData();
+        EventHandler handler = (EventHandler) key.attachment();
         try {
-            ((EventHandler) key.attachment()).handle(event);
+            Object readObject = handler.handle(event);
+            executor.execute(() -> {
+                handler.getInboundHandler().read(readObject, key);
+            });
         }  catch (EOFException e) {
             SelectableChannel sc = key.channel();
             if (sc instanceof SocketChannel) {
