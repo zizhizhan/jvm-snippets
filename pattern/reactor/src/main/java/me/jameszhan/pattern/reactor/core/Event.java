@@ -1,4 +1,4 @@
-package me.jameszhan.pattern.reactor;
+package me.jameszhan.pattern.reactor.core;
 
 import java.nio.channels.SelectionKey;
 import java.util.concurrent.atomic.AtomicLong;

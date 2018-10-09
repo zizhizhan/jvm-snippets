@@ -1,4 +1,4 @@
-package me.jameszhan.pattern.reactor;
+package me.jameszhan.pattern.reactor.core;
 
 import java.io.IOException;
 import java.nio.channels.SelectableChannel;
@@ -11,7 +11,7 @@ import java.nio.channels.SelectionKey;
  * Date: 2018/10/8
  * Time: 上午10:34
  */
-public interface Handler {
+public interface EventHandler {
 
     void handle(AcceptEvent e) throws IOException;
 

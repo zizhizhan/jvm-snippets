@@ -1,4 +1,6 @@
-package me.jameszhan.pattern.reactor;
+package me.jameszhan.pattern.reactor.core;
+
+import me.jameszhan.pattern.reactor.Processor;
 
 import java.io.IOException;
 import java.nio.channels.SelectableChannel;
@@ -15,13 +17,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Date: 2018/10/9
  * Time: 上午12:39
  */
-public abstract class AbstractHandler implements Handler {
+public abstract class ConcreteEventHandler implements EventHandler {
 
     private final Map<SelectableChannel, Queue<Object>> channelToPendingWrites = new ConcurrentHashMap<>();
     protected final Processor processor;
     protected final SelectableChannel channel;
 
-    public AbstractHandler(SelectableChannel channel, Processor processor) {
+    public ConcreteEventHandler(SelectableChannel channel, Processor processor) {
         this.channel = channel;
         this.processor = processor;
     }

@@ -1,4 +1,4 @@
-package me.jameszhan.pattern.reactor;
+package me.jameszhan.pattern.reactor.core;
 
 import java.nio.channels.SelectionKey;
 
@@ -14,4 +14,5 @@ public class ReadEvent extends Event {
     public ReadEvent(Object source, SelectionKey data) {
         super(source, data);
     }
+
 }

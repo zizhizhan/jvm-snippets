@@ -1,11 +1,12 @@
-package me.jameszhan.pattern.reactor;
+package me.jameszhan.pattern.reactor.main;
 
+import me.jameszhan.pattern.reactor.Processor;
+import me.jameszhan.pattern.reactor.core.EventHandler;
+import me.jameszhan.pattern.reactor.core.UdpEventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
@@ -32,11 +33,11 @@ public class LoggingAcceptor implements Processor {
     private static void sendReply(Object readObject, SelectionKey key) {
         ByteBuffer ack = ByteBuffer.wrap(ACK);
         if (readObject instanceof ByteBuffer) {
-            ((Handler)key.attachment()).write(ack, key);
-        } else if (readObject instanceof UdpHandler.DatagramPacket) {
-            UdpHandler.DatagramPacket replyPacket = new UdpHandler.DatagramPacket(ack);
-            replyPacket.setReceiver(((UdpHandler.DatagramPacket) readObject).getSender());
-            ((Handler)key.attachment()).write(replyPacket, key);
+            ((EventHandler)key.attachment()).write(ack, key);
+        } else if (readObject instanceof UdpEventHandler.DatagramPacket) {
+            UdpEventHandler.DatagramPacket replyPacket = new UdpEventHandler.DatagramPacket(ack);
+            replyPacket.setReceiver(((UdpEventHandler.DatagramPacket) readObject).getSender());
+            ((EventHandler)key.attachment()).write(replyPacket, key);
         } else {
             throw new IllegalStateException("Unknown data received");
         }
@@ -47,8 +48,8 @@ public class LoggingAcceptor implements Processor {
             ByteBuffer data = (ByteBuffer)readObject;
             LOGGER.info("Received {} from {}.", new String(data.array(), 0, data.limit(), ISO8859_1),
                     ((SocketChannel)channel).socket());
-        } else if (readObject instanceof UdpHandler.DatagramPacket) {
-            UdpHandler.DatagramPacket packet = (UdpHandler.DatagramPacket)readObject;
+        } else if (readObject instanceof UdpEventHandler.DatagramPacket) {
+            UdpEventHandler.DatagramPacket packet = (UdpEventHandler.DatagramPacket)readObject;
             LOGGER.info("Received {} from {}.", new String(packet.getData().array(), 0, packet.getData().limit(),
                             ISO8859_1), packet.getSender());
         } else {

@@ -1,5 +1,10 @@
-package me.jameszhan.pattern.reactor;
+package me.jameszhan.pattern.reactor.main;
 
+import me.jameszhan.pattern.reactor.Processor;
+import me.jameszhan.pattern.reactor.core.Dispatcher;
+import me.jameszhan.pattern.reactor.core.InitiationDispatcher;
+import me.jameszhan.pattern.reactor.core.TcpEventHandler;
+import me.jameszhan.pattern.reactor.core.UdpEventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +26,7 @@ public class LoggingServer {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingServer.class);
 
     public static void main(String[] args) throws IOException {
-        Demultiplexer demultiplexer = new Demultiplexer();
-        Dispatcher dispatcher = new InitiationDispatcher(demultiplexer);
+        Dispatcher dispatcher = new InitiationDispatcher();
         LoggingAcceptor loggingAcceptor = new LoggingAcceptor();
         dispatcher.registerHandler(newTcpHandler(8886, loggingAcceptor))
                 .registerHandler(newTcpHandler(8887, loggingAcceptor))
@@ -30,21 +34,21 @@ public class LoggingServer {
                 .handleEvents();
     }
 
-    public static TcpHandler newTcpHandler(int port, Processor processor) throws IOException {
+    public static TcpEventHandler newTcpHandler(int port, Processor processor) throws IOException {
         ServerSocketChannel ssc = ServerSocketChannel.open();
         ssc.socket().bind(new InetSocketAddress(port));
         ssc.configureBlocking(false);
         ssc.socket().setReuseAddress(true);
         LOGGER.info("Bound TCP socket at port: {}", port);
-        return new TcpHandler(ssc, processor);
+        return new TcpEventHandler(ssc, processor);
     }
 
-    public static UdpHandler newUdpHandler(int port, Processor processor) throws IOException {
+    public static UdpEventHandler newUdpHandler(int port, Processor processor) throws IOException {
         DatagramChannel dc = DatagramChannel.open();
         dc.socket().bind(new InetSocketAddress(InetAddress.getLocalHost(), port));
         dc.configureBlocking(false);
         LOGGER.info("Bound UDP socket at port: {}", port);
-        return new UdpHandler(dc, processor);
+        return new UdpEventHandler(dc, processor);
     }
 
 }

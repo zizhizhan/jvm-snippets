@@ -1,4 +1,6 @@
-package me.jameszhan.pattern.reactor;
+package me.jameszhan.pattern.reactor.core;
+
+import me.jameszhan.pattern.reactor.Processor;
 
 import java.io.IOException;
 import java.net.SocketAddress;
@@ -14,9 +16,9 @@ import java.nio.channels.SelectionKey;
  * Date: 2018/10/9
  * Time: 上午12:44
  */
-public class UdpHandler extends AbstractHandler {
+public class UdpEventHandler extends ConcreteEventHandler {
 
-    public UdpHandler(SelectableChannel channel, Processor processor) {
+    public UdpEventHandler(SelectableChannel channel, Processor processor) {
         super(channel, processor);
     }
 

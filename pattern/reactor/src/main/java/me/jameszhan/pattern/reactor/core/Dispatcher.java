@@ -1,4 +1,4 @@
-package me.jameszhan.pattern.reactor;
+package me.jameszhan.pattern.reactor.core;
 
 import java.io.IOException;
 
@@ -11,9 +11,9 @@ import java.io.IOException;
  */
 public interface Dispatcher {
 
-    Dispatcher registerHandler(Handler handler) throws IOException;
+    Dispatcher registerHandler(EventHandler handler) throws IOException;
 
-    void removeHandler(Handler handler);
+    void removeHandler(EventHandler handler);
 
     void handleEvents() throws IOException;
 

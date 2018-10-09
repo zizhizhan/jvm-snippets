@@ -1,4 +1,6 @@
-package me.jameszhan.pattern.reactor;
+package me.jameszhan.pattern.reactor.core;
+
+import me.jameszhan.pattern.reactor.Processor;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -15,9 +17,9 @@ import java.nio.channels.SocketChannel;
  * Date: 2018/10/8
  * Time: 下午5:36
  */
-public class TcpHandler extends AbstractHandler {
+public class TcpEventHandler extends ConcreteEventHandler {
 
-    public TcpHandler(SelectableChannel channel, Processor processor) {
+    public TcpEventHandler(SelectableChannel channel, Processor processor) {
         super(channel, processor);
     }
 
