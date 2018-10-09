@@ -1,6 +1,6 @@
 package me.jameszhan.pattern.reactor.main;
 
-import me.jameszhan.pattern.reactor.Processor;
+import me.jameszhan.pattern.reactor.core.InboundHandler;
 import me.jameszhan.pattern.reactor.core.Dispatcher;
 import me.jameszhan.pattern.reactor.core.InitiationDispatcher;
 import me.jameszhan.pattern.reactor.core.TcpEventHandler;
@@ -34,21 +34,21 @@ public class LoggingServer {
                 .handleEvents();
     }
 
-    public static TcpEventHandler newTcpHandler(int port, Processor processor) throws IOException {
+    public static TcpEventHandler newTcpHandler(int port, InboundHandler inboundHandler) throws IOException {
         ServerSocketChannel ssc = ServerSocketChannel.open();
         ssc.socket().bind(new InetSocketAddress(port));
         ssc.configureBlocking(false);
         ssc.socket().setReuseAddress(true);
         LOGGER.info("Bound TCP socket at port: {}", port);
-        return new TcpEventHandler(ssc, processor);
+        return new TcpEventHandler(ssc, inboundHandler);
     }
 
-    public static UdpEventHandler newUdpHandler(int port, Processor processor) throws IOException {
+    public static UdpEventHandler newUdpHandler(int port, InboundHandler inboundHandler) throws IOException {
         DatagramChannel dc = DatagramChannel.open();
         dc.socket().bind(new InetSocketAddress(InetAddress.getLocalHost(), port));
         dc.configureBlocking(false);
         LOGGER.info("Bound UDP socket at port: {}", port);
-        return new UdpEventHandler(dc, processor);
+        return new UdpEventHandler(dc, inboundHandler);
     }
 
 }

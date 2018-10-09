@@ -1,4 +1,4 @@
-package me.jameszhan.pattern.reactor;
+package me.jameszhan.pattern.reactor.core;
 
 import java.nio.channels.SelectionKey;
 
@@ -9,8 +9,8 @@ import java.nio.channels.SelectionKey;
  * Date: 2018/10/8
  * Time: 下午5:48
  */
-public interface Processor {
+public interface InboundHandler {
 
-    void process(Object readObject, SelectionKey key);
+    void read(Object readObject, SelectionKey key);
 
 }

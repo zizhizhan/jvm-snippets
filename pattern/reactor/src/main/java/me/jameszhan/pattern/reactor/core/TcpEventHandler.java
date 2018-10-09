@@ -1,7 +1,5 @@
 package me.jameszhan.pattern.reactor.core;
 
-import me.jameszhan.pattern.reactor.Processor;
-
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -19,8 +17,8 @@ import java.nio.channels.SocketChannel;
  */
 public class TcpEventHandler extends ConcreteEventHandler {
 
-    public TcpEventHandler(SelectableChannel channel, Processor processor) {
-        super(channel, processor);
+    public TcpEventHandler(SelectableChannel channel, InboundHandler inboundHandler) {
+        super(channel, inboundHandler);
     }
 
     public void handle(ReadEvent event) throws IOException {
@@ -32,7 +30,7 @@ public class TcpEventHandler extends ConcreteEventHandler {
         if (length == -1) {
             throw new EOFException("Socket closed");
         }
-        processor.process(buffer, key);
+        inboundHandler.read(buffer, key);
     }
 
     public void handle(AcceptEvent event) throws IOException {

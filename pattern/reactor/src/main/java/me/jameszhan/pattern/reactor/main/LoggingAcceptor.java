@@ -1,6 +1,6 @@
 package me.jameszhan.pattern.reactor.main;
 
-import me.jameszhan.pattern.reactor.Processor;
+import me.jameszhan.pattern.reactor.core.InboundHandler;
 import me.jameszhan.pattern.reactor.core.EventHandler;
 import me.jameszhan.pattern.reactor.core.UdpEventHandler;
 import org.slf4j.Logger;
@@ -19,13 +19,14 @@ import java.nio.charset.Charset;
  * Date: 2018/10/8
  * Time: 下午8:23
  */
-public class LoggingAcceptor implements Processor {
+public class LoggingAcceptor implements InboundHandler {
+
     private static final Charset ISO8859_1 = Charset.forName("ISO8859-1");
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingAcceptor.class);
     private static final byte[] ACK = "acknowledge successfully\n".getBytes(ISO8859_1);
 
     @Override
-    public void process(Object readObject, SelectionKey key) {
+    public void read(Object readObject, SelectionKey key) {
         doLogging(readObject, key.channel());
         sendReply(readObject, key);
     }

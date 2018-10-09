@@ -37,13 +37,14 @@ public class InitiationDispatcher implements Dispatcher {
         this.selector = Selector.open();
         this.running = new AtomicBoolean();
         this.eventBus = new EventBus();
+        this.eventBus.register(this);
     }
 
     @Override
     public Dispatcher registerHandler(EventHandler handler) throws IOException {
         handlers.add(handler);
-        SelectionKey key = handler.getSelectableChannel().register(selector, handler.interestOps());
-        key.attach(handler);
+        SelectionKey key = handler.getSelectableChannel().register(selector, handler.interestOps(), handler);
+        LOGGER.debug("Register {} with key {}.", handler, key);
         return this;
     }
 
@@ -122,6 +123,7 @@ public class InitiationDispatcher implements Dispatcher {
                             iterator.remove();
                             continue;
                         }
+                        LOGGER.info("{} with ops {}", key, key.readyOps());
                         dispatch(key);
                     }
                     selectionKeys.clear();
@@ -129,7 +131,7 @@ public class InitiationDispatcher implements Dispatcher {
         }
     }
 
-    private void dispatch(SelectionKey key) throws IOException {
+    private void dispatch(SelectionKey key) {
         if (key.isAcceptable()) {
             eventBus.post(new AcceptEvent(this, key));
         } else if (key.isReadable()) {

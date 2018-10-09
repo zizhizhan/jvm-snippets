@@ -1,7 +1,5 @@
 package me.jameszhan.pattern.reactor.core;
 
-import me.jameszhan.pattern.reactor.Processor;
-
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -18,8 +16,8 @@ import java.nio.channels.SelectionKey;
  */
 public class UdpEventHandler extends ConcreteEventHandler {
 
-    public UdpEventHandler(SelectableChannel channel, Processor processor) {
-        super(channel, processor);
+    public UdpEventHandler(SelectableChannel channel, InboundHandler inboundHandler) {
+        super(channel, inboundHandler);
     }
 
     @Override
@@ -30,7 +28,7 @@ public class UdpEventHandler extends ConcreteEventHandler {
         buffer.flip();
         DatagramPacket packet = new DatagramPacket(buffer);
         packet.setSender(sender);
-        processor.process(packet, key);
+        inboundHandler.read(packet, key);
     }
 
     @Override

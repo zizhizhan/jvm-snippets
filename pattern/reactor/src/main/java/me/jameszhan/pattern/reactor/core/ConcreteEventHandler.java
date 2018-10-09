@@ -1,7 +1,5 @@
 package me.jameszhan.pattern.reactor.core;
 
-import me.jameszhan.pattern.reactor.Processor;
-
 import java.io.IOException;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
@@ -20,12 +18,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public abstract class ConcreteEventHandler implements EventHandler {
 
     private final Map<SelectableChannel, Queue<Object>> channelToPendingWrites = new ConcurrentHashMap<>();
-    protected final Processor processor;
+    protected final InboundHandler inboundHandler;
     protected final SelectableChannel channel;
 
-    public ConcreteEventHandler(SelectableChannel channel, Processor processor) {
+    public ConcreteEventHandler(SelectableChannel channel, InboundHandler inboundHandler) {
         this.channel = channel;
-        this.processor = processor;
+        this.inboundHandler = inboundHandler;
     }
 
     public void handle(WriteEvent event) throws IOException {
