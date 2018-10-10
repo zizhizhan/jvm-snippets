@@ -1,7 +1,9 @@
-package me.jameszhan.pattern.reactor.simple;
+package me.jameszhan.pattern.reactor.simple.main;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import me.jameszhan.pattern.reactor.simple.core.ChannelHandler;
+import me.jameszhan.pattern.reactor.simple.core.Reactor;
+import me.jameszhan.pattern.reactor.simple.core.TcpChannel;
+import me.jameszhan.pattern.reactor.simple.core.UdpChannel;
 
 import java.io.IOException;
 
@@ -13,7 +15,6 @@ import java.io.IOException;
  * Time: 下午8:46
  */
 public class ReactorServer {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReactorServer.class);
 
     public static void main(String[] args) throws IOException {
         ChannelHandler handler = new LoggingHandler();

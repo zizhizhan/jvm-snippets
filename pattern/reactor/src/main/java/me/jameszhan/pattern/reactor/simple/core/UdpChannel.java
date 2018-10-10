@@ -1,8 +1,10 @@
-package me.jameszhan.pattern.reactor.simple;
+package me.jameszhan.pattern.reactor.simple.core;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 
@@ -25,11 +27,26 @@ public class UdpChannel extends AbstractChannel {
         return SelectionKey.OP_READ;
     }
 
+    @Override
+    public Message read(SelectionKey key) throws IOException{
+        DatagramChannel datagramChannel = (DatagramChannel) key.channel();
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        SocketAddress clientAddr = datagramChannel.receive(buffer);
+        buffer.flip();
+        return new Message(buffer, clientAddr);
+    }
+
+    @Override
+    protected void doWrite(Message message, SelectionKey key) throws IOException {
+        ((DatagramChannel) key.channel()).send(message.buffer, message.clientAddr);
+    }
+
     private static DatagramChannel buildDatagramChannel(int port) throws IOException {
         DatagramChannel datagramChannel = DatagramChannel.open();
         datagramChannel.socket().bind(new InetSocketAddress(InetAddress.getLocalHost(), port));
         datagramChannel.configureBlocking(false);
         return datagramChannel;
     }
+
 
 }

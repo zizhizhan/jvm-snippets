@@ -1,4 +1,4 @@
-package me.jameszhan.pattern.reactor.simple;
+package me.jameszhan.pattern.reactor.simple.core;
 
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -12,8 +12,8 @@ import java.nio.ByteBuffer;
  */
 public class Message {
 
-    final ByteBuffer buffer;
-    final SocketAddress clientAddr;
+    public final ByteBuffer buffer;
+    public final SocketAddress clientAddr;
 
     public Message(ByteBuffer buffer, SocketAddress clientAddr) {
         this.buffer = buffer;

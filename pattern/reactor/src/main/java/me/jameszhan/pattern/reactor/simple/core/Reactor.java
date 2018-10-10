@@ -1,17 +1,14 @@
-package me.jameszhan.pattern.reactor.simple;
+package me.jameszhan.pattern.reactor.simple.core;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Closeable;
+import java.io.EOFException;
 import java.io.IOException;
-import java.net.SocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,7 +24,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Reactor {
     private static final Logger LOGGER = LoggerFactory.getLogger(Reactor.class);
 
-    private final Map<SelectableChannel, Queue<Message>> channelToPendingWrites = new ConcurrentHashMap<>();
     private final Selector selector;
     private final Executor executor;
     private final AtomicBoolean running;
@@ -93,11 +89,9 @@ public class Reactor {
         try {
             if (key.isAcceptable()) {
                 accept(key);
-            }
-            if (key.isReadable()) {
+            } else if (key.isReadable()) {
                 read(key);
-            }
-            if (key.isWritable()) {
+            } else if (key.isWritable()) {
                 write(key);
             }
         } catch (IOException e) {
@@ -111,61 +105,42 @@ public class Reactor {
     }
 
     private void accept(SelectionKey key) throws IOException {
-        ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
-        SocketChannel socketChannel = serverSocketChannel.accept();
-        socketChannel.configureBlocking(false);
-        SelectionKey readKey = socketChannel.register(key.selector(), SelectionKey.OP_READ, key.attachment());
-        LOGGER.debug("Accept {} with {}.", socketChannel, readKey);
+        AcceptableChannel acceptableChannel = (AcceptableChannel) key.attachment();
+        acceptableChannel.accept(key);
     }
 
-    private void read(SelectionKey key) throws IOException {
-        SelectableChannel selectableChannel = key.channel();
-        Channel channel = (Channel)key.attachment();
-        if (selectableChannel instanceof SocketChannel) {
-            SocketChannel socketChannel = (SocketChannel) selectableChannel;
-            ByteBuffer buffer = ByteBuffer.allocate(1024);
-            int length = socketChannel.read(buffer);
-            buffer.flip();
-            if (length == -1) {
-                SelectableChannel sc = key.channel();
-                if (sc instanceof SocketChannel) {
-                    LOGGER.info("Socket {} closed.", ((SocketChannel) sc).socket());
-                } else {
-                    LOGGER.warn("SelectionKey {} closed.", key);
-                }
-                key.channel().close();
+    private void read(SelectionKey key) {
+        Channel channel = (Channel) key.attachment();
+        try {
+            Message message = channel.read(key);
+            executor.execute(() -> channel.handle(message, key));
+        } catch (EOFException e) {
+            SelectableChannel sc = key.channel();
+            if (sc instanceof SocketChannel) {
+                LOGGER.info("Socket {} closed.", ((SocketChannel) sc).socket());
             } else {
-                SocketAddress clientAddr = socketChannel.getRemoteAddress();
-                executor.execute(() -> channel.handle(new Message(buffer, clientAddr)));
+                LOGGER.warn("SelectionKey {} closed.", key);
             }
-        } else if (selectableChannel instanceof DatagramChannel) {
-            DatagramChannel datagramChannel = (DatagramChannel) selectableChannel;
-            ByteBuffer buffer = ByteBuffer.allocate(1024);
-            SocketAddress clientAddr = datagramChannel.receive(buffer);
-            buffer.flip();
-            executor.execute(() -> channel.handle(new Message(buffer, clientAddr)));
-        } else {
-            LOGGER.error("Read Unexpected SelectionKey {}.", key);
+            close(key.channel());
+        } catch (IOException e) {
+            LOGGER.error("Unexpected Error onChannelReadable {}.", key, e);
+            close(key.channel());
         }
     }
 
     private void write(SelectionKey key) throws IOException {
-        SelectableChannel selectableChannel = key.channel();
-        Queue<Message> pendingWrites = this.channelToPendingWrites.get(key.channel());
-        while (running.get()) {
-            Message pendingWrite = pendingWrites.poll();
-            if (pendingWrite == null) {
-                key.interestOps(SelectionKey.OP_READ);
-                break;
-            }
-            if (selectableChannel instanceof SocketChannel) {
-                ((SocketChannel) selectableChannel).write(pendingWrite.buffer);
-            } else if (selectableChannel instanceof DatagramChannel) {
-                ((DatagramChannel) selectableChannel).send(pendingWrite.buffer, pendingWrite.clientAddr);
-            } else {
-                LOGGER.error("Read Unexpected SelectionKey {}.", key);
-            }
-        }
-
+        Channel channel = (Channel) key.attachment();
+        channel.write(key);
     }
+
+    public static void close(Closeable closeable) {
+        try {
+            if (closeable != null) {
+                closeable.close();
+            }
+        } catch (IOException e) {
+            LOGGER.warn("Ignore close error.", e);
+        }
+    }
+
 }

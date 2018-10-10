@@ -1,4 +1,4 @@
-package me.jameszhan.pattern.reactor.simple;
+package me.jameszhan.pattern.reactor.simple.main;
 
 /**
  * Create by zhiqiangzhan@gmail.com
