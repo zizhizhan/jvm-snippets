@@ -23,8 +23,8 @@ public class DispatcherMain {
             event.channel.interestOps(EventType.READ);
         }).registerHandler(EventType.READ, (event -> {
             LOGGER.info("Read event {}.", event);
-            event.channel.write(event.data);
             event.channel.interestOps(EventType.WRITE);
+            event.channel.write(event.data);
         })).registerHandler(EventType.WRITE, (event -> {
             LOGGER.info("Get write event {}.", event);
             event.channel.interestOps(EventType.READ);
@@ -32,8 +32,6 @@ public class DispatcherMain {
 
         new Thread(() -> {
             try {
-                channel.accept(8080);
-                Thread.sleep(300);
                 channel.read("a");
                 Thread.sleep(100);
                 channel.read("b");
@@ -41,10 +39,17 @@ public class DispatcherMain {
                 channel.read("c");
                 channel.read("d");
                 channel.read("e");
+                channel.accept(8080);
+                Thread.sleep(100);
+                channel.read("f");
+                channel.read("g");
+                Thread.sleep(100);
+                channel.read("h");
+                channel.read("i");
+                channel.read("j");
+
                 Thread.sleep(3000);
                 channel.stop();
-
-                channel.interestOps(EventType.STOP);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -9,6 +9,7 @@ package me.jameszhan.pattern.reactor.origin;
  */
 public class DefaultChannel implements Channel {
     private final Demultiplexer demultiplexer;
+    private EventType interestOps = EventType.ACCEPT;
 
     public DefaultChannel(Demultiplexer demultiplexer) {
         this.demultiplexer = demultiplexer;
@@ -21,6 +22,7 @@ public class DefaultChannel implements Channel {
 
     @Override
     public void stop() {
+        this.interestOps = EventType.STOP;
         demultiplexer.enqueue(new Event(EventType.STOP, this, null));
     }
 
@@ -36,6 +38,12 @@ public class DefaultChannel implements Channel {
 
     @Override
     public void interestOps(EventType interestOps) {
-        demultiplexer.interestOps(interestOps);
+        this.interestOps = interestOps;
     }
+
+    @Override
+    public EventType interestOps() {
+        return this.interestOps;
+    }
+
 }

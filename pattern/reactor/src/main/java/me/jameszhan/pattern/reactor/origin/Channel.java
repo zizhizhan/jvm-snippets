@@ -19,4 +19,5 @@ public interface Channel {
 
     void interestOps(EventType interestOps);
 
+    EventType interestOps();
 }
