@@ -1,4 +1,4 @@
-package me.jameszhan.pattern.reactor.single;
+package me.jameszhan.pattern.reactor.simple;
 
 import me.jameszhan.pattern.reactor.classic.main.LoggingAcceptor;
 import org.slf4j.Logger;

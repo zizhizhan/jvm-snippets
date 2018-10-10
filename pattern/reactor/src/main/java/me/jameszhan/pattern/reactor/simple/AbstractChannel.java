@@ -1,10 +1,8 @@
-package me.jameszhan.pattern.reactor.single;
+package me.jameszhan.pattern.reactor.simple;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.SocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.SelectableChannel;
 
 /**

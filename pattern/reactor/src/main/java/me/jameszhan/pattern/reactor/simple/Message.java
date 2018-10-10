@@ -1,4 +1,4 @@
-package me.jameszhan.pattern.reactor.single;
+package me.jameszhan.pattern.reactor.simple;
 
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;

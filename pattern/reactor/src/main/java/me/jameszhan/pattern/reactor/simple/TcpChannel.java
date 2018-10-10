@@ -1,7 +1,4 @@
-package me.jameszhan.pattern.reactor.single;
-
-import me.jameszhan.pattern.reactor.classic.core.InboundHandler;
-import me.jameszhan.pattern.reactor.classic.core.TcpEventHandler;
+package me.jameszhan.pattern.reactor.simple;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
