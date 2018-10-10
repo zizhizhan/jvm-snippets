@@ -1,4 +1,4 @@
-package me.jameszhan.pattern.reactor.core;
+package me.jameszhan.pattern.reactor.classic.core;
 
 import java.io.IOException;
 import java.nio.channels.SelectableChannel;

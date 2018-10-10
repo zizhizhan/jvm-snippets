@@ -1,10 +1,10 @@
-package me.jameszhan.pattern.reactor.main;
+package me.jameszhan.pattern.reactor.classic.main;
 
-import me.jameszhan.pattern.reactor.core.InboundHandler;
-import me.jameszhan.pattern.reactor.core.Dispatcher;
-import me.jameszhan.pattern.reactor.core.InitiationDispatcher;
-import me.jameszhan.pattern.reactor.core.TcpEventHandler;
-import me.jameszhan.pattern.reactor.core.UdpEventHandler;
+import me.jameszhan.pattern.reactor.classic.core.InboundHandler;
+import me.jameszhan.pattern.reactor.classic.core.Dispatcher;
+import me.jameszhan.pattern.reactor.classic.core.InitiationDispatcher;
+import me.jameszhan.pattern.reactor.classic.core.TcpEventHandler;
+import me.jameszhan.pattern.reactor.classic.core.UdpEventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,8 +1,8 @@
-package me.jameszhan.pattern.reactor.main;
+package me.jameszhan.pattern.reactor.classic.main;
 
-import me.jameszhan.pattern.reactor.core.InboundHandler;
-import me.jameszhan.pattern.reactor.core.EventHandler;
-import me.jameszhan.pattern.reactor.core.UdpEventHandler;
+import me.jameszhan.pattern.reactor.classic.core.InboundHandler;
+import me.jameszhan.pattern.reactor.classic.core.EventHandler;
+import me.jameszhan.pattern.reactor.classic.core.UdpEventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

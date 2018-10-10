@@ -1,4 +1,4 @@
-package me.jameszhan.pattern.reactor.core;
+package me.jameszhan.pattern.reactor.classic.core;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
