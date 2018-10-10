@@ -13,20 +13,28 @@ public class DispatcherMain {
         Demultiplexer demultiplexer = new Demultiplexer();
         Dispatcher dispatcher = new Dispatcher(demultiplexer);
         dispatcher.registerHandler(EventType.ACCEPT, new AcceptEventHandler())
-                .registerHandler(EventType.READ, new ReadEventHandler())
+                .registerHandler(EventType.READ, new ReadEventHandler() {
+                    @Override public void handle(Event event) {
+                        super.handle(event);
+                        event.channel.write(event.data);
+                    }
+                })
                 .registerHandler(EventType.WRITE, new WriteEventHandler())
                 .registerHandler(EventType.STOP, new StopEventHandler(dispatcher));
         new Thread(() -> {
             try {
+                DefaultChannel channel = new DefaultChannel(demultiplexer);
+                channel.accept(8080);
                 Thread.sleep(300);
-                demultiplexer.enqueue(new Event(EventType.ACCEPT));
+                channel.read("a");
                 Thread.sleep(100);
-                demultiplexer.enqueue(new Event(EventType.ACCEPT));
+                channel.read("b");
                 Thread.sleep(100);
-                demultiplexer.enqueue(new Event(EventType.ACCEPT));
-                demultiplexer.enqueue(new Event(EventType.ACCEPT));
+                channel.read("c");
+                channel.read("d");
+                channel.read("e");
                 Thread.sleep(3000);
-                demultiplexer.enqueue(new Event(EventType.STOP));
+                channel.stop();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
