@@ -17,4 +17,6 @@ public interface Channel {
 
     void stop();
 
+    void interestOps(EventType interestOps);
+
 }

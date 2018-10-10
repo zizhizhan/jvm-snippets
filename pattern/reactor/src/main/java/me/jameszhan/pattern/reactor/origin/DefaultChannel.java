@@ -34,4 +34,8 @@ public class DefaultChannel implements Channel {
         demultiplexer.enqueue(new Event(EventType.WRITE, this, response));
     }
 
+    @Override
+    public void interestOps(EventType interestOps) {
+        demultiplexer.interestOps(interestOps);
+    }
 }
