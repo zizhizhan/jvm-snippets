@@ -17,12 +17,12 @@ public interface Channel {
 
     int interestOps();
 
-    void handle(Message message, SelectionKey key);
+    void handle(Message message, SelectionKey handle);
 
-    void enqueue(Message message, SelectionKey key);
+    void enqueue(Message message, SelectionKey handle);
 
-    Message read(SelectionKey key) throws IOException;
+    Message read(SelectionKey handle) throws IOException;
 
-    void write(SelectionKey key) throws IOException;
+    void write(SelectionKey handle) throws IOException;
 
 }

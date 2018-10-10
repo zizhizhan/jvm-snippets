@@ -24,12 +24,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Reactor {
     private static final Logger LOGGER = LoggerFactory.getLogger(Reactor.class);
 
-    private final Selector selector;
+    private final Selector demultiplexer;
     private final Executor executor;
     private final AtomicBoolean running;
 
     public Reactor(int poolSize) throws IOException {
-        this.selector = Selector.open();
+        this.demultiplexer = Selector.open();
         this.running = new AtomicBoolean(false);
         if (poolSize > 0) {
             executor = Executors.newFixedThreadPool(poolSize);
@@ -39,7 +39,7 @@ public class Reactor {
     }
 
     public Reactor register(Channel channel) throws IOException {
-        SelectionKey key = channel.getSelectableChannel().register(selector, channel.interestOps(), channel);
+        SelectionKey key = channel.getSelectableChannel().register(demultiplexer, channel.interestOps(), channel);
         LOGGER.debug("Register {} with key {}.", channel, key);
         return this;
     }
@@ -62,9 +62,9 @@ public class Reactor {
                     running.compareAndSet(true, false);
                     break;
                 }
-                int readyOps = selector.select();
+                int readyOps = demultiplexer.select();
                 if (readyOps > 0) {
-                    Set<SelectionKey> selectionKeys = selector.selectedKeys();
+                    Set<SelectionKey> selectionKeys = demultiplexer.selectedKeys();
                     Iterator<SelectionKey> iterator = selectionKeys.iterator();
                     while (iterator.hasNext()) {
                         SelectionKey key = iterator.next();
@@ -77,7 +77,7 @@ public class Reactor {
                     }
                     selectionKeys.clear();
                 } else {
-                    LOGGER.warn("Select error for {} with readyOps {}.", selector.selectedKeys(), readyOps);
+                    LOGGER.warn("Select error for {} with readyOps {}.", demultiplexer.selectedKeys(), readyOps);
                 }
             }
         }

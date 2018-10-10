@@ -28,8 +28,8 @@ public class UdpChannel extends AbstractChannel {
     }
 
     @Override
-    public Message read(SelectionKey key) throws IOException{
-        DatagramChannel datagramChannel = (DatagramChannel) key.channel();
+    public Message read(SelectionKey handle) throws IOException{
+        DatagramChannel datagramChannel = (DatagramChannel) handle.channel();
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         SocketAddress clientAddr = datagramChannel.receive(buffer);
         buffer.flip();

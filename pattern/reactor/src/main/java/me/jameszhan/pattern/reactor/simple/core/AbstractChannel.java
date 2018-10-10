@@ -36,37 +36,37 @@ public abstract class AbstractChannel implements Channel {
     }
 
     @Override
-    public void handle(Message message, SelectionKey key) {
-        handler.handle(this, message, key);
+    public void handle(Message message, SelectionKey handle) {
+        handler.handle(this, message, handle);
     }
 
     @Override
-    public void enqueue(Message message, SelectionKey key) {
-        Queue<Message> pendingWrites = this.channelToPendingWrites.get(key.channel());
+    public void enqueue(Message message, SelectionKey handle) {
+        Queue<Message> pendingWrites = this.channelToPendingWrites.get(handle.channel());
         if (pendingWrites == null) {
             synchronized (this.channelToPendingWrites) {
-                pendingWrites = this.channelToPendingWrites.get(key.channel());
+                pendingWrites = this.channelToPendingWrites.get(handle.channel());
                 if (pendingWrites == null) {
                     pendingWrites = new ConcurrentLinkedQueue<>();
-                    this.channelToPendingWrites.put(key.channel(), pendingWrites);
+                    this.channelToPendingWrites.put(handle.channel(), pendingWrites);
                 }
             }
         }
         pendingWrites.add(message);
-        key.interestOps(SelectionKey.OP_WRITE);
+        handle.interestOps(SelectionKey.OP_WRITE);
     }
 
     @Override
-    public void write(SelectionKey key) throws IOException {
-        Queue<Message> pendingWrites = this.channelToPendingWrites.get(key.channel());
+    public void write(SelectionKey handle) throws IOException {
+        Queue<Message> pendingWrites = this.channelToPendingWrites.get(handle.channel());
         while (true) {
             Message pendingWrite = pendingWrites.poll();
             if (pendingWrite == null) {
-                key.interestOps(SelectionKey.OP_READ);
+                handle.interestOps(SelectionKey.OP_READ);
                 break;
             }
 
-            doWrite(pendingWrite, key);
+            doWrite(pendingWrite, handle);
         }
     }
 

@@ -35,8 +35,8 @@ public class TcpChannel extends AbstractChannel implements AcceptableChannel {
     }
 
     @Override
-    public Message read(SelectionKey key) throws IOException {
-        SocketChannel socketChannel = (SocketChannel) key.channel();
+    public Message read(SelectionKey handle) throws IOException {
+        SocketChannel socketChannel = (SocketChannel) handle.channel();
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         int length = socketChannel.read(buffer);
         buffer.flip();
