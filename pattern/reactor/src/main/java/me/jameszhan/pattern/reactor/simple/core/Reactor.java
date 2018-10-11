@@ -67,13 +67,13 @@ public class Reactor {
                     Set<SelectionKey> selectionKeys = demultiplexer.selectedKeys();
                     Iterator<SelectionKey> iterator = selectionKeys.iterator();
                     while (iterator.hasNext()) {
-                        SelectionKey key = iterator.next();
-                        if (!key.isValid()) {
+                        SelectionKey handle = iterator.next();
+                        if (!handle.isValid()) {
                             iterator.remove();
                             continue;
                         }
-                        LOGGER.info("{} with ops {}", key, key.readyOps());
-                        dispatch(key);
+                        LOGGER.info("{} with ops {}", handle, handle.readyOps());
+                        dispatch(handle);
                     }
                     selectionKeys.clear();
                 } else {
@@ -83,54 +83,54 @@ public class Reactor {
         }
     }
 
-    private void dispatch(SelectionKey key) {
-        LOGGER.info("Dispatch SelectionKey(interestOps: {}, readyOps: {}, channel: {})", key.interestOps(),
-                key.readyOps(), key.channel());
+    private void dispatch(SelectionKey handle) {
+        LOGGER.info("Dispatch SelectionKey(interestOps: {}, readyOps: {}, channel: {})", handle.interestOps(),
+                handle.readyOps(), handle.channel());
         try {
-            if (key.isAcceptable()) {
-                accept(key);
-            } else if (key.isReadable()) {
-                read(key);
-            } else if (key.isWritable()) {
-                write(key);
+            if (handle.isAcceptable()) {
+                accept(handle);
+            } else if (handle.isReadable()) {
+                read(handle);
+            } else if (handle.isWritable()) {
+                write(handle);
             }
         } catch (IOException e) {
-            if (key.isValid()) {
+            if (handle.isValid()) {
                 LOGGER.error("Dispatch SelectionKey(interestOps: {}, readyOps: {}, channel: {}) failure.",
-                        key.interestOps(), key.readyOps(), key.channel(), e);
+                        handle.interestOps(), handle.readyOps(), handle.channel(), e);
             } else {
                 LOGGER.debug("Dispatch SelectionKey failure.", e);
             }
         }
     }
 
-    private void accept(SelectionKey key) throws IOException {
-        AcceptableChannel acceptableChannel = (AcceptableChannel) key.attachment();
-        acceptableChannel.accept(key);
+    private void accept(SelectionKey handle) throws IOException {
+        AcceptableChannel acceptableChannel = (AcceptableChannel) handle.attachment();
+        acceptableChannel.accept(handle);
     }
 
-    private void read(SelectionKey key) {
-        Channel channel = (Channel) key.attachment();
+    private void read(SelectionKey handle) {
+        Channel channel = (Channel) handle.attachment();
         try {
-            Message message = channel.read(key);
-            executor.execute(() -> channel.handle(message, key));
+            Message message = channel.read(handle);
+            executor.execute(() -> channel.handle(message, handle));
         } catch (EOFException e) {
-            SelectableChannel sc = key.channel();
+            SelectableChannel sc = handle.channel();
             if (sc instanceof SocketChannel) {
                 LOGGER.info("Socket {} closed.", ((SocketChannel) sc).socket());
             } else {
-                LOGGER.warn("SelectionKey {} closed.", key);
+                LOGGER.warn("SelectionKey {} closed.", handle);
             }
-            close(key.channel());
+            close(handle.channel());
         } catch (IOException e) {
-            LOGGER.error("Unexpected Error onChannelReadable {}.", key, e);
-            close(key.channel());
+            LOGGER.error("Unexpected Error onChannelReadable {}.", handle, e);
+            close(handle.channel());
         }
     }
 
-    private void write(SelectionKey key) throws IOException {
-        Channel channel = (Channel) key.attachment();
-        channel.write(key);
+    private void write(SelectionKey handle) throws IOException {
+        Channel channel = (Channel) handle.attachment();
+        channel.write(handle);
     }
 
     public static void close(Closeable closeable) {
