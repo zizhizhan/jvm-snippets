@@ -8,10 +8,9 @@ import java.io.IOException;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
-import java.nio.channels.spi.SelectorProvider;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -24,15 +23,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class Reactor {
     private static final Logger LOGGER = LoggerFactory.getLogger(Reactor.class);
-    private final String name;
-    private final ExecutorService eventLoopExecutor;
+    private final Executor eventLoopExecutor;
     private final Selector demultiplexer;
     private final Dispatcher dispatcher;
     private final AtomicBoolean running;
 
-    public Reactor(String name, Dispatcher dispatcher, Selector selectorProvider) throws IOException {
-        this.name = name;
-        this.demultiplexer = selectorProvider;
+    public Reactor(Dispatcher dispatcher) throws IOException {
+        this.demultiplexer = Selector.open();
         this.dispatcher = dispatcher;
         this.eventLoopExecutor = Executors.newSingleThreadExecutor();
         this.running = new AtomicBoolean(false);
@@ -40,13 +37,13 @@ public class Reactor {
 
     public Reactor register(SelectableChannel channel, int interestOps, Channel attachment) throws IOException {
         SelectionKey handle = channel.register(demultiplexer, interestOps, attachment);
-        LOGGER.info("{} register {} with {}(interestOps: {}).", name, channel, handle, interestOps);
+        LOGGER.info("{} register {} with {}(interestOps: {}).", this, channel, handle, interestOps);
         return this;
     }
 
     public void start() {
         if (running.compareAndSet(false, true)) {
-            LOGGER.info("{} started.", name);
+            LOGGER.info("{} started.", this);
             eventLoopExecutor.execute(this::eventLoop);
         }
     }
@@ -58,9 +55,8 @@ public class Reactor {
                 break;
             }
             try {
-                int readyCount = demultiplexer.select();
+                int readyCount = demultiplexer.select(1000); // 多个Selector会出现死锁，这里务必设置超时时间
                 if (readyCount > 0) {
-                    LOGGER.info("{} with readyCount {}.", name, readyCount);
                     Set<SelectionKey> selectionKeys = demultiplexer.selectedKeys();
                     Iterator<SelectionKey> iterator = selectionKeys.iterator();
                     while (iterator.hasNext()) {
@@ -69,7 +65,7 @@ public class Reactor {
                             iterator.remove();
                             continue;
                         }
-                        LOGGER.info("{} with readOps {}", name, handle.readyOps());
+                        LOGGER.info("{} with readOps {}", handle, handle.readyOps());
                         dispatcher.dispatch(handle);
                     }
                     selectionKeys.clear();
