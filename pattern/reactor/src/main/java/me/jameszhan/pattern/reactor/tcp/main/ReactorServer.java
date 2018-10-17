@@ -23,7 +23,7 @@ public class ReactorServer {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        ReadWriteDispatcher dispatcher = new ReadWriteDispatcher(0);
+        SessionDispatcher dispatcher = new SessionDispatcher(0);
         Reactor subReactor = new Reactor(dispatcher);
 
         AcceptDispatcher acceptor = new AcceptDispatcher(subReactor);

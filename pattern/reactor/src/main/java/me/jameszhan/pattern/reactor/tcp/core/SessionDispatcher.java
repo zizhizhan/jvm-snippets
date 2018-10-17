@@ -20,12 +20,12 @@ import java.util.concurrent.Executors;
  * Date: 2018/10/10
  * Time: 下午10:12
  */
-public class ReadWriteDispatcher implements Dispatcher {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReadWriteDispatcher.class);
+public class SessionDispatcher implements Dispatcher {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionDispatcher.class);
 
     private final Executor executor;
 
-    public ReadWriteDispatcher(int poolSize) {
+    public SessionDispatcher(int poolSize) {
         if (poolSize > 0) {
             executor = Executors.newFixedThreadPool(poolSize);
         } else {
