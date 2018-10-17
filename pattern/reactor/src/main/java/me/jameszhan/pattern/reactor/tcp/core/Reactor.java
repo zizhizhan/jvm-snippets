@@ -35,7 +35,7 @@ public class Reactor {
         this.running = new AtomicBoolean(false);
     }
 
-    public Reactor register(SelectableChannel channel, int interestOps, Channel attachment) throws IOException {
+    public Reactor register(SelectableChannel channel, int interestOps, Object attachment) throws IOException {
         SelectionKey handle = channel.register(demultiplexer, interestOps, attachment);
         LOGGER.info("{} register {} with {}(interestOps: {}).", this, channel, handle, interestOps);
         return this;

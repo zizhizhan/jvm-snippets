@@ -29,8 +29,8 @@ public class ReactorServer {
         AcceptDispatcher acceptor = new AcceptDispatcher(subReactor);
         Reactor reactor = new Reactor(acceptor);
 
-        Channel channel = new DefaultChannel(new LoggingHandler());
-        reactor.register(buildServerSocketChannel(8888), SelectionKey.OP_ACCEPT, channel).start();
+        SessionHandler sessionHandler = new LoggingHandler();
+        reactor.register(buildServerSocketChannel(8888), SelectionKey.OP_ACCEPT, sessionHandler).start();
         subReactor.start();
     }
 

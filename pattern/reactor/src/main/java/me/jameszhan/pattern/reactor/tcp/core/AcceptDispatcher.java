@@ -30,8 +30,8 @@ public class AcceptDispatcher implements Dispatcher {
                 ServerSocketChannel serverSocketChannel = (ServerSocketChannel) handle.channel();
                 SocketChannel socketChannel = serverSocketChannel.accept();
                 socketChannel.configureBlocking(false);
-                Channel channel = (Channel) handle.attachment();
-                subReactor.register(socketChannel, SelectionKey.OP_READ, channel);
+                SessionHandler handler = (SessionHandler) handle.attachment();
+                subReactor.register(socketChannel, SelectionKey.OP_READ, new DefaultSession(handler));
             } else {
                 LOGGER.error("Unexpected handle(readyOps: {}, interestOps: {})", handle.readyOps(), handle.interestOps());
             }

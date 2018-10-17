@@ -7,11 +7,11 @@ import java.nio.channels.SelectionKey;
  * Create by zhiqiangzhan@gmail.com
  *
  * @author James Zhan
- * Date: 2018/10/10
- * Time: 下午10:59
+ * Date: 2018/10/17
+ * Time: 下午8:26
  */
-public interface ChannelHandler {
+public interface SessionHandler {
 
-    void handle(Channel channel, ByteBuffer buffer, SelectionKey handle);
+    void handle(Session channel, ByteBuffer buffer, SelectionKey handle);
 
 }

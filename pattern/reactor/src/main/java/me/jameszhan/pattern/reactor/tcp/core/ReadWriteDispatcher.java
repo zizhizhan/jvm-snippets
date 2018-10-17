@@ -58,7 +58,7 @@ public class ReadWriteDispatcher implements Dispatcher {
     }
 
     private void read(SelectionKey handle) {
-        Channel channel = (Channel) handle.attachment();
+        Session channel = (Session) handle.attachment();
         try {
             ByteBuffer buffer = channel.read(handle);
             executor.execute(() -> channel.handle(buffer, handle));
@@ -77,7 +77,7 @@ public class ReadWriteDispatcher implements Dispatcher {
     }
 
     private void write(SelectionKey handle) throws IOException {
-        Channel channel = (Channel) handle.attachment();
+        Session channel = (Session) handle.attachment();
         channel.send(handle);
     }
 
