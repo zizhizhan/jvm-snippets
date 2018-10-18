@@ -58,10 +58,10 @@ public class SessionDispatcher implements Dispatcher {
     }
 
     private void read(SelectionKey handle) {
-        Session channel = (Session) handle.attachment();
+        Session session = (Session) handle.attachment();
         try {
-            ByteBuffer buffer = channel.read(handle);
-            executor.execute(() -> channel.handle(buffer, handle));
+            ByteBuffer buffer = session.read(handle);
+            executor.execute(() -> session.handle(buffer, handle));
         } catch (EOFException e) {
             SelectableChannel sc = handle.channel();
             if (sc instanceof SocketChannel) {
@@ -77,8 +77,8 @@ public class SessionDispatcher implements Dispatcher {
     }
 
     private void write(SelectionKey handle) throws IOException {
-        Session channel = (Session) handle.attachment();
-        channel.send(handle);
+        Session session = (Session) handle.attachment();
+        session.send(handle);
     }
 
     private static void close(Closeable closeable) {

@@ -1,11 +1,10 @@
-package me.jameszhan.pattern.reactor.tcp.core;
+package me.jameszhan.pattern.reactor.nio.core;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.util.Iterator;
@@ -24,20 +23,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Reactor {
     private static final Logger LOGGER = LoggerFactory.getLogger(Reactor.class);
     private final Executor eventLoopExecutor;
-    private final Selector demultiplexer;
-    private final Dispatcher dispatcher;
+    private final Selector selector;
     private final AtomicBoolean running;
 
-    public Reactor(Dispatcher dispatcher) throws IOException {
-        this.demultiplexer = Selector.open();
-        this.dispatcher = dispatcher;
+    public Reactor() throws IOException {
+        this.selector = Selector.open();
         this.eventLoopExecutor = Executors.newSingleThreadExecutor();
         this.running = new AtomicBoolean(false);
     }
 
-    public Reactor register(SelectableChannel channel, int interestOps, Object attachment) throws IOException {
-        SelectionKey handle = channel.register(demultiplexer, interestOps, attachment);
-        LOGGER.info("{} register {} with {}(interestOps: {}).", this, channel, handle, interestOps);
+    public Reactor register(Channel channel) throws IOException {
+        SelectionKey handle = channel.register(selector);
+        LOGGER.info("{} register {} with {}(interestOps: {}).", this, channel, handle, handle.interestOps());
         return this;
     }
 
@@ -55,9 +52,9 @@ public class Reactor {
                 break;
             }
             try {
-                int readyCount = demultiplexer.select(1000); // 多个Selector会出现死锁，这里务必设置超时时间
+                int readyCount = selector.select();
                 if (readyCount > 0) {
-                    Set<SelectionKey> selectionKeys = demultiplexer.selectedKeys();
+                    Set<SelectionKey> selectionKeys = selector.selectedKeys();
                     Iterator<SelectionKey> iterator = selectionKeys.iterator();
                     while (iterator.hasNext()) {
                         SelectionKey handle = iterator.next();
@@ -65,14 +62,14 @@ public class Reactor {
                             iterator.remove();
                             continue;
                         }
-                        LOGGER.info("{} with readyOps {}", handle, handle.readyOps());
-                        dispatcher.dispatch(handle);
+                        LOGGER.debug("{} with readyOps {}", handle, handle.readyOps());
+                        ((Channel)handle.attachment()).dispatch(handle);
                     }
                     selectionKeys.clear();
                 }
             } catch (IOException e) {
                 LOGGER.error("Unexpected IOError.", e);
-                close(demultiplexer);
+                close(selector);
             }
         }
     }
