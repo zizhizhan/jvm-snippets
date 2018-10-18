@@ -5,7 +5,6 @@ import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
-import me.jameszhan.pattern.reactor.nio.core.UdpSession.DatagramPacket;
 
 /**
  * Create by zhiqiangzhan@gmail.com
@@ -33,13 +32,4 @@ public class UdpSession extends AbstractSession<DatagramPacket> {
         ((DatagramChannel)handle.channel()).send(pendingWrite.buf, pendingWrite.address);
     }
 
-    public static class DatagramPacket {
-        public final SocketAddress address;
-        public final ByteBuffer buf;
-
-        public DatagramPacket(SocketAddress address, ByteBuffer buf) {
-            this.address = address;
-            this.buf = buf;
-        }
-    }
 }

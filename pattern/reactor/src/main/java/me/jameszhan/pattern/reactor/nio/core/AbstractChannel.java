@@ -7,8 +7,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
 /**
@@ -18,10 +16,9 @@ import java.util.concurrent.Executor;
  * Date: 2018/10/17
  * Time: 下午9:02
  */
-public abstract class AbstractChannel<T> implements Channel {
+public abstract class AbstractChannel implements Channel {
     protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractChannel.class);
 
-    protected final Map<SelectableChannel, Session<T>> sessions = new ConcurrentHashMap<>();
     protected final SelectableChannel selectableChannel;
     protected final Executor executor;
 
@@ -36,7 +33,7 @@ public abstract class AbstractChannel<T> implements Channel {
 
     @Override
     public void dispatch(SelectionKey handle) {
-        LOGGER.info("Dispatch {}(interestOps: {}, readyOps: {}, channel: {})", handle, handle.interestOps(),
+        LOGGER.debug("Dispatch {}(interestOps: {}, readyOps: {}, channel: {})", handle, handle.interestOps(),
                 handle.readyOps(), handle.channel());
         try {
             if (handle.isAcceptable()) {
@@ -66,10 +63,7 @@ public abstract class AbstractChannel<T> implements Channel {
 
     protected abstract void read(SelectionKey handle);
 
-    protected void write(SelectionKey handle) throws IOException {
-        Session session = sessions.get(handle.channel());
-        session.send(handle);
-    }
+    protected abstract void write(SelectionKey handle) throws IOException;
 
     protected static void close(Closeable closeable) {
         try {

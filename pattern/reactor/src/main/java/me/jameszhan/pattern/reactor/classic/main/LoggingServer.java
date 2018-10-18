@@ -31,6 +31,7 @@ public class LoggingServer {
         dispatcher.registerHandler(newTcpHandler(8886, loggingAcceptor))
                 .registerHandler(newTcpHandler(8887, loggingAcceptor))
                 .registerHandler(newUdpHandler(8888, loggingAcceptor))
+                .registerHandler(newUdpHandler(8889, loggingAcceptor))
                 .handleEvents();
     }
 

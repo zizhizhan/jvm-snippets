@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
 /**
@@ -14,8 +16,8 @@ import java.util.concurrent.Executor;
  * Date: 2018/10/17
  * Time: 下午9:08
  */
-public class TcpChannel extends AbstractChannel<ByteBuffer> {
-
+public class TcpChannel extends AbstractChannel {
+    protected final Map<SelectableChannel, Session<ByteBuffer>> sessions = new ConcurrentHashMap<>();
     protected final SessionHandler<ByteBuffer> sessionHandler;
 
     public TcpChannel(int port, SessionHandler<ByteBuffer> sessionHandler) throws IOException {
@@ -71,7 +73,13 @@ public class TcpChannel extends AbstractChannel<ByteBuffer> {
         }
     }
 
-    public static ServerSocketChannel buildServerSocketChannel(int port) throws IOException {
+    @Override
+    protected void write(SelectionKey handle) throws IOException {
+        Session<ByteBuffer> session = sessions.get(handle.channel());
+        session.send(handle);
+    }
+
+    private static ServerSocketChannel buildServerSocketChannel(int port) throws IOException {
         ServerSocketChannel ssc = ServerSocketChannel.open();
         ssc.socket().bind(new InetSocketAddress(port));
         ssc.configureBlocking(false);

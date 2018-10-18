@@ -30,7 +30,9 @@ public class ReactorServer {
         Reactor reactor = new Reactor(acceptor);
 
         SessionHandler sessionHandler = new LoggingHandler();
-        reactor.register(buildServerSocketChannel(8888), SelectionKey.OP_ACCEPT, sessionHandler).start();
+        reactor.register(buildServerSocketChannel(8886), SelectionKey.OP_ACCEPT, sessionHandler)
+                .register(buildServerSocketChannel(8887), SelectionKey.OP_ACCEPT, sessionHandler)
+                .start();
         subReactor.start();
     }
 

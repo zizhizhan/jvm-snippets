@@ -6,7 +6,6 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.channels.*;
 import java.util.concurrent.Executor;
-import me.jameszhan.pattern.reactor.nio.core.UdpSession.DatagramPacket;
 
 /**
  * Create by zhiqiangzhan@gmail.com
@@ -15,7 +14,7 @@ import me.jameszhan.pattern.reactor.nio.core.UdpSession.DatagramPacket;
  * Date: 2018/10/17
  * Time: 下午9:01
  */
-public class UdpChannel extends AbstractChannel<DatagramPacket> {
+public class UdpChannel extends AbstractChannel {
 
     private final UdpSession session;
 
@@ -40,7 +39,6 @@ public class UdpChannel extends AbstractChannel<DatagramPacket> {
     }
 
     protected void read(SelectionKey handle) {
-        System.out.println("handle = " + handle);
         try {
             DatagramPacket buffer = session.read(handle);
             executor.execute(() -> session.handle(buffer, handle));
@@ -56,6 +54,11 @@ public class UdpChannel extends AbstractChannel<DatagramPacket> {
             LOGGER.error("Unexpected Error onChannelReadable {}.", handle, e);
             close(handle.channel());
         }
+    }
+
+    @Override
+    protected void write(SelectionKey handle) throws IOException {
+        session.send(handle);
     }
 
     private static DatagramChannel buildDatagramChannel(int port) throws IOException {

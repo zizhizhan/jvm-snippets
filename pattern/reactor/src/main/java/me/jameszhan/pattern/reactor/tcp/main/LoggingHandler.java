@@ -25,7 +25,6 @@ public class LoggingHandler implements SessionHandler {
 
     @Override
     public void handle(Session session, ByteBuffer buffer, SelectionKey handle) {
-        System.out.println(handle);
         String request = decode(buffer);
         LOGGER.info("{} received {} from {}.", session, request, ((SocketChannel)handle.channel()).socket());
         String response = compute(request);

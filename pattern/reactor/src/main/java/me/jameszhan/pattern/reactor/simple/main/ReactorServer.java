@@ -20,8 +20,9 @@ public class ReactorServer {
         ChannelHandler handler = new LoggingHandler();
         Reactor reactor = new Reactor(0);
         reactor.register(new TcpChannel(8886, handler))
-                .register(new UdpChannel(8887, handler))
+                .register(new TcpChannel(8887, handler))
                 .register(new UdpChannel(8888, handler))
+                .register(new UdpChannel(8889, handler))
                 .start();
     }
 }

@@ -5,7 +5,7 @@ import me.jameszhan.pattern.reactor.nio.core.*;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import me.jameszhan.pattern.reactor.nio.core.UdpSession.DatagramPacket;
+import me.jameszhan.pattern.reactor.nio.core.DatagramPacket;
 
 
 /**
@@ -18,7 +18,7 @@ import me.jameszhan.pattern.reactor.nio.core.UdpSession.DatagramPacket;
 public class ReactorMain {
 
     public static void main(String[] args) throws IOException {
-        SessionHandler<ByteBuffer> byteBufferSessionHandler = new AbstractLoggingHandler<ByteBuffer>() {
+        SessionHandler<ByteBuffer> byteBufferSessionHandler = new LoggingHandler<ByteBuffer>() {
             @Override
             String decode(ByteBuffer buffer) {
                 return new String(buffer.array(), 0, buffer.limit(), ISO8859_1);
@@ -28,7 +28,7 @@ public class ReactorMain {
                 return ByteBuffer.wrap(response.getBytes(ISO8859_1));
             }
         };
-        SessionHandler<DatagramPacket> datagramPacketSessionHandler = new AbstractLoggingHandler<DatagramPacket>() {
+        SessionHandler<DatagramPacket> datagramPacketSessionHandler = new LoggingHandler<DatagramPacket>() {
             @Override
             String decode(DatagramPacket packet) {
                 return new String(packet.buf.array(), 0, packet.buf.limit(), ISO8859_1);
@@ -44,8 +44,8 @@ public class ReactorMain {
         reactor.register(new TcpChannel(8886, byteBufferSessionHandler))
                 .register(new TcpChannel(8887, byteBufferSessionHandler))
                 .register(new UdpChannel(8888, datagramPacketSessionHandler))
+                .register(new UdpChannel(8889, datagramPacketSessionHandler))
                 .start();
-
     }
 
 }
