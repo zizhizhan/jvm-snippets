@@ -8,14 +8,13 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>reactor</artifactId>
+    <artifactId>event</artifactId>
 
     <dependencies>
-
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
+            <groupId>me.jameszhan.pattern</groupId>
+            <artifactId>base</artifactId>
+            <version>${parent.version}</version>
         </dependency>
-
     </dependencies>
 </project>

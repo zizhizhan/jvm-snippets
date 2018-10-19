@@ -26,10 +26,6 @@
             <artifactId>logback-classic</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -40,7 +36,9 @@
 
 
     <modules>
+        <module>base</module>
         <module>reactor</module>
+        <module>event</module>
     </modules>
 
 </project>
