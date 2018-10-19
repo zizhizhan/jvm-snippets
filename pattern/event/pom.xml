@@ -14,7 +14,8 @@
         <dependency>
             <groupId>me.jameszhan.pattern</groupId>
             <artifactId>base</artifactId>
-            <version>${parent.version}</version>
+            <version>${pattern.base.version}</version>
         </dependency>
     </dependencies>
+
 </project>

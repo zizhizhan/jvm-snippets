@@ -30,6 +30,7 @@
 
 
     <modules>
+        <module>guava</module>
     </modules>
 
 </project>
