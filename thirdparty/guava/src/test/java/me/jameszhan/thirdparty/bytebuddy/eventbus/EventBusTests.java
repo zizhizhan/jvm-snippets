@@ -1,4 +1,4 @@
-package me.jameszhan.thirdparty.guava.eventbus;
+package me.jameszhan.thirdparty.bytebuddy.eventbus;
 
 import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
