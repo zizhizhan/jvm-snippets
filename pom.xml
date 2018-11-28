@@ -123,6 +123,7 @@
     </build>
 
     <modules>
+        <module>lang</module>
         <module>io</module>
         <module>memory</module>
         <module>pattern</module>
