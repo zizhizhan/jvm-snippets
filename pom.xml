@@ -21,9 +21,23 @@
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
         <guava.version>26.0-jre</guava.version>
+        <pattern.base.version>1.0-SNAPSHOT</pattern.base.version>
+        <netty.version>4.1.29.Final</netty.version>
+        <jetty.version>8.1.2.v20120308</jetty.version>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>junit</groupId>
@@ -77,6 +91,60 @@
             </dependency>
 
             <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-common</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-resolver</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-buffer</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-handler</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-http</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-http2</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-example</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mortbay.jetty.npn</groupId>
+                <artifactId>npn-boot</artifactId>
+                <version>${jetty.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
@@ -123,11 +191,17 @@
     </build>
 
     <modules>
-        <module>lang</module>
-        <module>io</module>
+        <module>lang/lang-basic</module>
+        <module>io/io-basic</module>
+        <module>io/nio-reactor</module>
+        <module>io/netty</module>
         <module>memory</module>
-        <module>pattern</module>
-        <module>thirdparty</module>
+        <module>pattern/base</module>
+        <module>pattern/event</module>
+        <module>pattern/reactor</module>
+        <module>thirdparty/guava</module>
+        <module>thirdparty/bytebuddy</module>
+        <module>thirdparty/reflections</module>
     </modules>
 
 </project>
