@@ -38,6 +38,10 @@
             <artifactId>logback-classic</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
@@ -70,6 +74,12 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.4</version>
             </dependency>
 
             <dependency>
@@ -198,6 +208,7 @@
         <module>memory</module>
         <module>pattern/base</module>
         <module>pattern/event</module>
+        <module>pattern/promise</module>
         <module>pattern/reactor</module>
         <module>thirdparty/guava</module>
         <module>thirdparty/bytebuddy</module>
