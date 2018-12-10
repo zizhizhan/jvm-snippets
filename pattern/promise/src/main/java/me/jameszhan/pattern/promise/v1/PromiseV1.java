@@ -1,11 +1,13 @@
-package me.jameszhan.pattern.promise.v0;
+package me.jameszhan.pattern.promise.v1;
 
 import lombok.extern.slf4j.Slf4j;
+
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Slf4j
-public class PromiseV0 {
+public class PromiseV1<T> {
 
     private volatile int state;
     private static final int PENDING     = 0;
@@ -14,13 +16,13 @@ public class PromiseV0 {
     private Object value;
     private final Object lock = new Object();
 
-    public PromiseV0(PromiseExecutor executor) {
+    public PromiseV1(PromiseExecutor<T> executor) {
         this.state = PENDING;
-        Consumer<Object> resolve = this::fulfill;
+        Consumer<T> resolve = this::fulfill;
         Consumer<Throwable> reject = this::reject;
         try {
             log.info("{} executor start.", this);
-            executor.execute(resolve, reject);
+            executor.execute(this, resolve, reject);
         } catch (Throwable t) {
             reject.accept(t);
         } finally {
@@ -28,19 +30,19 @@ public class PromiseV0 {
         }
     }
 
-    public PromiseV0 then(Consumer<Object> onFulfilled) {
+    public <U> PromiseV1<U> then(Function<T, U> onFulfilled) {
         return then(onFulfilled, null);
     }
 
-    public PromiseV0 then(Consumer<Object> onFulfilled, Consumer<Throwable> onRejected) {
-        return new PromiseV0((resolve, reject) -> {
+    public <U> PromiseV1<U> then(Function<T, U> onFulfilled, Consumer<Throwable> onRejected) {
+        return new PromiseV1<>((promise, resolve, reject) -> {
             try {
-                Object value = this.get();
-                onFulfilled.accept(value);
-                System.out.println(this);
+                U transformValue = onFulfilled.apply(this.get());
+                promise.fulfill(transformValue);
             } catch (Throwable t) {
                 if (onRejected != null) {
                     onRejected.accept(t);
+                    promise.reject(t);
                 } else {
                     log.error("Promise reject.", t);
                 }
@@ -48,20 +50,20 @@ public class PromiseV0 {
         });
     }
 
-    public Object get() throws InterruptedException, ExecutionException {
+    public T get() throws InterruptedException, ExecutionException {
         synchronized (lock) {
             while (state == PENDING) {
                 lock.wait();
             }
         }
         if (state == FULFILLED) {
-            return value;
+            return (T)value;
         } else {
             throw new ExecutionException((Throwable) value);
         }
     }
 
-    private void fulfill(Object value) {
+    private void fulfill(T value) {
         this.value = value;
         this.state = FULFILLED;
         log.info("{} fulfill {}.", this, value);
@@ -79,10 +81,7 @@ public class PromiseV0 {
         }
     }
 
-    public interface PromiseExecutor {
-
-        void execute(Consumer<Object> resolve, Consumer<Throwable> reject);
-
+    public interface PromiseExecutor<T> {
+        void execute(PromiseV1<T> promise, Consumer<T> resolve, Consumer<Throwable> reject);
     }
-
 }
