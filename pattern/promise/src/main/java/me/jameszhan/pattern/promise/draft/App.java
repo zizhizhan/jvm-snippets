@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package me.jameszhan.pattern.promise.simple;
+package me.jameszhan.pattern.promise.draft;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,6 +31,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * The Promise object is used for asynchronous computations. A Promise represents an operation
@@ -66,6 +68,7 @@ public class App {
 
     private static final String DEFAULT_URL = "https://raw.githubusercontent.com/jameszhan/linux-internal/master/bin/psh";
     private final CountDownLatch stopLatch;
+    private final ExecutorService executor = Executors.newFixedThreadPool(2);
 
     private App() {
         stopLatch = new CountDownLatch(2);
@@ -118,7 +121,7 @@ public class App {
      * then promise to apply function to calculate lowest character frequency.
      */
     private Promise<Character> lowestFrequencyChar() {
-        return characterFrequency().then(App::lowestFrequencyChar);
+        return characterFrequency().thenApply(App::lowestFrequencyChar);
     }
 
     /*
@@ -126,7 +129,7 @@ public class App {
      * then promise to apply function to calculate character frequency.
      */
     private Promise<Map<Character, Integer>> characterFrequency() {
-        return download(DEFAULT_URL).then(App::characterFrequency);
+        return download(DEFAULT_URL).thenApply(App::characterFrequency);
     }
 
     /*
@@ -134,7 +137,7 @@ public class App {
      * then promise to apply function to count lines in that file.
      */
     private Promise<Integer> countLines() {
-        return download(DEFAULT_URL).then(App::countLines);
+        return download(DEFAULT_URL).thenApply(App::countLines);
     }
 
     /*
@@ -142,7 +145,7 @@ public class App {
      * This is an async method and does not wait until the file is downloaded.
      */
     private Promise<String> download(String urlString) {
-        return Promise.async(() -> downloadFile(urlString)).caught(throwable -> {
+        return Promise.await(() -> downloadFile(urlString), executor).caught(throwable -> {
             throwable.printStackTrace();
             taskCompleted();
         });
@@ -150,6 +153,7 @@ public class App {
 
     private void stop() throws InterruptedException {
         stopLatch.await();
+        executor.shutdown();
     }
 
     private void taskCompleted() {

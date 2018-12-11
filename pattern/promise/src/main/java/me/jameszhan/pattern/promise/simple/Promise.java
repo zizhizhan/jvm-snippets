@@ -21,6 +21,8 @@ public class Promise<T> {
     private volatile int state = PENDING;
     private final Object lock = new Object();
 
+    private Consumer<? super Throwable> exceptionHandler;
+
     private Object value;
 
     private Promise() {}
@@ -70,14 +72,17 @@ public class Promise<T> {
                 target.resolveCallback(onFulfilled.apply(source.get()));
             } catch (Throwable t) {
                 if (onRejected != null) {
-                    onRejected.accept(t);
-                } else {
-                    log.error("Unexpected Exception.", t);
+                    target.exceptionHandler = onRejected;
                 }
                 target.rejectCallback(t.getCause());
             }
         });
         return target;
+    }
+
+    public Promise<T> caught(Consumer<? super Throwable> onRejected) {
+        this.exceptionHandler = onRejected;
+        return this;
     }
 
     @SuppressWarnings("unchecked")
@@ -109,6 +114,11 @@ public class Promise<T> {
         log.info("{} reject {}.", this, value);
         synchronized (lock) {
             lock.notifyAll();
+        }
+        if (this.exceptionHandler != null) {
+            this.exceptionHandler.accept(reason);
+        } else {
+            log.error("Unhandled Exception: ", reason);
         }
     }
 
