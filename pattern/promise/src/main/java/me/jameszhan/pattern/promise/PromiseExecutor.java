@@ -4,6 +4,6 @@ import java.util.function.Consumer;
 
 public interface PromiseExecutor<T> {
 
-    void execute(Consumer<T> resolve, Consumer<Throwable> reject);
+    void execute(Promise<T> promise, Consumer<T> resolve, Consumer<Throwable> reject);
 
 }
