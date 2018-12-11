@@ -1,4 +1,4 @@
-package me.jameszhan.pattern.promise;
+package me.jameszhan.pattern.promise.standard;
 
 import java.util.function.Consumer;
 
