@@ -1,9 +1,10 @@
-package me.jameszhan.pattern.promise.standard;
+package me.jameszhan.pattern.promise.release;
 
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.*;
-import java.util.function.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  *
@@ -18,43 +19,24 @@ public class Promise<T> {
     private static final int PENDING = 1;
     private static final int FULFILLED = 2;
     private static final int REJECTED = 3;
-    private static ExecutorService executorService = ForkJoinPool.commonPool();
 
     private volatile int state = PENDING;
     private final Object lock = new Object();
-
+    private Runnable fulfillmentAction;
     private Object value;
 
-    public Promise(Callable<T> callable) {
-        this((target, resolve, reject) -> {
+    private Promise() {}
+
+    public static <V> Promise<V> async(Callable<V> task, Executor executor) {
+        Promise<V> promise = new Promise<>();
+        executor.execute(() -> {
             try {
-                resolve.accept(callable.call());
+                promise.fulfill(task.call());
             } catch (Throwable t) {
-                reject.accept(t);
+                promise.reject(t);
             }
         });
-    }
-
-    public Promise(PromiseExecutor<T> executor) {
-        if (executor != null) {
-            executorService.execute(() -> {
-                try {
-                    executor.execute(this, this::resolveCallback, this::rejectCallback);
-                } catch (Throwable t) {
-                    rejectCallback(t);
-                }
-            });
-        } else {
-            this.state = FULFILLED;
-        }
-    }
-
-    private void resolveCallback(T value) {
-        this.fulfill(value);
-    }
-
-    private void rejectCallback(Throwable reason) {
-        this.reject(reason);
+        return promise;
     }
 
     public Promise<Void> thenAccept(Consumer<T> onFulfilled) {
@@ -69,18 +51,20 @@ public class Promise<T> {
     }
 
     public <R> Promise<R> then(Function<T, R> onFulfilled, Consumer<Throwable> onRejected) {
-        return new Promise<>((target, resolve, reject) -> {
+        Promise<R> target = new Promise<>();
+        this.fulfillmentAction = () -> {
             try {
-                target.resolveCallback(onFulfilled.apply(this.get()));
+                target.fulfill(onFulfilled.apply(this.get()));
             } catch (Throwable t) {
                 if (onRejected != null) {
                     onRejected.accept(t);
                 } else {
                     log.error("No reject handler for.", t);
                 }
-                target.rejectCallback(t);
+                target.reject(t);
             }
-        });
+        };
+        return target;
     }
 
     public T get() throws InterruptedException, ExecutionException {
@@ -102,6 +86,9 @@ public class Promise<T> {
         log.info("{} fulfill {}.", this, value);
         synchronized (lock) {
             lock.notifyAll();
+        }
+        if (this.fulfillmentAction != null) {
+            this.fulfillmentAction.run();
         }
     }
 
