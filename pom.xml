@@ -202,10 +202,10 @@
 
     <modules>
         <module>lang/lang-basic</module>
+        <module>lang/memory</module>
         <module>io/io-basic</module>
         <module>io/nio-reactor</module>
         <module>io/netty</module>
-        <module>memory</module>
         <module>pattern/base</module>
         <module>pattern/event</module>
         <module>pattern/promise</module>
@@ -213,6 +213,7 @@
         <module>thirdparty/guava</module>
         <module>thirdparty/bytebuddy</module>
         <module>thirdparty/reflections</module>
+        <module>thirdparty/spring/spring-boot</module>
     </modules>
 
 </project>
