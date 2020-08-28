@@ -203,7 +203,6 @@
     <modules>
         <module>lang/lang-basic</module>
         <module>lang/memory</module>
-        <module>io/io-basic</module>
         <module>io/nio-reactor</module>
         <module>io/netty</module>
         <module>pattern/base</module>
