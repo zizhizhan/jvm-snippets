@@ -4,26 +4,25 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.jameszhan</groupId>
-    <artifactId>jvm-internal</artifactId>
+    <groupId>com.zizhizhan.jvm</groupId>
+    <artifactId>jvm-snippets</artifactId>
     <version>1.0-SNAPSHOT</version>
     <description>JVM Internal</description>
     <packaging>pom</packaging>
 
-    <name>jvm-internal</name>
+    <name>jvm-snippets</name>
     <url>http://jameszhan.me</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <slf4j.version>1.7.25</slf4j.version>
+        <maven.test.skip>true</maven.test.skip>
+        <junit.version>4.11</junit.version>
+        <guava.version>29.0-jre</guava.version>
+        <lombok.version>1.18.12</lombok.version>
+        <slf4j.version>1.7.30</slf4j.version>
         <logback.version>1.2.3</logback.version>
-        <junit.version>4.12</junit.version>
-        <guava.version>26.0-jre</guava.version>
-        <pattern.base.version>1.0-SNAPSHOT</pattern.base.version>
-        <netty.version>4.1.29.Final</netty.version>
-        <jetty.version>8.1.2.v20120308</jetty.version>
     </properties>
 
     <dependencies>
@@ -97,61 +96,7 @@
             <dependency>
                 <groupId>org.reflections</groupId>
                 <artifactId>reflections</artifactId>
-                <version>0.9.11</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-common</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-resolver</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-buffer</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-transport</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-handler</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-codec-http</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-codec-http2</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-example</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.mortbay.jetty.npn</groupId>
-                <artifactId>npn-boot</artifactId>
-                <version>${jetty.version}</version>
+                <version>0.9.12</version>
             </dependency>
 
             <dependency>
@@ -201,18 +146,10 @@
     </build>
 
     <modules>
-        <module>lang/lang-basic</module>
-        <module>lang/memory</module>
-        <module>io/nio-reactor</module>
-        <module>io/netty</module>
-        <module>pattern/base</module>
-        <module>pattern/event</module>
-        <module>pattern/promise</module>
-        <module>pattern/reactor</module>
-        <module>thirdparty/guava</module>
-        <module>thirdparty/bytebuddy</module>
-        <module>thirdparty/reflections</module>
-        <module>thirdparty/spring/spring-boot</module>
+<!--        <module>lang/lang-basic</module>-->
+<!--        <module>lang/memory</module>-->
+<!--        <module>thirdparty/bytebuddy</module>-->
+<!--        <module>thirdparty/reflections</module>-->
     </modules>
 
 </project>
