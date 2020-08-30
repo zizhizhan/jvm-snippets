@@ -1,4 +1,4 @@
-package com.zizhizhan.interview.javassist;
+package com.zizhizhan.javassist;
 
 import javassist.*;
 

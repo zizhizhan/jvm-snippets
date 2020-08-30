@@ -1,4 +1,4 @@
-package com.zizhizhan.interview.asm;
+package com.zizhizhan.asm;
 
 import com.google.common.base.Joiner;
 import lombok.extern.slf4j.Slf4j;

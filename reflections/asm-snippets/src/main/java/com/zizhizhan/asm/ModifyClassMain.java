@@ -1,4 +1,4 @@
-package com.zizhizhan.interview.asm;
+package com.zizhizhan.asm;
 
 import com.google.common.io.Files;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import static org.objectweb.asm.Opcodes.ASM8;
 public class ModifyClassMain {
 
     public static void main(String[] args) throws IOException {
-        String targetClassFile = "com/zizhizhan/interview/asm/Foo.class";
+        String targetClassFile = "com/zizhizhan/asm/Foo.class";
         InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(targetClassFile);
         if (in != null) {
             ClassReader cr = new ClassReader(in);

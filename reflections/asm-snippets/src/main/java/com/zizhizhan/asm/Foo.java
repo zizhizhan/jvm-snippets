@@ -1,4 +1,4 @@
-package com.zizhizhan.interview.asm;
+package com.zizhizhan.asm;
 
 public class Foo {
 

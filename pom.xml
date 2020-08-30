@@ -211,10 +211,8 @@
         <module>lang/reflections</module>
         <module>reflections/reflections-snippets</module>
         <module>reflections/bytebuddy-snippets</module>
-
-
-        <!--        <module>thirdparty/bytebuddy</module>-->
-<!--        <module>thirdparty/reflections</module>-->
+        <module>reflections/javassist-snippets</module>
+        <module>reflections/asm-snippets</module>
     </modules>
 
 </project>

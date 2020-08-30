@@ -1,4 +1,4 @@
-package com.zizhizhan.interview.asm;
+package com.zizhizhan.asm;
 
 import lombok.extern.slf4j.Slf4j;
 import org.objectweb.asm.ClassReader;
@@ -11,11 +11,11 @@ import java.io.InputStream;
 public class LogClassMain {
 
     public static void main(String[] args) throws IOException {
-        log.info("Visit class {}.", "com/zizhizhan/interview/asm/Hello.class");
-        visitClass("com/zizhizhan/interview/asm/Hello.class");
+        log.info("Visit class {}.", "com/zizhizhan/asm/Hello.class");
+        visitClass("com/zizhizhan/asm/Hello.class");
 
-        log.info("Visit class {}.", "com/zizhizhan/interview/asm/Hello$Inner.class");
-        visitClass("com/zizhizhan/interview/asm/Hello$Inner.class");
+        log.info("Visit class {}.", "com/zizhizhan/asm/Hello$Inner.class");
+        visitClass("com/zizhizhan/asm/Hello$Inner.class");
     }
 
     public static void visitClass(String classFile) throws IOException {
