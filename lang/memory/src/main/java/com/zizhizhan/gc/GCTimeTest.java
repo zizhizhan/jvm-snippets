@@ -1,4 +1,4 @@
-package me.jameszhan;
+package com.zizhizhan.gc;
 
 import java.util.HashMap;
 

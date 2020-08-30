@@ -11,7 +11,7 @@
     <packaging>pom</packaging>
 
     <name>jvm-snippets</name>
-    <url>http://jameszhan.me</url>
+    <url>http://zizhizhan.com</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -207,7 +207,7 @@
 
     <modules>
         <module>lang/lang-basic</module>
-<!--        <module>lang/memory</module>-->
+        <module>lang/memory</module>
         <module>lang/reflections</module>
 
         <!--        <module>thirdparty/bytebuddy</module>-->
