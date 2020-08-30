@@ -1,4 +1,4 @@
-package com.zizhizhan.lang.juc.aqs;
+package com.zizhizhan.juc.aqs;
 
 
 public class Node {

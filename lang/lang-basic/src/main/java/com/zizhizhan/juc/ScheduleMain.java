@@ -1,4 +1,4 @@
-package com.zizhizhan.lang.juc;
+package com.zizhizhan.juc;
 
 import lombok.extern.slf4j.Slf4j;
 

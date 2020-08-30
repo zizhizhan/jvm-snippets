@@ -1,4 +1,4 @@
-package com.zizhizhan.lang.juc.aqs;
+package com.zizhizhan.juc.aqs;
 
 import lombok.extern.slf4j.Slf4j;
 import sun.misc.Unsafe;

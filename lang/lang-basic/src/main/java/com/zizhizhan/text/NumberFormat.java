@@ -1,4 +1,4 @@
-package com.zizhizhan.lang;
+package com.zizhizhan.text;
 
 import java.text.DecimalFormat;
 

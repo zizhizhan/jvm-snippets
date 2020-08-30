@@ -1,4 +1,4 @@
-package com.zizhizhan.lang.juc;
+package com.zizhizhan.juc;
 
 
 public class Node<T> {
