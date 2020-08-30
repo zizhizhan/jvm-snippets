@@ -100,6 +100,66 @@
             </dependency>
 
             <dependency>
+                <groupId>org.mvel</groupId>
+                <artifactId>mvel2</artifactId>
+                <version>2.4.8.Final</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jeasy</groupId>
+                <artifactId>easy-rules-core</artifactId>
+                <version>4.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jeasy</groupId>
+                <artifactId>easy-rules-mvel</artifactId>
+                <version>4.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.ehcache</groupId>
+                <artifactId>ehcache</artifactId>
+                <version>3.8.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.ben-manes.caffeine</groupId>
+                <artifactId>caffeine</artifactId>
+                <version>2.8.5</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jsr107.ri</groupId>
+                <artifactId>cache-ri-impl</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jcraft</groupId>
+                <artifactId>jsch</artifactId>
+                <version>0.1.55</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>8.0.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm-commons</artifactId>
+                <version>8.0.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>3.27.0-GA</version>
+            </dependency>
+
+            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
@@ -146,9 +206,11 @@
     </build>
 
     <modules>
-<!--        <module>lang/lang-basic</module>-->
+        <module>lang/lang-basic</module>
 <!--        <module>lang/memory</module>-->
-<!--        <module>thirdparty/bytebuddy</module>-->
+        <module>lang/reflections</module>
+
+        <!--        <module>thirdparty/bytebuddy</module>-->
 <!--        <module>thirdparty/reflections</module>-->
     </modules>
 
