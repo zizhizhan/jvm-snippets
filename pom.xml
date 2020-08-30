@@ -214,6 +214,9 @@
         <module>reflections/javassist-snippets</module>
         <module>reflections/asm-snippets</module>
         <module>reflections/mvel-snippets</module>
+        <module>jsr/cache-jsr107</module>
+        <module>jsr/crypto-jsr177</module>
+        <module>jsr/jdbc-jsr221</module>
     </modules>
 
 </project>
