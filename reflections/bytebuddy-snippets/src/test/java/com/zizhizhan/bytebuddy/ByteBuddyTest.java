@@ -1,4 +1,4 @@
-package me.jameszhan.thirdparty.bytebuddy;
+package com.zizhizhan.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.implementation.MethodDelegation;

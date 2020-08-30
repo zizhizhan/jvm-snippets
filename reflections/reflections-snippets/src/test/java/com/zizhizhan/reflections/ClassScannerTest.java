@@ -1,4 +1,4 @@
-package me.jameszhan.thirdparty.reflections;
+package com.zizhizhan.reflections;
 
 import com.google.common.base.Function;
 import org.junit.Test;
