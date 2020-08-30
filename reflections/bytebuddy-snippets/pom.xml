@@ -3,20 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>me.jameszhan</groupId>
-        <artifactId>jvm-internal</artifactId>
+        <groupId>com.zizhizhan.jvm</groupId>
+        <artifactId>jvm-snippets</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>me.jameszhan.thirdparty</groupId>
-    <artifactId>bytebuddy</artifactId>
+    <artifactId>bytebuddy-snippets</artifactId>
 
     <dependencies>
 
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.9.2</version>
         </dependency>
 
     </dependencies>
