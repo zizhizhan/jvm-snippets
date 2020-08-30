@@ -43,3 +43,15 @@ buildNumber.properties
 *.iws
 *.ipr
 .DS_Store
+
+*.classpath
+*.project
+
+*.tmp
+
+*.tgz
+*.gz
+
+*.pyc
+*.csv
+*.yarn.lock
