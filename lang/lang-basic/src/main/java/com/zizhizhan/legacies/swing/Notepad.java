@@ -1,4 +1,4 @@
-package com.zizhizhan.legacy.swing;
+package com.zizhizhan.legacies.swing;
 
 import javax.swing.*;
 import java.awt.event.*;

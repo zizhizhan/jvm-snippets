@@ -1,4 +1,4 @@
-package com.zizhizhan.legacy.swing;
+package com.zizhizhan.legacies.swing;
 
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
