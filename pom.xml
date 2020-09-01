@@ -182,9 +182,20 @@
                     <version>3.0.2</version>
                 </plugin>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.7.0</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                        <fork>true</fork>
+                        <compilerArgs>
+                            <arg>-XDignore.symbol.file</arg>
+                        </compilerArgs>
+                        <verbose>true</verbose>
+                    </configuration>
                 </plugin>
+
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.20.1</version>
@@ -214,9 +225,11 @@
         <module>reflections/javassist-snippets</module>
         <module>reflections/asm-snippets</module>
         <module>reflections/mvel-snippets</module>
+        <module>jsr/jsr-codes</module>
         <module>jsr/cache-jsr107</module>
         <module>jsr/crypto-jsr177</module>
         <module>jsr/jdbc-jsr221</module>
+        <module>jsr/servlet-jsr369</module>
     </modules>
 
 </project>
