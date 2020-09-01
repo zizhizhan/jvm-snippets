@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+       
+    <bean id="wiki.util.crypto.Crypto" class="com.zizhizhan.legacies.crypto.CryptoUtil">
+    	<property name="crypto" ref="wiki.util.crypto.Encryption" />
+    </bean>
+    
+     <bean id="wiki.util.crypto.Encryption" class="com.zizhizhan.legacies.crypto.BlobEncryption">
+    	<property name="charJumble" ref="wiki.util.crypto.CharJumble" />
+    </bean>
+    
+    <bean id="wiki.util.crypto.CharJumble" class="com.zizhizhan.legacies.crypto.CharJumbleImp" />
+
+</beans>

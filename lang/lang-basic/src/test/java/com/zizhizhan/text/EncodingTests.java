@@ -25,7 +25,8 @@ public class EncodingTests {
      */
     @Test
     public void iso8859_1() {
-        Charset iso8859_1 = Charset.forName("iso8859-1");  //Also can work for iso8859-2, iso8859-4, iso8859-5, iso8859-9
+        Charset iso8859_1 = Charset.forName("iso8859-1");
+        //Also can work for iso8859-2, iso8859-4, iso8859-5, iso8859-9
         byte[] bytes = new byte[256];
         for (int i = 0; i < 256; i++) {
             bytes[i] = (byte)i;
