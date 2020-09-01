@@ -1,4 +1,4 @@
-package com.zizhizhan.pattern.mvc;
+package com.zizhizhan.legacies.pattern.mvc;
 
 import java.io.IOException;
 import java.io.PrintWriter;
