@@ -14,6 +14,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Map;
 
+import com.zizhizhan.legacy.bookshelf.origin.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -212,4 +213,8 @@ public abstract class ReflectionHelper {
 		return getContextClassLoader();
 	}
 
+	public static Object getField(Document doc, String fieldName) {
+		// todo
+		return null;
+	}
 }
