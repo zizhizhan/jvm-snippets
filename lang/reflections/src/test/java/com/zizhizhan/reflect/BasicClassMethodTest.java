@@ -1,6 +1,6 @@
 package com.zizhizhan.reflect;
 
-import com.zizhizhan.reflect.spring.AnnotationUtils;
+import com.zizhizhan.legacy.spring.AnnotationUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
