@@ -33,8 +33,6 @@ public class ReflectTest {
             f = foo.getClass().getDeclaredField("test");
             f.setAccessible(true);
             f.set(null, "cccc");
-
-
         } catch (SecurityException | NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
             e.printStackTrace();
         }
