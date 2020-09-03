@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.thirdparty.jaxb;
+package com.zizhizhan.legacies.thirdparty.jaxb.v0;
 
 import java.io.File;
 import java.io.FileInputStream;

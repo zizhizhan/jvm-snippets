@@ -1,4 +1,4 @@
-package com.zizhizhan.legacy.compress.zip;
+package com.zizhizhan.legacies.compress.zip;
 
 import java.io.IOException;
 import java.util.Enumeration;

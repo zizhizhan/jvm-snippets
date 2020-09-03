@@ -1,4 +1,4 @@
-package com.zizhizhan.legacy.compress;
+package com.zizhizhan.legacies.compress;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;

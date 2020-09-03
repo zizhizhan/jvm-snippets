@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.thirdparty.httpclient;
+package com.zizhizhan.legacies.io.net;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

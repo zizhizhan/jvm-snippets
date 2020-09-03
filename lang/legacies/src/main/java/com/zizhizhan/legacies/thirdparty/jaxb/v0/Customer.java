@@ -5,7 +5,7 @@
 // Generated on: 2009.09.04 at 06:08:30 下午 CST
 //
 
-package com.zizhizhan.legacies.thirdparty.jaxb;
+package com.zizhizhan.legacies.thirdparty.jaxb.v0;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.thirdparty.jaxb;
+package com.zizhizhan.legacies.thirdparty.jaxb.v0;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;

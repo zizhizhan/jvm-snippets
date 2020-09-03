@@ -15,13 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextAttributeEvent;
-import javax.servlet.ServletContextAttributeListener;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import javax.servlet.*;
+import javax.servlet.descriptor.JspConfigDescriptor;
 
 import com.zizhizhan.legacies.util.Enumerator;
 import com.zizhizhan.legacies.util.MimeType;
@@ -180,6 +175,11 @@ public class ServletContextImpl implements ServletContext {
         return (new Enumerator<String>(parameters.keySet()));
     }
 
+    @Override
+    public boolean setInitParameter(String s, String s1) {
+        return false;
+    }
+
     public Object getAttribute(String name) {
         return attributes.get(name);
     }
@@ -258,6 +258,131 @@ public class ServletContextImpl implements ServletContext {
 
     public String getServletContextName() {
         return contextName;
+    }
+
+    @Override
+    public ServletRegistration.Dynamic addServlet(String s, String s1) throws IllegalArgumentException, IllegalStateException {
+        return null;
+    }
+
+    @Override
+    public ServletRegistration.Dynamic addServlet(String s, Servlet servlet) throws IllegalArgumentException, IllegalStateException {
+        return null;
+    }
+
+    @Override
+    public ServletRegistration.Dynamic addServlet(String s, Class<? extends Servlet> aClass) throws IllegalArgumentException, IllegalStateException {
+        return null;
+    }
+
+    @Override
+    public <T extends Servlet> T createServlet(Class<T> aClass) throws ServletException {
+        return null;
+    }
+
+    @Override
+    public ServletRegistration getServletRegistration(String s) {
+        return null;
+    }
+
+    @Override
+    public Map<String, ? extends ServletRegistration> getServletRegistrations() {
+        return null;
+    }
+
+    @Override
+    public FilterRegistration.Dynamic addFilter(String s, String s1) throws IllegalArgumentException, IllegalStateException {
+        return null;
+    }
+
+    @Override
+    public FilterRegistration.Dynamic addFilter(String s, Filter filter) throws IllegalArgumentException, IllegalStateException {
+        return null;
+    }
+
+    @Override
+    public FilterRegistration.Dynamic addFilter(String s, Class<? extends Filter> aClass) throws IllegalArgumentException, IllegalStateException {
+        return null;
+    }
+
+    @Override
+    public <T extends Filter> T createFilter(Class<T> aClass) throws ServletException {
+        return null;
+    }
+
+    @Override
+    public FilterRegistration getFilterRegistration(String s) {
+        return null;
+    }
+
+    @Override
+    public Map<String, ? extends FilterRegistration> getFilterRegistrations() {
+        return null;
+    }
+
+    @Override
+    public void addListener(Class<? extends EventListener> aClass) {
+
+    }
+
+    @Override
+    public void addListener(String s) {
+
+    }
+
+    @Override
+    public <T extends EventListener> void addListener(T t) {
+
+    }
+
+    @Override
+    public <T extends EventListener> T createListener(Class<T> aClass) throws ServletException {
+        return null;
+    }
+
+    @Override
+    public void declareRoles(String... strings) {
+
+    }
+
+    @Override
+    public SessionCookieConfig getSessionCookieConfig() {
+        return null;
+    }
+
+    @Override
+    public void setSessionTrackingModes(Set<SessionTrackingMode> set) {
+
+    }
+
+    @Override
+    public Set<SessionTrackingMode> getDefaultSessionTrackingModes() {
+        return null;
+    }
+
+    @Override
+    public int getEffectiveMajorVersion() throws UnsupportedOperationException {
+        return 0;
+    }
+
+    @Override
+    public int getEffectiveMinorVersion() throws UnsupportedOperationException {
+        return 0;
+    }
+
+    @Override
+    public Set<SessionTrackingMode> getEffectiveSessionTrackingModes() {
+        return null;
+    }
+
+    @Override
+    public ClassLoader getClassLoader() {
+        return null;
+    }
+
+    @Override
+    public JspConfigDescriptor getJspConfigDescriptor() {
+        return null;
     }
 
     public void setDisplayName(String contextName) {
@@ -372,13 +497,13 @@ public class ServletContextImpl implements ServletContext {
     }
 
     @Deprecated
-    public Enumeration<?> getServlets() {
-        return (new Enumerator<Object>(empty));
+    public Enumeration<Servlet> getServlets() {
+        return (new Enumerator<>(Collections.emptyList()));
     }
 
     @Deprecated
-    public Enumeration<?> getServletNames() {
-        return (new Enumerator<Object>(empty));
+    public Enumeration<String> getServletNames() {
+        return (new Enumerator<>(Collections.emptyList()));
     }
 
     @Deprecated
