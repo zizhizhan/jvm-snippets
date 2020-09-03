@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<script type="text/javascript">
+function $(id){
+	if(typeof id === 'string'){
+		return document.getElementById(id);
+	}else{
+		return id;
+	}
+}
+
+function formatXml(xmlString, obj, stylesheet){	
+	var xml = new ActiveXObject('MSXML2.DOMDocument');
+	var xsl = new ActiveXObject('MSXML2.DOMDocument');
+	xml.async = false;
+	xml.loadXML(xmlString);
+	xsl.async = false;
+	xsl.load(stylesheet);	
+	var transformedXML = xml.transformNode(xsl).substring(2);
+	//transformedXML =  transformedXML.replace(/ xmlns:auto-ns1=\"urn:expedia:e3:shop:classification:messages:defn:v2\" xmlns=\"\"/g, "");
+	$(obj).value = transformedXML;
+}
+
+function format(){
+	formatXml($('text').value, 'text', 'pretty.xsl');
+}
+
+</script>
+<title>XmlFormat</title>
+</head>
+
+<body>
+<textarea id="text" cols="80" rows="10">
+
+</textarea><br />
+<button type="button" onclick="format()">test</button>
+</body>
+</html>

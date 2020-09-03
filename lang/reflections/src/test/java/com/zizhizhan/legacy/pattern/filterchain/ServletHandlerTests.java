@@ -8,8 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import com.zizhizhan.legacy.pattern.filterchain.test.AsyncFilter;
-import com.zizhizhan.legacy.pattern.filterchain.test.LoggingFilter;
+import com.zizhizhan.legacy.pattern.filterchain.servlet.ServletHandler;
+import com.zizhizhan.legacy.pattern.filterchain.servlet.AsyncFilter;
+import com.zizhizhan.legacy.pattern.filterchain.servlet.LoggingFilter;
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.After;

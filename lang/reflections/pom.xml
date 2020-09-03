@@ -64,18 +64,7 @@
             <version>2.0.1.Final</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.mozilla</groupId>
-            <artifactId>rhino</artifactId>
-            <version>1.7R4</version>
-        </dependency>
 
-        <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-            <version>3.4</version>
-            <scope>test</scope>
-        </dependency>
 
     </dependencies>
 

@@ -1,0 +1,53 @@
+options
+{
+  STATIC = false;  
+}
+
+
+PARSER_BEGIN(SelectClauseParser)
+package com.zizhizhan.legacies.javacc.parser.sql;
+
+import java.io.StringReader;   
+import java.util.Map;   
+import java.util.HashMap;   
+import java.util.List;   
+import java.util.ArrayList; 
+
+public class SelectClauseParser
+{
+	private Map<String, String> map = new HashMap<String, String>();
+	{
+	  map.put("id", "1");
+	  map.put("name", "James");
+	}
+}
+
+PARSER_END(SelectClauseParser)
+
+SKIP:{   
+  " " | "\r" | "\t" | "\n"  
+}
+
+TOKEN:/* IDENTIFIERS */  
+{   
+  <ID: "id" | "name">   
+}
+
+void select():
+{
+  String key;
+}
+{
+  "select "(key = column())" from map"
+  {    
+  	System.out.println(map.get(key));
+	}
+}
+
+String column():{   
+  Token t;   
+  String value;   
+}   
+{   
+  t = <ID>{ return t.image;}    
+} 

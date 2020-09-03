@@ -21,8 +21,8 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
 
 import com.zizhizhan.legacy.scanner.Notifier;
-import com.zizhizhan.legacy.scanner.util.CollectionUtils;
-import com.zizhizhan.legacy.scanner.util.DateUtils;
+import com.zizhizhan.legacies.common.util.CollectionUtils;
+import com.zizhizhan.legacies.common.util.DateUtils;
 
 public class DirectoryFileChangeMonitor {
 
