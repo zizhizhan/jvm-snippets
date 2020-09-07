@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.pattern.mvc;
+package com.zizhizhan.legacies.pattern.mvc.v1;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.pattern.mvc;
+package com.zizhizhan.legacies.pattern.mvc.v1;
 
 import java.util.Map;
 

@@ -331,8 +331,4 @@ public class ReflectionHelper {
         return methods;
     }
 
-    public static void main(String[] args) {
-        System.out.println(getContextClassLoader());
-    }
-
 }

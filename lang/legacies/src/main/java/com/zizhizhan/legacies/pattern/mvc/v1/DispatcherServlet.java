@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.pattern.mvc;
+package com.zizhizhan.legacies.pattern.mvc.v1;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,14 +20,14 @@ public class DispatcherServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(DispatcherServlet.class);
-	private Map<String, Controller> handleMapping = new HashMap<String, Controller>();
+	private final Map<String, Controller> handleMapping = new HashMap<>();
 
-	protected void doDispatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doDispatch(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		String method = req.getMethod();
 		if (method.equals("GET") || method.equals("POST")) {
 			String action = req.getPathInfo();
-			LOGGER.info("request info {servletPath: {}, requestURI: {}, contextPath: {}, pathInfo: {}}", 
-				new Object[]{action, req.getRequestURI(), req.getContextPath(), req.getPathInfo()});
+			LOGGER.info("request info {servletPath: {}, requestURI: {}, contextPath: {}, pathInfo: {}}",
+					action, req.getRequestURI(), req.getContextPath(), req.getPathInfo());
 			Controller c = handleMapping.get(action);
 			if (c != null) {
 				String viewName = c.execute(req, resp);

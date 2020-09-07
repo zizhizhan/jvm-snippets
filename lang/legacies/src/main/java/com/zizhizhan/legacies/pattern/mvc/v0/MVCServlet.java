@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.pattern.mvc;
+package com.zizhizhan.legacies.pattern.mvc.v0;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,14 +22,14 @@ public class MVCServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private Map<String, C> controllers = new HashMap<String, C>();
-	private Configuration config = new Configuration();
+	private final Map<String, C> controllers = new HashMap<String, C>();
+	private final Configuration config = new Configuration();
 	
 	@Override
 	public void init() throws ServletException {
 		controllers.put("/login", new C(){
 			public String handle(HttpServletRequest req, HttpServletResponse resp) {
-				String user = req.getParameter("user");
+				String user = req.getParameter("username");
 				if(user != null){
 					req.setAttribute("username", user);
 					return "success";
@@ -90,8 +90,7 @@ public class MVCServlet extends HttpServlet {
 				template.process(map, resp.getWriter());
 			} catch (Exception e) {
 				logger.error("", e);
-			}	
-			
+			}
 		}		
 	}
 

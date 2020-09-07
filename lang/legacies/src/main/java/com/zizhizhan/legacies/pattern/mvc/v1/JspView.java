@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.pattern.mvc;
+package com.zizhizhan.legacies.pattern.mvc.v1;
 
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public class JspView implements View {
 	private boolean alwaysInclude = false;
 	
 	public JspView(String url) {
-		this.url = url;
+		this.url = "/WEB-INF/" + url;
 	}
 
 	@Override

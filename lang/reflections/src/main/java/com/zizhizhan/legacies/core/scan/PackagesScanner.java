@@ -43,7 +43,6 @@ public class PackagesScanner implements Scanner {
 				log.warn("Can't find resource for " + p, e);
 			} 
 		}
-		
 	}
 
 	private void scan(URI uri, final ScannerListener sl) {
