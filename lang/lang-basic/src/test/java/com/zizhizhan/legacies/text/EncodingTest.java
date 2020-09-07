@@ -1,27 +1,26 @@
 package com.zizhizhan.legacies.text;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.util.Properties;
 
 public class EncodingTest {
 
     public static void main(String[] args) throws IOException {
-        System.out.println(Charset.defaultCharset());
-		
-	/*	InputStream in = EncodingTest.class.getResourceAsStream("1.html");
-		byte[] buf = new byte[80000];
-		int len = in.read(buf);
+        String china = "";//"你总是想逃";
 
-		String content = new String(buf, 0, len, "iso8859-1");
-		String con = new String(content.getBytes("iso8859-1"), "utf-8");
-		System.out.println(con);*/
+        Properties properties = new Properties();
 
-        String hello = "因此不存在字符串的内码的问题";
-        byte[] x = hello.getBytes("utf-8");
-        String cache = new String(x, "iso8859-1");
+        properties.load(EncodingTest.class.getResourceAsStream("/unicode.test.properties"));
 
-        byte[] y = cache.getBytes("iso8859-1");
+        System.out.println(properties.getProperty("china"));
+        System.out.println(properties.getProperty("china2"));
 
-        System.out.println(new String(y, "utf-8"));
+        System.out.println(properties.getProperty("china").equals(china));
+        System.out.println(properties.getProperty("china2").equals(china));
+
+        properties.load(EncodingTest.class.getResourceAsStream("/test.properties"));
+        System.out.println(properties.getProperty("test.encoding"));
+        System.getProperties().list(System.out);
     }
+
 }

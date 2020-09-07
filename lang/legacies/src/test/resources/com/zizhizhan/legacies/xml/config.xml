@@ -1,0 +1,40 @@
+<configuration-data>
+	<schemaList>
+		<schema name="environment">
+			<stripingAttributeList>
+				<stripingAttribute name="environment" tree="environment_hierarchy" />
+			</stripingAttributeList>
+			<settingNodeList>
+				<settingNode environment="dn">
+					<settingFamily name="com.expedia.e3.es.ad.impl.service.config.NacProvider">
+						<settingValue name="host" value="ads.expedia.com" />
+					</settingFamily>
+				</settingNode>
+			</settingNodeList>
+		</schema>
+		<schema name="myschema">
+			<stripingAttributeList>				
+				<stripingAttribute name="attribute1" tree="tree1" />
+				<stripingAttribute name="attribute2" tree="tree2" />
+				<settingNode>
+					<settingFamily name="com.expedia.unicode.first">
+						<settingValue name="name" value="blackguard " />
+						<settingValue name="age" value="1" />
+					</settingFamily>
+				</settingNode>
+			</stripingAttributeList>
+			<settingNodeList>
+				<settingNode attribute1="james" attribute2="jim">
+					<settingFamily name="com.expedia.unicode.first">
+						<settingValue name="yourname" value="garbage" />
+					</settingFamily>
+				</settingNode>
+				<settingNode attribute1="green" attribute2="zhan">
+					<settingFamily name="com.expedia.pcote.first">
+						<settingValue name="cctv" value="tvb" />
+					</settingFamily>
+				</settingNode>				
+			</settingNodeList>	
+		</schema>
+	</schemaList>
+</configuration-data>

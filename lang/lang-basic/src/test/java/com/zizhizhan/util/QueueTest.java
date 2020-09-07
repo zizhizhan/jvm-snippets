@@ -2,9 +2,6 @@ package com.zizhizhan.util;
 
 public class QueueTest {
 
-    /**
-     * @param args
-     */
     public static void main(String[] args) {
         Queue queue = new Queue();
 
@@ -29,9 +26,7 @@ public class QueueTest {
         while (queue.size() > 0) {
             System.out.println(queue.poll());
         }
-
     }
-
 
     public static class Queue {
 
@@ -67,11 +62,9 @@ public class QueueTest {
         public int size() {
             return size;
         }
-
     }
 
     public static class Queue2 {
-
         private static final int MAX_SIZE = 10;
         private final int[] data = new int[MAX_SIZE];
         private int front = -1;

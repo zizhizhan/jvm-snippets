@@ -18,7 +18,7 @@ public class ClassLoaderUnitTests {
         System.out.println(ClassLoaderUnitTests.class.getClassLoader() == loader.getClass().getClassLoader());
         assertEquals(ClassLoaderUnitTests.class.getClassLoader(), loader.getClass().getClassLoader());
 
-        assertTrue(Class.class.getClassLoader() == Class.class.getClassLoader());
+        assertSame(Class.class.getClassLoader(), Class.class.getClassLoader());
     }
 
     public static junit.framework.Test suite() {
