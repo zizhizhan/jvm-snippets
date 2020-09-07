@@ -1,8 +1,59 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project name="pf" basedir="." default="tomcat-start">
-	
-	<property file="build.properties" />	
-	
+<?xml version="1.0"?>
+<project name="mvc" basedir="." default="build">
+	<property file="build.properties" />
+
+	<property name="src.dir" value="src" />
+	<property name="web.dir" value="war" />
+	<property name="build.dir" value="${web.dir}/WEB-INF/classes" />
+	<property name="build.lib" value="${web.dir}/WEB-INF/lib" />
+	<property name="name" value="mvc" />
+
+	<path id="master-classpath">
+		<fileset dir="${web.dir}/WEB-INF/lib">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${appserver.lib}">
+			<include name="servlet*.jar" />
+		</fileset>
+		<pathelement path="${build.dir}" />
+	</path>
+
+	<target name="build" description="Compile main source tree java files">
+		<mkdir dir="${build.dir}" />
+		<javac destdir="${build.dir}" source="1.8" target="1.8" debug="true"
+			deprecation="false" optimize="false" failonerror="true">
+			<src path="${src.dir}" />
+			<exclude name="**/*Test*.java"/>
+			<classpath refid="master-classpath" />
+		</javac>
+		<copy todir="${build.dir}" preservelastmodified="true">
+			<fileset dir="${src.dir}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>	
+	</target>
+
+	<target name="deploy" depends="build" description="Deploy application">
+		<copy todir="${deploy.path}/${name}" preservelastmodified="true">
+			<fileset dir="${web.dir}">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="deploywar" depends="build" description="Deploy application as a WAR file">
+		<war destfile="${name}.war" webxml="${web.dir}/WEB-INF/web.xml">
+			<fileset dir="${web.dir}">
+				<include name="**/*.*" />
+			</fileset>
+		</war>
+		<copy todir="${deploy.path}" preservelastmodified="true">
+			<fileset dir=".">
+				<include name="*.war" />
+			</fileset>
+		</copy>
+	</target>
+
 	<target name="tomcat-start" description="Launches Tomcat">
 		<fail unless="appserver.home" message="You must set the TOMCAT_HOME environment variable to point to your Tomcat installation folder"/>
 		<exec dir="${appserver.home}/bin" executable="catalina.bat" vmlauncher="false" spawn="true">
@@ -10,7 +61,6 @@
 		</exec>
 	</target>
 
-	<!-- Launches Tomcat in debug mode -->
 	<target name="tomcat-start-debug" description="Launches Tomcat in JPDA debug mode on port 8000">
 		<fail unless="appserver.home" message="You must set the TOMCAT_HOME environment variable to point to your Tomcat installation folder"/>
 		<exec dir="${appserver.home}/bin" executable="catalina.bat" vmlauncher="false" spawn="true">
@@ -18,7 +68,23 @@
 			<arg value="start"/>
 			<env key="JPDA_ADDRESS" value="8000"/>
 			<env key="JPDA_TRANSPORT" value="dt_socket"/>
-			<env key="JPDA_SUSPEND" value="n"/>			
 		</exec>
 	</target>
+
+	<target name="clean" description="Clean output directories">
+		<delete>
+			<fileset dir="${build.dir}">
+				<include name="**/*.class" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="undeploy" description="Un-Deploy application">
+		<delete>
+			<fileset dir="${deploy.path}/${name}">
+				<include name="**/*.*" />
+			</fileset>
+		</delete>
+	</target>
+
 </project>

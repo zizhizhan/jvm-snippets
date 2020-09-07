@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <bean id="controllerAdapter" class="com.zizhizhan.legacies.pattern.springmvc.impl.ControllerHandlerAdapter" />
+
+    <bean id="/hello.htm" class="com.zizhizhan.legacies.pattern.springmvc.controller.HelloController" />
+
+    <bean id="viewResolver" class="com.zizhizhan.legacies.pattern.springmvc.impl.DefaultViewResolver">
+        <property name="viewClass" value="com.zizhizhan.legacies.pattern.springmvc.impl.InternalResourceView"/>
+        <property name="prefix" value="/WEB-INF/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+</beans>
+
