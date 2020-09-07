@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="pf" basedir="." default="tomcat-start">
+	
+	<property file="build.properties" />	
+	
+	<target name="tomcat-start" description="Launches Tomcat">
+		<fail unless="appserver.home" message="You must set the TOMCAT_HOME environment variable to point to your Tomcat installation folder"/>
+		<exec dir="${appserver.home}/bin" executable="catalina.bat" vmlauncher="false" spawn="true">
+			<arg value="start"/>
+		</exec>
+	</target>
+
+	<!-- Launches Tomcat in debug mode -->
+	<target name="tomcat-start-debug" description="Launches Tomcat in JPDA debug mode on port 8000">
+		<fail unless="appserver.home" message="You must set the TOMCAT_HOME environment variable to point to your Tomcat installation folder"/>
+		<exec dir="${appserver.home}/bin" executable="catalina.bat" vmlauncher="false" spawn="true">
+			<arg value="jpda"/>
+			<arg value="start"/>
+			<env key="JPDA_ADDRESS" value="8000"/>
+			<env key="JPDA_TRANSPORT" value="dt_socket"/>
+			<env key="JPDA_SUSPEND" value="n"/>			
+		</exec>
+	</target>
+</project>
