@@ -12,19 +12,13 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.Attribute;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.*;
 
 public class ClassScanner {
 
 	public static Set<Class<?>> scan(String packageName, Class<? extends Annotation>... annotations) throws IOException, URISyntaxException{
 		Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(packageName.replace(".", "/"));
-		Set<Class<?>> classes = new HashSet<Class<?>>();
+		Set<Class<?>> classes = new HashSet<>();
 		AnnotatedClassVisitor visitor = new AnnotatedClassVisitor(classes, annotations);
 		while(urls.hasMoreElements()){
 			scan(urls.nextElement().toURI(), visitor);
@@ -62,7 +56,7 @@ public class ClassScanner {
 		return a;
 	}
 	
-	private static final class AnnotatedClassVisitor implements ClassVisitor {
+	private static final class AnnotatedClassVisitor extends ClassVisitor {
 		private String className;
 		private boolean isScoped;
 		private boolean isAnnotated;
@@ -70,6 +64,7 @@ public class ClassScanner {
 		private final Set<Class<?>> classes;
 		
 		public AnnotatedClassVisitor(Set<Class<?>> classes, Class<? extends Annotation>... annotations){
+			super(Opcodes.ASM8);
 			this.classes = classes;
 			this.annotations = getAnnotationSet(annotations);
 		}

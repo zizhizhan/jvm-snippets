@@ -45,12 +45,18 @@
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-bundle-minimal</artifactId>
             <version>2.7.18</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>asm</groupId>
+                    <artifactId>asm</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
-            <groupId>asm</groupId>
+            <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
-            <version>3.3.1</version>
+            <version>8.0.1</version>
         </dependency>
 
         <dependency>

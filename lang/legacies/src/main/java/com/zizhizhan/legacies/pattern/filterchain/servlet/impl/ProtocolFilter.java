@@ -21,7 +21,6 @@ public class ProtocolFilter implements Filter {
             String line = br.readLine();
             String[] bs = line.split("\\s");
             if (bs.length == 3) {
-
                 request.setMethod(bs[0]);
                 request.setResourcePath(bs[1]);
                 while (((line = br.readLine()) != null) && !line.equals("")) {

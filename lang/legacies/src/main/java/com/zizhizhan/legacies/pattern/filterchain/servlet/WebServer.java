@@ -6,7 +6,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -26,15 +25,13 @@ public class WebServer {
 	
 	@SuppressWarnings("unchecked")
 	public WebServer() throws Exception {
-		Set<Class<?>> classes = ClassScanner.scan("com.zizhizhan.legacies", FilterConfig.class);
+		Set<Class<?>> classes = ClassScanner.scan("com.zizhizhan.legacies.pattern", FilterConfig.class);
 		log.info(classes.toString());
 		Class<?>[] clazzes = classes.toArray(new Class<?>[classes.size()]);
-		Arrays.sort(clazzes, new Comparator<Class<?>>() {
-			public int compare(Class<?> c1, Class<?> c2) {
-				int o1 = c1.getAnnotation(FilterConfig.class).order();
-				int o2 = c2.getAnnotation(FilterConfig.class).order();
-				return o1 > o2 ? 1 : -1;
-			}
+		Arrays.sort(clazzes, (c1, c2) -> {
+			int o1 = c1.getAnnotation(FilterConfig.class).order();
+			int o2 = c2.getAnnotation(FilterConfig.class).order();
+			return o1 > o2 ? 1 : -1;
 		});
 		log.info(Arrays.asList(clazzes).toString());
 		
