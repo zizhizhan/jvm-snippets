@@ -3,6 +3,6 @@
 ```bash
 $ cd target/classes
 $ rmiregistry
-$ java com.zizhizhan.aopalliance.rmi.RmiServer
-$ java com.zizhizhan.aopalliance.rmi.RmiClient
+$ java com.zizhizhan.aopalliance.rmi.v1.RmiServer
+$ java com.zizhizhan.aopalliance.rmi.v1.RmiClient
 ```
