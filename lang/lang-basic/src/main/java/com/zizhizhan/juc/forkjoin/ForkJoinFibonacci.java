@@ -1,4 +1,4 @@
-package com.zizhizhan.juc;
+package com.zizhizhan.juc.forkjoin;
 
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
