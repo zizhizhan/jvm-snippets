@@ -58,7 +58,7 @@ public class AnnotationScannerListener implements ScannerListener {
 		new ClassReader(in).accept(classVisitor, 0);		
 	}
 	
-	private final class AnnotatedClassVisitor implements ClassVisitor {
+	private final class AnnotatedClassVisitor extends ClassVisitor {
 
 		/**
 		 * The name of the visited class.
@@ -74,6 +74,7 @@ public class AnnotationScannerListener implements ScannerListener {
 		private boolean isAnnotated;
 
         public AnnotatedClassVisitor() {
+        	super(Opcodes.ASM8);
         }
 
         public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
