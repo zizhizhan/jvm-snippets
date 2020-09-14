@@ -8,7 +8,7 @@ options
 
 
 PARSER_BEGIN(JsonParser)
-package com.zizhizhan.legacies.javacc.parser.json;
+package com.zizhizhan.javacc.parser.json;
 
 import java.io.StringReader;   
 import java.util.Map;   

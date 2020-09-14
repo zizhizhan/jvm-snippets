@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.javacc.parser.calc;
+package com.zizhizhan.javacc.parser.calc;
 
 import java.io.IOException;
 import java.io.InputStream;

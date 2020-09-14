@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.javacc.parser.calc;
+package com.zizhizhan.javacc.parser.calc;
 
 public class Token implements java.io.Serializable {
 
