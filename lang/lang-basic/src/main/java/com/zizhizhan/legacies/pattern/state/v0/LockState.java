@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.pattern.state;
+package com.zizhizhan.legacies.pattern.state.v0;
 
 class LockState implements State {
     StateDoor door;

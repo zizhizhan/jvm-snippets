@@ -1,4 +1,5 @@
-package com.zizhizhan.legacies.pattern.state;
+package com.zizhizhan.legacies.pattern.state.v0;
+
 import java.util.HashMap;
 import java.util.Map;
 

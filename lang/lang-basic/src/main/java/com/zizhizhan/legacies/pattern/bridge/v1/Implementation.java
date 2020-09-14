@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.pattern.bridge;
+package com.zizhizhan.legacies.pattern.bridge.v1;
 
 class Implementation {
     public void DoStringOp(String str) {
