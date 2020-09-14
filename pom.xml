@@ -221,6 +221,7 @@
         <module>lang/memory</module>
         <module>lang/reflections</module>
         <module>lang/legacies</module>
+<!--        <module>lang/java7developer</module>-->
         <module>reflections/reflections-snippets</module>
         <module>reflections/bytebuddy-snippets</module>
         <module>reflections/javassist-snippets</module>
