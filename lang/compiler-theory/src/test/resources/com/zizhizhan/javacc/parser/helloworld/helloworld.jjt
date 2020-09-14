@@ -1,0 +1,106 @@
+
+options {
+    LOOKAHEAD=1;
+    JDK_VERSION = "1.7";
+    STATIC = false;
+}
+
+PARSER_BEGIN(CalcParser)
+import java.io.StringReader;
+import java.io.Reader;
+
+public class CalcParser{
+
+    public CalcParser(String expr){
+        this((Reader)(new StringReader(expr)));
+    }
+
+    public static void main(String[] args){
+        try {
+            CalcParser parser = new CalcParser(System.in);
+            while (true) {
+                parser.parseOneLine();
+            }
+        } catch(Exception e) {
+            System.out.println("error : " + e.getMessage());
+        }
+    }
+
+}
+PARSER_END(CalcParser)
+
+SKIP:
+{
+    " " | "\r" | "\t"
+}
+
+TOKEN:{
+      <ADD : "+">
+    | <SUB : "-">
+    | <MUL : "*">
+    | <DIV : "/">
+    | <LPAREN : "(">
+    | <RPAREN : ")">
+    | <NUMBER: ( <DIGIT> ) + ( "." ( <DIGIT> )+ )?>
+    | <DIGIT:  [ "0"-"9" ]>
+    | <SIN: "sin">
+    | <COS: "cos">
+    | <EOL: "\n">
+}
+
+
+void parseOneLine():
+{
+    double t;
+}
+{
+    t = expr() <EOL>  { System.out.println(t); }
+    |
+    <EOL>
+    |
+    <EOF>   { System.exit(-1); }
+}
+
+
+double expr():
+{
+    double a, b, t;
+}
+{
+    a = term() { t = a; }
+    (
+        <ADD> b = term() { t = a + b; } |
+        <SUB> b = term() { t = a - b; }
+    )*
+    { return t; }
+}
+
+double term():
+{
+    double a, b, t;
+}
+{
+    a = factor() { t = a; }
+    (
+        <MUL> b = factor() { t = a * b; } |
+        <DIV> b = factor() { t = a / b; }
+    )*
+    { return t; }
+}
+
+double factor():
+{
+    double t = 0;
+    Token token;
+}
+{
+    token = <NUMBER> {
+        return Double.parseDouble(token.image);
+    } | <LPAREN> t = expr() <RPAREN> {
+        return t;
+    } | <SIN><LPAREN> t = expr() <RPAREN> {
+        return Math.sin(t);
+    } | <COS><LPAREN> t = expr() <RPAREN> {
+        return Math.cos(t);
+    }
+}
