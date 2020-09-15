@@ -27,10 +27,10 @@ import org.slf4j.LoggerFactory;
 public class ServletContextImpl implements ServletContext {
 
     private static final List<Object> empty = Collections.emptyList();
-    private final transient List<EventListener> eventListeners = new ArrayList<EventListener>();
+    private final transient List<EventListener> eventListeners = new ArrayList<>();
 
-    private final ConcurrentHashMap<String, String> parameters = new ConcurrentHashMap<String, String>(16, 0.75f, 64);
-    private final ConcurrentHashMap<String, Object> attributes = new ConcurrentHashMap<String, Object>(16, 0.75f, 64);
+    private final ConcurrentHashMap<String, String> parameters = new ConcurrentHashMap<>(16, 0.75f, 64);
+    private final ConcurrentHashMap<String, Object> attributes = new ConcurrentHashMap<>(16, 0.75f, 64);
     private final Logger logger = LoggerFactory.getLogger("Grizzly");
 
     private String contextPath = "";

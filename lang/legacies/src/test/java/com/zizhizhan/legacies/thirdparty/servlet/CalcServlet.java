@@ -14,7 +14,6 @@ public class CalcServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
 		String operand1 = req.getParameter("operand1");
 		String operand2 = req.getParameter("operand2");
 		String operation = req.getParameter("op");

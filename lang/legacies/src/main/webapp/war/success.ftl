@@ -1,1 +1,0 @@
-Welcome, ${request.getParameter('username')}!

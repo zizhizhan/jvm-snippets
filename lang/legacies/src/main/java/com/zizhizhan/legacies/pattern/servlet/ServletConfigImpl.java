@@ -11,8 +11,8 @@ import com.zizhizhan.legacies.util.Enumerator;
 
 public class ServletConfigImpl implements ServletConfig{
 
-    private final ConcurrentHashMap<String,String> initParams = new ConcurrentHashMap<String,String>(16, 0.75f, 64);
-    private ServletContextImpl servletContextImpl;
+    private final ConcurrentHashMap<String,String> initParams = new ConcurrentHashMap<>(16, 0.75f, 64);
+    private final ServletContextImpl servletContextImpl;
     private String name;
     
     

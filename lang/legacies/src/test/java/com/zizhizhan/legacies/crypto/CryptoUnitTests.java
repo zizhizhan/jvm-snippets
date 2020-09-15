@@ -17,8 +17,7 @@ public class CryptoUnitTests {
 		System.out.println(bitCount2(15));
 		System.out.println(bitCount2(15));
 	}
-	
-	
+
 	static int bitCount2(int v){
 		int count = 0;
 		for(int i = 0; i < 32; i++){

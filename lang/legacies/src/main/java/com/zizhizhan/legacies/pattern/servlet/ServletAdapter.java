@@ -23,18 +23,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.zizhizhan.legacies.util.ReflectionHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 public class ServletAdapter {
 
 	public static final String LOAD_ON_STARTUP = "load-on-startup";
 	
 	private static final int INCREMENT = 8;
 
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
-	
 	private final ReentrantLock filterChainReady = new ReentrantLock();
 	private final ReentrantLock initializedLock = new ReentrantLock();
 	private final Object[] lock = new Object[0];
@@ -128,7 +125,7 @@ public class ServletAdapter {
 				}
 			}
 		} catch (Throwable t) {
-			logger.error("start", t);
+			log.error("start", t);
 		}
 	}
 
@@ -139,8 +136,8 @@ public class ServletAdapter {
 			response.getWriter().write("<html><body><h1>" + message + "</h1></body></html>");
 			response.getWriter().flush();
 		} catch (IOException ex) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("customizeErrorPage", ex);
+			if (log.isDebugEnabled()) {
+				log.debug("customizeErrorPage", ex);
 			}
 		}
 	}
@@ -159,7 +156,7 @@ public class ServletAdapter {
 			FilterChainImpl filterChain = new FilterChainImpl(servletInstance, servletConfig);
 			filterChain.invokeFilterChain(request, response);
 		} catch (Throwable ex) {
-			logger.error("service exception:", ex);
+			log.error("service exception:", ex);
 			customizeErrorPage(response, "Internal Error", 500);
 		}
 	}
@@ -201,7 +198,7 @@ public class ServletAdapter {
 					servletInstance = (Servlet) ReflectionHelper.load(servletClassName);
 				}
 				if (servletInstance != null) {
-					logger.info("Loading Servlet: " + servletInstance.getClass().getName());
+					log.info("Loading Servlet: " + servletInstance.getClass().getName());
 				}
 			}
 			if (servletInstance != null) {
@@ -286,8 +283,8 @@ public class ServletAdapter {
 							((ServletRequestListener) l).requestInitialized(event);
 						}
 					} catch (Throwable t) {
-						if (logger.isWarnEnabled()) {
-							logger.warn("HTTP Servlet Container Object Initialized error " + l.getClass(), t);
+						if (log.isWarnEnabled()) {
+							log.warn("HTTP Servlet Container Object Initialized error " + l.getClass(), t);
 						}
 					}
 				}
@@ -300,8 +297,8 @@ public class ServletAdapter {
 							((ServletRequestListener) l).requestDestroyed(event);
 						}
 					} catch (Throwable t) {
-						if (logger.isWarnEnabled()) {
-							logger.warn("HTTP Servlet Container Object destroyed error " + l.getClass(), t);
+						if (log.isWarnEnabled()) {
+							log.warn("HTTP Servlet Container Object destroyed error " + l.getClass(), t);
 						}
 					}
 				}
