@@ -100,9 +100,8 @@ public class DesCrypto {
         byte[] dataDecoded = Base64.decode(data);
         byte[] dataDecrypted = processLocalBytes(dataDecoded,
                 Cipher.DECRYPT_MODE);
-        String clearText = new String(dataDecrypted);
 
-        return clearText;
+        return new String(dataDecrypted);
     }
 
     private byte[] processLocalBytes(byte[] data, int opmode)

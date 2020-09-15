@@ -125,8 +125,7 @@ public class Base64 {
         } else if (c == '/') {
             return 63;
         }
-        throw new IllegalArgumentException("Character " + c
-                + " is not a BASE64 char");
+        throw new IllegalArgumentException("Character " + c + " is not a BASE64 char");
     }
 
     public static void main(String[] args) {

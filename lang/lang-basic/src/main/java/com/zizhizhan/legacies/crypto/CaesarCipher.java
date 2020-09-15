@@ -9,9 +9,9 @@ public class CaesarCipher {
 			'i', 'b', 'e', 'j', 'c', 't', 'n', 'k', 'o', 'g', 'w', 'r', 's',
 			'f', 'y', 'v', 'l', 'z', 'q', 'a', 'h' };
 
-	private static char[] UC_DECRYPT_CHARS = new char[26];
+	private static final char[] UC_DECRYPT_CHARS = new char[26];
 
-	private static char[] LC_DECRYPT_CHARS = new char[26];
+	private static final char[] LC_DECRYPT_CHARS = new char[26];
 
 	static {
 		for (int i = 0; i < 26; i++) {

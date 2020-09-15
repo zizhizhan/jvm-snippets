@@ -53,8 +53,6 @@ public class BlobEncryption implements Encryption, InitializingBean {
 		}
 
 		return ("EX01" + getCRCAsString(inputBytes) + output.toString());
-
-		
 	}
 
 	private String getCRCAsString(List<Byte> inputBytes) {

@@ -142,5 +142,4 @@ public class Base64 {
 		System.out.println(new String(bytes));
 	}
 
-
 }
