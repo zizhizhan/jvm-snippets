@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.thirdparty.servlet;
+package com.zizhizhan.legacies.thirdparty.script;
 
 import java.io.File;
 import java.io.FileReader;
