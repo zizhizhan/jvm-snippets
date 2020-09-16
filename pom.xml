@@ -217,12 +217,12 @@
     </build>
 
     <modules>
+        <module>lang/local-test-support</module>
         <module>lang/lang-basic</module>
         <module>lang/memory</module>
         <module>lang/reflections</module>
         <module>lang/legacies</module>
         <module>lang/compiler-theory</module>
-<!--        <module>lang/java7developer</module>-->
         <module>reflections/reflections-snippets</module>
         <module>reflections/bytebuddy-snippets</module>
         <module>reflections/javassist-snippets</module>

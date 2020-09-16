@@ -1,10 +1,11 @@
-package com.zizhizhan.legacies.mock.servlet;
+package com.zizhizhan.framework.easymock;
 
 import java.io.IOException;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import com.zizhizhan.test.servlet.LoginServlet;
 import org.easymock.*;
 import org.junit.*;
 
@@ -12,7 +13,7 @@ import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-public class LoginServletMockTest {
+public class LoginServletTests {
 
     @Test
     public void loginOK() throws ServletException, IOException {
@@ -59,9 +60,8 @@ public class LoginServletMockTest {
         verify(request);
     }
 
-
     public static junit.framework.Test suite() {
-        return new junit.framework.JUnit4TestAdapter(LoginServletMockTest.class);
+        return new junit.framework.JUnit4TestAdapter(LoginServletTests.class);
     }
 
 }

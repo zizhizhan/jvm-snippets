@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.service;
+package com.zizhizhan.test.service.hello;
 
 public interface HelloService {
 	

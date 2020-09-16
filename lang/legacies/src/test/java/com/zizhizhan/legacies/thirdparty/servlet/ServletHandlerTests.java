@@ -50,13 +50,11 @@ public class ServletHandlerTests {
 
             @Override
             public ServletConfig getServletConfig() {
-
                 return null;
             }
 
             @Override
             public void destroy() {
-
 
             }
         };

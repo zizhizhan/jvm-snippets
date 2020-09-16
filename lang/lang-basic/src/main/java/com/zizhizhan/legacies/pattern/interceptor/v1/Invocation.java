@@ -7,7 +7,6 @@ public class Invocation {
 
 	private final List<Interceptor> chain = new ArrayList<>();
 	private int index = 0;
-	
 
 	public void process() {
 		if (index == chain.size()) {

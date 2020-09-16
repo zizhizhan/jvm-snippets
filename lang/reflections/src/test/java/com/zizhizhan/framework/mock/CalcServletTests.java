@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.thirdparty.servlet;
+package com.zizhizhan.framework.mock;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,34 +8,33 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.Assert;
+import com.zizhizhan.test.servlet.CalcServlet;
 import org.junit.Test;
-import static org.easymock.EasyMock.*;
+import static com.zizhizhan.framework.mock.MockControl.*;
 
-public class CalcServletTestCases {
+public class CalcServletTests {
 	
 	private final CalcServlet servlet = new CalcServlet();
 	
 	@Test
 	public void testPlus() throws IOException, ServletException{
-				
 		HttpServletRequest request = createMock(HttpServletRequest.class);
 		HttpServletResponse response = createMock(HttpServletResponse.class);
 		
 		StringWriter out = new StringWriter();
 		
+		expect(request.getParameter("operand1")).andReturn("5");
+		expect(request.getParameter("operand2")).andReturn("3");
+		expect(request.getParameter("op")).andReturn("*");		
 		expect(response.getWriter()).andReturn(new PrintWriter(out));
-		expect(request.getParameter(isA(String.class))).andReturn("5");	
-		expect(request.getParameter(isA(String.class))).andReturn("3");		
-		expect(request.getParameter("op")).andReturn("+");		
-				
+		
 		replay(request, response);
 		
 		try{		
 			servlet.doGet(request, response);			
-			Assert.assertEquals("The result is 8\n", out.toString());
+			System.out.println(out);
 		}finally{
-			verify(request, response);	
+			verify(request, response);		
 		}
 	}
 

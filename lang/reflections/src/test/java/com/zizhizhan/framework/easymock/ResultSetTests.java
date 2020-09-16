@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.mock.sql;
+package com.zizhizhan.framework.easymock;
 
 import static org.easymock.EasyMock.*;
 
@@ -9,10 +9,10 @@ import org.easymock.IMocksControl;
 import org.junit.Test;
 
 @Slf4j
-public class ResultSetTest {
+public class ResultSetTests {
 
     public static junit.framework.Test suite() {
-        return new junit.framework.JUnit4TestAdapter(ResultSetTest.class);
+        return new junit.framework.JUnit4TestAdapter(ResultSetTests.class);
     }
 
     @Test
