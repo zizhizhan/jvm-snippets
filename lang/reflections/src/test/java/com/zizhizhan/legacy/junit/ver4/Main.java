@@ -34,12 +34,7 @@ public class Main {
             }
         });
 
-        runner.sort(new Sorter(new Comparator<Description>() {
-            @Override
-            public int compare(Description o1, Description o2) {
-                return o2.getDisplayName().compareTo(o1.getDisplayName());
-            }
-        }));
+        runner.sort(new Sorter((o1, o2) -> o2.getDisplayName().compareTo(o1.getDisplayName())));
 
         RunNotifier notifier = new RunNotifier();
         notifier.addListener(new TextListener(System.out));

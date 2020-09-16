@@ -11,7 +11,7 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class ParameterizedSample {
 
-    private String parameter;
+    private final String parameter;
 
     public ParameterizedSample(String param) {
         super();
@@ -32,6 +32,4 @@ public class ParameterizedSample {
     public static Collection<String[]> parameters() {
         return Arrays.asList(new String[]{"param1"}, new String[]{"param2"}, new String[]{"param3"}, new String[]{"Test"});
     }
-
-
 }

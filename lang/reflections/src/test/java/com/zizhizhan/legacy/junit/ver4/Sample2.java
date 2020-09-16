@@ -11,8 +11,8 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class Sample2 {
 
-    private String name;
-    private int a;
+    private final String name;
+    private final int a;
 
     public Sample2(String name, int a) {
         this.name = name;

@@ -2,22 +2,23 @@ package com.zizhizhan.legacy.junit.ver3;
 
 import java.util.UUID;
 
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 public class JUnitTests extends TestCase {
-	
-		
-/*	public static Test suite(){	
-		TestSuite suite = new TestSuite("suite1");
-		suite.addTest(new JUnitTests("testCase3"));
-		TestSuite suite2 = new TestSuite("suite2");
-		suite2.addTest(new JUnitTests("testCase2"));
-		suite.addTest(suite2);
-		suite.addTest(new JUnitTests("testCase1"));
-		return suite;
-	}*/
 
-    private String name = UUID.randomUUID().toString();
+    public static Test suite() {
+        TestSuite suite = new TestSuite("suite1");
+        suite.addTest(new JUnitTests("testCase3"));
+        TestSuite suite2 = new TestSuite("suite2");
+        suite2.addTest(new JUnitTests("testCase2"));
+        suite.addTest(suite2);
+        suite.addTest(new JUnitTests("testCase1"));
+        return suite;
+    }
+
+    private final String name = UUID.randomUUID().toString();
 
     public JUnitTests() {
         System.out.println("jUINT TESTS.");
@@ -38,7 +39,7 @@ public class JUnitTests extends TestCase {
     }
 
     public void testCase2() {
-        assertEquals("The 2 string should matched.", "Jamse", "James");
+        assertEquals("The 2 string should matched.", "James", "James");
     }
 
     public void testCase3() {
