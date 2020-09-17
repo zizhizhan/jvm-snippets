@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.thirdparty.servlet;
+package com.zizhizhan.legacies.pattern.filterchain.servlet;
 
 import java.io.IOException;
 
@@ -74,7 +74,7 @@ public class ServletHandlerTests {
             sh.handle("", request, response);
         }
 
-        Thread.sleep(50000);
+        Thread.sleep(30000);
 
         ctrl.verify();
         ctrl.reset();

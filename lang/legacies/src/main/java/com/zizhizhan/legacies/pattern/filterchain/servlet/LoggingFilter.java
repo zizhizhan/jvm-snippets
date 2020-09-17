@@ -1,4 +1,6 @@
-package com.zizhizhan.legacies.thirdparty.servlet;
+package com.zizhizhan.legacies.pattern.filterchain.servlet;
+
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
@@ -9,12 +11,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+@Slf4j
 public class LoggingFilter implements Filter {
-	
-	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -24,9 +22,9 @@ public class LoggingFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
 			ServletException {
-		logger.info("request coming...");
+		log.info("request coming...");
 		chain.doFilter(request, response);
-		logger.info("request leaving...");
+		log.info("request leaving...");
 	}
 
 	@Override

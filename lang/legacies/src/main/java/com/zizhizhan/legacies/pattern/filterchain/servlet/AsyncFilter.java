@@ -1,4 +1,6 @@
-package com.zizhizhan.legacies.thirdparty.servlet;
+package com.zizhizhan.legacies.pattern.filterchain.servlet;
+
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -10,13 +12,14 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+@Slf4j
 public class AsyncFilter implements Filter {
 	
 	private final Executor pool = Executors.newCachedThreadPool();
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		
+		log.info("Initialize filterConfig {}.", filterConfig);
 	}
 
 	@Override
@@ -32,7 +35,7 @@ public class AsyncFilter implements Filter {
 
 	@Override
 	public void destroy() {
-		
+		log.info("Destroy AsyncFilter.");
 	}
 
 }

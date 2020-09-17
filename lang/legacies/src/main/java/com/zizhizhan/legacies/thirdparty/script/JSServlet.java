@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.thirdparty.servlet;
+package com.zizhizhan.legacies.thirdparty.script;
 
 import java.io.IOException;
 
@@ -9,13 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.zizhizhan.legacies.thirdparty.script.JSEngine;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JSServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public void init() throws ServletException {
@@ -32,9 +31,9 @@ public class JSServlet extends HttpServlet {
 			String result = JSEngine.invoke("run", req);
 			resp.getWriter().println(result);
 		} catch (NoSuchMethodException e) {
-			logger.warn("No Such Method Exception", e);
+			log.warn("No Such Method Exception", e);
 		} catch (ScriptException e) {
-			logger.warn("ScriptException", e);
+			log.warn("ScriptException", e);
 		}
 	}
 

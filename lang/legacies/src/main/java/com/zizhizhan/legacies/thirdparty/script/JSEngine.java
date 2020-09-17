@@ -24,11 +24,8 @@ public class JSEngine {
 
 	public static void excuteFiles(String dir) throws IOException, ScriptException {
 		for (File file : new File(dir).listFiles()) {
-			FileReader reader = new FileReader(file);
-			try {
+			try (FileReader reader = new FileReader(file)) {
 				compilable.compile(reader).eval();
-			} finally {
-				reader.close();
 			}
 		}
 	}

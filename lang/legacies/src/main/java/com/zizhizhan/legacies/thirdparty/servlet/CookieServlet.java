@@ -14,7 +14,8 @@ public class CookieServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @SuppressWarnings("unchecked")
-    @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.doGet(req, resp);
         PrintWriter out = resp.getWriter();
         out.print("-------------- listing attributes-------------------<br />");
