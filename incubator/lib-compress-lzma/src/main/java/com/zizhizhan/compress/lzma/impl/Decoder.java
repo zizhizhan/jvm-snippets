@@ -1,7 +1,7 @@
-package com.zizhizhan.legacies.compress.lzma;
+package com.zizhizhan.compress.lzma.impl;
 
-import com.zizhizhan.legacies.compress.lz.OutWindow;
-import com.zizhizhan.legacies.compress.rangecoder.BitTreeDecoder;
+import com.zizhizhan.compress.lzma.lz.OutWindow;
+import com.zizhizhan.compress.lzma.rangecoder.BitTreeDecoder;
 
 import java.io.IOException;
 
@@ -21,7 +21,7 @@ public class Decoder {
         }
 
         public void Init() {
-            com.zizhizhan.legacies.compress.rangecoder.Decoder.InitBitModels(m_Choice);
+            com.zizhizhan.compress.lzma.rangecoder.Decoder.InitBitModels(m_Choice);
             for (int posState = 0; posState < m_NumPosStates; posState++) {
                 m_LowCoder[posState].Init();
                 m_MidCoder[posState].Init();
@@ -29,7 +29,7 @@ public class Decoder {
             m_HighCoder.Init();
         }
 
-        public int Decode(com.zizhizhan.legacies.compress.rangecoder.Decoder rangeDecoder, int posState) throws IOException {
+        public int Decode(com.zizhizhan.compress.lzma.rangecoder.Decoder rangeDecoder, int posState) throws IOException {
             if (rangeDecoder.DecodeBit(m_Choice, 0) == 0)
                 return m_LowCoder[posState].Decode(rangeDecoder);
             int symbol = Base.kNumLowLenSymbols;
@@ -41,15 +41,15 @@ public class Decoder {
         }
     }
 
-    class LiteralDecoder {
+    static class LiteralDecoder {
         class Decoder2 {
             short[] m_Decoders = new short[0x300];
 
             public void Init() {
-                com.zizhizhan.legacies.compress.rangecoder.Decoder.InitBitModels(m_Decoders);
+                com.zizhizhan.compress.lzma.rangecoder.Decoder.InitBitModels(m_Decoders);
             }
 
-            public byte DecodeNormal(com.zizhizhan.legacies.compress.rangecoder.Decoder rangeDecoder) throws IOException {
+            public byte DecodeNormal(com.zizhizhan.compress.lzma.rangecoder.Decoder rangeDecoder) throws IOException {
                 int symbol = 1;
                 do
                     symbol = (symbol << 1) | rangeDecoder.DecodeBit(m_Decoders, symbol);
@@ -57,7 +57,7 @@ public class Decoder {
                 return (byte) symbol;
             }
 
-            public byte DecodeWithMatchByte(com.zizhizhan.legacies.compress.rangecoder.Decoder rangeDecoder, byte matchByte) throws IOException {
+            public byte DecodeWithMatchByte(com.zizhizhan.compress.lzma.rangecoder.Decoder rangeDecoder, byte matchByte) throws IOException {
                 int symbol = 1;
                 do {
                     int matchBit = (matchByte >> 7) & 1;
@@ -104,7 +104,7 @@ public class Decoder {
     }
 
     OutWindow m_OutWindow = new OutWindow();
-    com.zizhizhan.legacies.compress.rangecoder.Decoder m_RangeDecoder = new com.zizhizhan.legacies.compress.rangecoder.Decoder();
+    com.zizhizhan.compress.lzma.rangecoder.Decoder m_RangeDecoder = new com.zizhizhan.compress.lzma.rangecoder.Decoder();
 
     short[] m_IsMatchDecoders = new short[Base.kNumStates << Base.kNumPosStatesBitsMax];
     short[] m_IsRepDecoders = new short[Base.kNumStates];
@@ -158,13 +158,13 @@ public class Decoder {
     void Init() throws IOException {
         m_OutWindow.Init(false);
 
-        com.zizhizhan.legacies.compress.rangecoder.Decoder.InitBitModels(m_IsMatchDecoders);
-        com.zizhizhan.legacies.compress.rangecoder.Decoder.InitBitModels(m_IsRep0LongDecoders);
-        com.zizhizhan.legacies.compress.rangecoder.Decoder.InitBitModels(m_IsRepDecoders);
-        com.zizhizhan.legacies.compress.rangecoder.Decoder.InitBitModels(m_IsRepG0Decoders);
-        com.zizhizhan.legacies.compress.rangecoder.Decoder.InitBitModels(m_IsRepG1Decoders);
-        com.zizhizhan.legacies.compress.rangecoder.Decoder.InitBitModels(m_IsRepG2Decoders);
-        com.zizhizhan.legacies.compress.rangecoder.Decoder.InitBitModels(m_PosDecoders);
+        com.zizhizhan.compress.lzma.rangecoder.Decoder.InitBitModels(m_IsMatchDecoders);
+        com.zizhizhan.compress.lzma.rangecoder.Decoder.InitBitModels(m_IsRep0LongDecoders);
+        com.zizhizhan.compress.lzma.rangecoder.Decoder.InitBitModels(m_IsRepDecoders);
+        com.zizhizhan.compress.lzma.rangecoder.Decoder.InitBitModels(m_IsRepG0Decoders);
+        com.zizhizhan.compress.lzma.rangecoder.Decoder.InitBitModels(m_IsRepG1Decoders);
+        com.zizhizhan.compress.lzma.rangecoder.Decoder.InitBitModels(m_IsRepG2Decoders);
+        com.zizhizhan.compress.lzma.rangecoder.Decoder.InitBitModels(m_PosDecoders);
 
         m_LiteralDecoder.Init();
         int i;

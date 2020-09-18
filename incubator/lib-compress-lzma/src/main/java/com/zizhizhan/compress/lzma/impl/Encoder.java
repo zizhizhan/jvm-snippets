@@ -1,8 +1,8 @@
-package com.zizhizhan.legacies.compress.lzma;
+package com.zizhizhan.compress.lzma.impl;
 
-import com.zizhizhan.legacies.compress.ICodeProgress;
-import com.zizhizhan.legacies.compress.lz.BinTree;
-import com.zizhizhan.legacies.compress.rangecoder.BitTreeEncoder;
+import com.zizhizhan.compress.lzma.ICodeProgress;
+import com.zizhizhan.compress.lzma.lz.BinTree;
+import com.zizhizhan.compress.lzma.rangecoder.BitTreeEncoder;
 
 import java.io.IOException;
 
@@ -61,10 +61,10 @@ public class Encoder {
             short[] m_Encoders = new short[0x300];
 
             public void Init() {
-                com.zizhizhan.legacies.compress.rangecoder.Encoder.InitBitModels(m_Encoders);
+                com.zizhizhan.compress.lzma.rangecoder.Encoder.InitBitModels(m_Encoders);
             }
 
-            public void Encode(com.zizhizhan.legacies.compress.rangecoder.Encoder rangeEncoder, byte symbol)
+            public void Encode(com.zizhizhan.compress.lzma.rangecoder.Encoder rangeEncoder, byte symbol)
                     throws IOException {
                 int context = 1;
                 for (int i = 7; i >= 0; i--) {
@@ -74,7 +74,7 @@ public class Encoder {
                 }
             }
 
-            public void EncodeMatched(com.zizhizhan.legacies.compress.rangecoder.Encoder rangeEncoder, byte matchByte,
+            public void EncodeMatched(com.zizhizhan.compress.lzma.rangecoder.Encoder rangeEncoder, byte matchByte,
                                       byte symbol) throws IOException {
                 int context = 1;
                 boolean same = true;
@@ -99,7 +99,7 @@ public class Encoder {
                     for (; i >= 0; i--) {
                         int matchBit = (matchByte >> i) & 1;
                         int bit = (symbol >> i) & 1;
-                        price += com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice(
+                        price += com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice(
                                 m_Encoders[((1 + matchBit) << 8) + context], bit);
                         context = (context << 1) | bit;
                         if (matchBit != bit) {
@@ -110,7 +110,7 @@ public class Encoder {
                 }
                 for (; i >= 0; i--) {
                     int bit = (symbol >> i) & 1;
-                    price += com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice(m_Encoders[context], bit);
+                    price += com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice(m_Encoders[context], bit);
                     context = (context << 1) | bit;
                 }
                 return price;
@@ -159,7 +159,7 @@ public class Encoder {
         }
 
         public void Init(int numPosStates) {
-            com.zizhizhan.legacies.compress.rangecoder.Encoder.InitBitModels(_choice);
+            com.zizhizhan.compress.lzma.rangecoder.Encoder.InitBitModels(_choice);
 
             for (int posState = 0; posState < numPosStates; posState++) {
                 _lowCoder[posState].Init();
@@ -168,7 +168,7 @@ public class Encoder {
             _highCoder.Init();
         }
 
-        public void Encode(com.zizhizhan.legacies.compress.rangecoder.Encoder rangeEncoder, int symbol, int posState)
+        public void Encode(com.zizhizhan.compress.lzma.rangecoder.Encoder rangeEncoder, int symbol, int posState)
                 throws IOException {
             if (symbol < Base.kNumLowLenSymbols) {
                 rangeEncoder.Encode(_choice, 0, 0);
@@ -187,10 +187,10 @@ public class Encoder {
         }
 
         public void SetPrices(int posState, int numSymbols, int[] prices, int st) {
-            int a0 = com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice0(_choice[0]);
-            int a1 = com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice1(_choice[0]);
-            int b0 = a1 + com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice0(_choice[1]);
-            int b1 = a1 + com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice1(_choice[1]);
+            int a0 = com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice0(_choice[0]);
+            int a1 = com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice1(_choice[0]);
+            int b0 = a1 + com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice0(_choice[1]);
+            int b1 = a1 + com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice1(_choice[1]);
             int i = 0;
             for (i = 0; i < Base.kNumLowLenSymbols; i++) {
                 if (i >= numSymbols)
@@ -206,8 +206,6 @@ public class Encoder {
                 prices[st + i] = b1 + _highCoder.GetPrice(i - Base.kNumLowLenSymbols - Base.kNumMidLenSymbols);
         }
     }
-
-    ;
 
     public static final int kNumLenSpecSymbols = Base.kNumLowLenSymbols + Base.kNumMidLenSymbols;
 
@@ -234,7 +232,7 @@ public class Encoder {
                 UpdateTable(posState);
         }
 
-        public void Encode(com.zizhizhan.legacies.compress.rangecoder.Encoder rangeEncoder, int symbol, int posState)
+        public void Encode(com.zizhizhan.compress.lzma.rangecoder.Encoder rangeEncoder, int symbol, int posState)
                 throws IOException {
             super.Encode(rangeEncoder, symbol, posState);
             if (--_counters[posState] == 0)
@@ -269,7 +267,6 @@ public class Encoder {
 
         public void MakeAsShortRep() {
             BackPrev = 0;
-            ;
             Prev1IsChar = false;
         }
 
@@ -278,11 +275,9 @@ public class Encoder {
         }
     }
 
-    ;
-
     Optimal[] _optimum = new Optimal[kNumOpts];
     BinTree _matchFinder = null;
-    com.zizhizhan.legacies.compress.rangecoder.Encoder _rangeEncoder = new com.zizhizhan.legacies.compress.rangecoder.Encoder();
+    com.zizhizhan.compress.lzma.rangecoder.Encoder _rangeEncoder = new com.zizhizhan.compress.lzma.rangecoder.Encoder();
 
     short[] _isMatch = new short[Base.kNumStates << Base.kNumPosStatesBitsMax];
     short[] _isRep = new short[Base.kNumStates];
@@ -372,13 +367,13 @@ public class Encoder {
         BaseInit();
         _rangeEncoder.Init();
 
-        com.zizhizhan.legacies.compress.rangecoder.Encoder.InitBitModels(_isMatch);
-        com.zizhizhan.legacies.compress.rangecoder.Encoder.InitBitModels(_isRep0Long);
-        com.zizhizhan.legacies.compress.rangecoder.Encoder.InitBitModels(_isRep);
-        com.zizhizhan.legacies.compress.rangecoder.Encoder.InitBitModels(_isRepG0);
-        com.zizhizhan.legacies.compress.rangecoder.Encoder.InitBitModels(_isRepG1);
-        com.zizhizhan.legacies.compress.rangecoder.Encoder.InitBitModels(_isRepG2);
-        com.zizhizhan.legacies.compress.rangecoder.Encoder.InitBitModels(_posEncoders);
+        com.zizhizhan.compress.lzma.rangecoder.Encoder.InitBitModels(_isMatch);
+        com.zizhizhan.compress.lzma.rangecoder.Encoder.InitBitModels(_isRep0Long);
+        com.zizhizhan.compress.lzma.rangecoder.Encoder.InitBitModels(_isRep);
+        com.zizhizhan.compress.lzma.rangecoder.Encoder.InitBitModels(_isRepG0);
+        com.zizhizhan.compress.lzma.rangecoder.Encoder.InitBitModels(_isRepG1);
+        com.zizhizhan.compress.lzma.rangecoder.Encoder.InitBitModels(_isRepG2);
+        com.zizhizhan.compress.lzma.rangecoder.Encoder.InitBitModels(_posEncoders);
 
         _literalEncoder.Init();
         for (int i = 0; i < Base.kNumLenToPosStates; i++)
@@ -416,24 +411,23 @@ public class Encoder {
     }
 
     int GetRepLen1Price(int state, int posState) {
-        return com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice0(_isRepG0[state])
-                + com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice0(
-                _isRep0Long[(state << Base.kNumPosStatesBitsMax) + posState]);
+        return com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice0(_isRepG0[state])
+                + com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice0(_isRep0Long[(state << Base.kNumPosStatesBitsMax) + posState]);
     }
 
     int GetPureRepPrice(int repIndex, int state, int posState) {
         int price;
         if (repIndex == 0) {
-            price = com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice0(_isRepG0[state]);
-            price += com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice1(
+            price = com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice0(_isRepG0[state]);
+            price += com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice1(
                     _isRep0Long[(state << Base.kNumPosStatesBitsMax) + posState]);
         } else {
-            price = com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice1(_isRepG0[state]);
+            price = com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice1(_isRepG0[state]);
             if (repIndex == 1)
-                price += com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice0(_isRepG1[state]);
+                price += com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice0(_isRepG1[state]);
             else {
-                price += com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice1(_isRepG1[state]);
-                price += com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice(_isRepG2[state], repIndex - 2);
+                price += com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice1(_isRepG1[state]);
+                price += com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice(_isRepG2[state], repIndex - 2);
             }
         }
         return price;
@@ -547,15 +541,15 @@ public class Encoder {
 
         int posState = (position & _posStateMask);
 
-        _optimum[1].Price = com.zizhizhan.legacies.compress.rangecoder.Encoder
+        _optimum[1].Price = com.zizhizhan.compress.lzma.rangecoder.Encoder
                 .GetPrice0(_isMatch[(_state << Base.kNumPosStatesBitsMax) + posState])
                 + _literalEncoder.GetSubCoder(position, _previousByte).GetPrice(!Base.StateIsCharState(_state),
                 matchByte, currentByte);
         _optimum[1].MakeAsChar();
 
-        int matchPrice = com.zizhizhan.legacies.compress.rangecoder.Encoder
+        int matchPrice = com.zizhizhan.compress.lzma.rangecoder.Encoder
                 .GetPrice1(_isMatch[(_state << Base.kNumPosStatesBitsMax) + posState]);
-        int repMatchPrice = matchPrice + com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice1(_isRep[_state]);
+        int repMatchPrice = matchPrice + com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice1(_isRep[_state]);
 
         if (matchByte == currentByte) {
             int shortRepPrice = repMatchPrice + GetRepLen1Price(_state, posState);
@@ -601,7 +595,7 @@ public class Encoder {
             } while (--repLen >= 2);
         }
 
-        int normalMatchPrice = matchPrice + com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice0(_isRep[_state]);
+        int normalMatchPrice = matchPrice + com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice0(_isRep[_state]);
 
         len = ((repLens[0] >= 2) ? repLens[0] + 1 : 2);
         if (len <= lenMain) {
@@ -717,8 +711,7 @@ public class Encoder {
             posState = (position & _posStateMask);
 
             int curAnd1Price = curPrice
-                    + com.zizhizhan.legacies.compress.rangecoder.Encoder
-                    .GetPrice0(_isMatch[(state << Base.kNumPosStatesBitsMax) + posState])
+                    + com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice0(_isMatch[(state << Base.kNumPosStatesBitsMax) + posState])
                     + _literalEncoder.GetSubCoder(position, _matchFinder.GetIndexByte(0 - 2)).GetPrice(
                     !Base.StateIsCharState(state), matchByte, currentByte);
 
@@ -733,9 +726,9 @@ public class Encoder {
             }
 
             matchPrice = curPrice
-                    + com.zizhizhan.legacies.compress.rangecoder.Encoder
+                    + com.zizhizhan.compress.lzma.rangecoder.Encoder
                     .GetPrice1(_isMatch[(state << Base.kNumPosStatesBitsMax) + posState]);
-            repMatchPrice = matchPrice + com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice1(_isRep[state]);
+            repMatchPrice = matchPrice + com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice1(_isRep[state]);
 
             if (matchByte == currentByte && !(nextOptimum.PosPrev < cur && nextOptimum.BackPrev == 0)) {
                 int shortRepPrice = repMatchPrice + GetRepLen1Price(state, posState);
@@ -761,12 +754,10 @@ public class Encoder {
                 int lenTest2 = _matchFinder.GetMatchLen(0, reps[0], t);
                 if (lenTest2 >= 2) {
                     int state2 = Base.StateUpdateChar(state);
-
                     int posStateNext = (position + 1) & _posStateMask;
                     int nextRepMatchPrice = curAnd1Price
-                            + com.zizhizhan.legacies.compress.rangecoder.Encoder
-                            .GetPrice1(_isMatch[(state2 << Base.kNumPosStatesBitsMax) + posStateNext])
-                            + com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice1(_isRep[state2]);
+                            + com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice1(_isMatch[(state2 << Base.kNumPosStatesBitsMax) + posStateNext])
+                            + com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice1(_isRep[state2]);
                     {
                         int offset = cur + 1 + lenTest2;
                         while (lenEnd < offset)
@@ -818,8 +809,7 @@ public class Encoder {
                         int posStateNext = (position + lenTest) & _posStateMask;
                         int curAndLenCharPrice = repMatchPrice
                                 + GetRepPrice(repIndex, lenTest, state, posState)
-                                + com.zizhizhan.legacies.compress.rangecoder.Encoder
-                                .GetPrice0(_isMatch[(state2 << Base.kNumPosStatesBitsMax) + posStateNext])
+                                + com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice0(_isMatch[(state2 << Base.kNumPosStatesBitsMax) + posStateNext])
                                 + _literalEncoder.GetSubCoder(position + lenTest,
                                 _matchFinder.GetIndexByte(lenTest - 1 - 1)).GetPrice(true,
                                 _matchFinder.GetIndexByte(lenTest - 1 - (reps[repIndex] + 1)),
@@ -827,10 +817,9 @@ public class Encoder {
                         state2 = Base.StateUpdateChar(state2);
                         posStateNext = (position + lenTest + 1) & _posStateMask;
                         int nextMatchPrice = curAndLenCharPrice
-                                + com.zizhizhan.legacies.compress.rangecoder.Encoder
-                                .GetPrice1(_isMatch[(state2 << Base.kNumPosStatesBitsMax) + posStateNext]);
+                                + com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice1(_isMatch[(state2 << Base.kNumPosStatesBitsMax) + posStateNext]);
                         int nextRepMatchPrice = nextMatchPrice
-                                + com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice1(_isRep[state2]);
+                                + com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice1(_isRep[state2]);
 
                         // for(; lenTest2 >= 2; lenTest2--)
                         {
@@ -861,7 +850,7 @@ public class Encoder {
                 numDistancePairs += 2;
             }
             if (newLen >= startLen) {
-                normalMatchPrice = matchPrice + com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice0(_isRep[state]);
+                normalMatchPrice = matchPrice + com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice0(_isRep[state]);
                 while (lenEnd < cur + newLen)
                     _optimum[++lenEnd].Price = kIfinityPrice;
 
@@ -888,22 +877,17 @@ public class Encoder {
                                 int state2 = Base.StateUpdateMatch(state);
 
                                 int posStateNext = (position + lenTest) & _posStateMask;
-                                int curAndLenCharPrice = curAndLenPrice
-                                        + com.zizhizhan.legacies.compress.rangecoder.Encoder
-                                        .GetPrice0(_isMatch[(state2 << Base.kNumPosStatesBitsMax)
-                                                + posStateNext])
-                                        + _literalEncoder.GetSubCoder(position + lenTest,
-                                        _matchFinder.GetIndexByte(lenTest - 1 - 1)).GetPrice(true,
-                                        _matchFinder.GetIndexByte(lenTest - (curBack + 1) - 1),
-                                        _matchFinder.GetIndexByte(lenTest - 1));
+                                int curAndLenCharPrice = curAndLenPrice  + com.zizhizhan.compress.lzma.rangecoder.Encoder
+                                        .GetPrice0(_isMatch[(state2 << Base.kNumPosStatesBitsMax)  + posStateNext]) + _literalEncoder
+                                        .GetSubCoder(position + lenTest, _matchFinder.GetIndexByte(lenTest - 1 - 1))
+                                        .GetPrice(true, _matchFinder.GetIndexByte(lenTest - (curBack + 1) - 1), _matchFinder.GetIndexByte(lenTest - 1));
                                 state2 = Base.StateUpdateChar(state2);
                                 posStateNext = (position + lenTest + 1) & _posStateMask;
                                 int nextMatchPrice = curAndLenCharPrice
-                                        + com.zizhizhan.legacies.compress.rangecoder.Encoder
-                                        .GetPrice1(_isMatch[(state2 << Base.kNumPosStatesBitsMax)
-                                                + posStateNext]);
+                                        + com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice1(_isMatch[(state2 << Base.kNumPosStatesBitsMax)
+                                        + posStateNext]);
                                 int nextRepMatchPrice = nextMatchPrice
-                                        + com.zizhizhan.legacies.compress.rangecoder.Encoder.GetPrice1(_isRep[state2]);
+                                        + com.zizhizhan.compress.lzma.rangecoder.Encoder.GetPrice1(_isRep[state2]);
 
                                 int offset = lenTest + 1 + lenTest2;
                                 while (lenEnd < cur + offset)
@@ -1195,7 +1179,7 @@ public class Encoder {
             for (posSlot = 0; posSlot < _distTableSize; posSlot++)
                 _posSlotPrices[st + posSlot] = encoder.GetPrice(posSlot);
             for (posSlot = Base.kEndPosModelIndex; posSlot < _distTableSize; posSlot++)
-                _posSlotPrices[st + posSlot] += ((((posSlot >> 1) - 1) - Base.kNumAlignBits) << com.zizhizhan.legacies.compress.rangecoder.Encoder.kNumBitPriceShiftBits);
+                _posSlotPrices[st + posSlot] += ((((posSlot >> 1) - 1) - Base.kNumAlignBits) << com.zizhizhan.compress.lzma.rangecoder.Encoder.kNumBitPriceShiftBits);
 
             int st2 = lenToPosState * Base.kNumFullDistances;
             int i;

@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.compress.lzma;
+package com.zizhizhan.compress.lzma.impl;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -214,8 +214,8 @@ public class LzmaAlone {
             outStream.flush();
             outStream.close();
             inStream.close();
-        } else
+        } else {
             throw new Exception("Incorrect command");
-        return;
+        }
     }
 }

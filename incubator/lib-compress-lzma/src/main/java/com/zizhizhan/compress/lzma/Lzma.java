@@ -1,7 +1,7 @@
-package com.zizhizhan.legacies.compress;
+package com.zizhizhan.compress.lzma;
 
-import com.zizhizhan.legacies.compress.lzma.Decoder;
-import com.zizhizhan.legacies.compress.lzma.Encoder;
+import com.zizhizhan.compress.lzma.impl.Decoder;
+import com.zizhizhan.compress.lzma.impl.Encoder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
@@ -21,13 +21,8 @@ public abstract class Lzma {
     }
 
     public static void encode(byte[] data, File file) throws IOException {
-        FileOutputStream fos = new FileOutputStream(file);
-        ByteArrayInputStream bais = new ByteArrayInputStream(data);
-        try {
+        try (FileOutputStream fos = new FileOutputStream(file); ByteArrayInputStream bais = new ByteArrayInputStream(data)) {
             encode(bais, fos);
-        } finally {
-            bais.close();
-            fos.close();
         }
     }
 

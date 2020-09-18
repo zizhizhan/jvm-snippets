@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.compress.rangecoder;
+package com.zizhizhan.compress.lzma.rangecoder;
 
 import java.io.IOException;
 

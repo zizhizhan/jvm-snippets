@@ -1,6 +1,6 @@
 // LZ.InWindow
 
-package com.zizhizhan.legacies.compress.lz;
+package com.zizhizhan.compress.lzma.lz;
 
 import java.io.IOException;
 

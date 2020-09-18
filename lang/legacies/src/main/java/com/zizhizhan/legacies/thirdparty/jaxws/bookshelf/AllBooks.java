@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.zizhizhan.legacies.thirdparty.jaxws.bookshelf.domain.Document;
-import com.zizhizhan.legacies.compress.Lzma;
+import com.zizhizhan.compress.lzma.Lzma;
 import lombok.extern.slf4j.Slf4j;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

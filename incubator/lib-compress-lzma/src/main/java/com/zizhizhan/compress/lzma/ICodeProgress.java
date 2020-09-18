@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.compress;
+package com.zizhizhan.compress.lzma;
 
 public interface ICodeProgress {
 

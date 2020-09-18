@@ -1,6 +1,5 @@
 // Base.java
-
-package com.zizhizhan.legacies.compress.lzma;
+package com.zizhizhan.compress.lzma.impl;
 
 public class Base {
     public static final int kNumRepDistances = 4;
@@ -74,7 +73,6 @@ public class Base {
     public static final int kNumHighLenBits = 8;
     public static final int kNumLowLenSymbols = 1 << kNumLowLenBits;
     public static final int kNumMidLenSymbols = 1 << kNumMidLenBits;
-    public static final int kNumLenSymbols = kNumLowLenSymbols + kNumMidLenSymbols +
-            (1 << kNumHighLenBits);
+    public static final int kNumLenSymbols = kNumLowLenSymbols + kNumMidLenSymbols + (1 << kNumHighLenBits);
     public static final int kMatchMaxLen = kMatchMinLen + kNumLenSymbols - 1;
 }

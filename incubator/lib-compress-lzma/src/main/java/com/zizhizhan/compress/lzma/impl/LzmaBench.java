@@ -1,7 +1,7 @@
-package com.zizhizhan.legacies.compress.lzma;
+package com.zizhizhan.compress.lzma.impl;
 
-import com.zizhizhan.legacies.compress.CRC;
-import com.zizhizhan.legacies.compress.ICodeProgress;
+import com.zizhizhan.compress.lzma.CRC;
+import com.zizhizhan.compress.lzma.ICodeProgress;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -121,7 +121,7 @@ public class LzmaBench {
     }
 
     static class CrcOutStream extends java.io.OutputStream {
-        public com.zizhizhan.legacies.compress.CRC CRC = new CRC();
+        public CRC CRC = new CRC();
 
         public void Init() {
             CRC.Init();

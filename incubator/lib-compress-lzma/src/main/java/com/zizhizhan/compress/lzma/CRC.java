@@ -1,6 +1,6 @@
 // SevenZip/CRC.java
 
-package com.zizhizhan.legacies.compress;
+package com.zizhizhan.compress.lzma;
 
 public class CRC {
 
