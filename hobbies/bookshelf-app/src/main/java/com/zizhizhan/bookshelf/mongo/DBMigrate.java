@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.thirdparty.jaxws.bookshelf.mongo;
+package com.zizhizhan.bookshelf.mongo;
 
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DB;
@@ -7,13 +7,14 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
-import com.zizhizhan.legacies.thirdparty.jaxws.bookshelf.AllBooks;
-import com.zizhizhan.legacies.thirdparty.jaxws.bookshelf.domain.Document;
+import com.zizhizhan.bookshelf.AllBooks;
+import com.zizhizhan.bookshelf.domain.Document;
+import lombok.extern.slf4j.Slf4j;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class DBMigrate {
 
 	public static void file2db() throws MongoException {
@@ -44,11 +45,10 @@ public class DBMigrate {
 				.add("accessTime", doc.getAccessTime())	
 				.get());
 		}
-		
 		collection.insert(objects);
 	}
 
-	public static void testdb() {
+	public static void testDB() {
 		try {
 			Mongo mongo = new Mongo("localhost", 27017);
 			DB db = mongo.getDB("bookshelf");
@@ -61,12 +61,12 @@ public class DBMigrate {
 				System.out.println(cursor.next());
 			}
 		} catch (MongoException e) {
-			e.printStackTrace();
+			log.error("Can't test db.", e);
 		}
 	}
 
-	public static void main(String[] args) throws UnknownHostException, MongoException {
-		testdb();
+	public static void main(String[] args) throws MongoException {
+		testDB();
 	}
 
 }

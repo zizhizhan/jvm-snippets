@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.thirdparty.jaxws.bookshelf.web;
+package com.zizhizhan.bookshelf.web;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.zizhizhan.compress.lzma.Lzma;
-import com.zizhizhan.legacies.thirdparty.jaxws.bookshelf.domain.Document;
+import com.zizhizhan.bookshelf.domain.Document;
 import lombok.extern.slf4j.Slf4j;
 
 import com.google.gson.Gson;
@@ -33,7 +33,8 @@ public class SimplyBookShelf extends HttpServlet {
     @Override
     public void init() throws ServletException {
         File jsonfile = new File(".books/json_final.lzma");
-        Type type = new TypeToken<List<Document>>() {}.getType();
+        Type type = new TypeToken<List<Document>>() {
+        }.getType();
         try {
             byte[] result = Lzma.decode(jsonfile);
             books = gson.fromJson(new String(result, UTF8), type);

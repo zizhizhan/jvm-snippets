@@ -1,25 +1,23 @@
-package com.zizhizhan.legacies.thirdparty.jaxws.bookshelf.domain;
+package com.zizhizhan.bookshelf.domain;
 
-import static com.zizhizhan.legacies.thirdparty.jaxws.bookshelf.domain.BookUtils.author;
-import static com.zizhizhan.legacies.thirdparty.jaxws.bookshelf.domain.BookUtils.bookName;
-import static com.zizhizhan.legacies.thirdparty.jaxws.bookshelf.domain.BookUtils.documentType;
-import static com.zizhizhan.legacies.thirdparty.jaxws.bookshelf.domain.BookUtils.starRating;
-import static com.zizhizhan.legacies.thirdparty.jaxws.bookshelf.domain.BookUtils.version;
+import lombok.extern.slf4j.Slf4j;
+
+import static com.zizhizhan.bookshelf.utils.BookUtils.author;
+import static com.zizhizhan.bookshelf.utils.BookUtils.bookName;
+import static com.zizhizhan.bookshelf.utils.BookUtils.documentType;
+import static com.zizhizhan.bookshelf.utils.BookUtils.starRating;
+import static com.zizhizhan.bookshelf.utils.BookUtils.version;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-
+@Slf4j
 public class BookShelf {
 
     private final AtomicLong generator = new AtomicLong();
-    private final List<Document> books = new ArrayList<Document>();
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final List<Document> books = new ArrayList<>();
     private final File root;
 
     public BookShelf(String path) {
@@ -55,7 +53,7 @@ public class BookShelf {
                     .setAuthors(author(filename)).setVersion(version(filename));
             books.add(builder.build());
         } catch (Exception e) {
-            logger.info("Unexpected Exception.", e);
+            log.info("Unexpected Exception.", e);
         }
     }
 }

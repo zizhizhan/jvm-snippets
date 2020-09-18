@@ -1,4 +1,4 @@
-package com.zizhizhan.legacies.thirdparty.jaxws.bookshelf.web;
+package com.zizhizhan.bookshelf.web;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +11,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.zizhizhan.legacies.thirdparty.jaxws.bookshelf.AllBooks;
-import com.zizhizhan.legacies.thirdparty.jaxws.bookshelf.domain.Document;
-import com.zizhizhan.legacies.util.ReflectionHelper;
+import com.zizhizhan.bookshelf.AllBooks;
+import com.zizhizhan.bookshelf.domain.Document;
+import com.zizhizhan.bookshelf.utils.ReflectionUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BookShelf {
 
     private static final Pattern QUERY_PATTERN = Pattern.compile("^(\\w+)\\s*(>|<|=)\\s*(.+)$");
-    private List<Document> books = AllBooks.get();
+    private final List<Document> books = AllBooks.get();
 
     @GET
     public List<Document> books() {
@@ -72,7 +72,7 @@ public class BookShelf {
                 String fieldName = m.group(1);
                 String operator = m.group(2);
                 String data = m.group(3);
-                Object val = ReflectionHelper.getFieldValue(doc, fieldName);
+                Object val = ReflectionUtils.getFieldValue(doc, fieldName);
 
                 if (val != null && accept(val, operator, data)) {
                     docs.add(doc);

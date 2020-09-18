@@ -10,8 +10,7 @@
     </parent>
     <artifactId>tank-games</artifactId>
     <name>Tank Games</name>
-    <version>0.1</version>
-    <url>http://maven.apache.org</url>
+    <url>http://www.zizhizhan.com</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -224,6 +224,7 @@
         <module>lang/compiler-theory</module>
         <module>incubator/lib-compress-lzma</module>
         <module>hobbies/tank-games</module>
+        <module>hobbies/bookshelf-app</module>
         <module>reflections/reflections-snippets</module>
         <module>reflections/bytebuddy-snippets</module>
         <module>reflections/javassist-snippets</module>
