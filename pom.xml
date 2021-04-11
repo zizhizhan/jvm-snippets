@@ -245,7 +245,6 @@
         <module>reflections/mvel-snippets</module>
         <module>jsr/jsr-codes</module>
         <module>jsr/cache-jsr107</module>
-        <module>jsr/crypto-jsr177</module>
         <module>jsr/jdbc-jsr221</module>
         <module>jsr/servlet-jsr369</module>
     </modules>
