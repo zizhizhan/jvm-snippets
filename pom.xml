@@ -247,6 +247,8 @@
         <module>jsr/cache-jsr107</module>
         <module>jsr/jdbc-jsr221</module>
         <module>jsr/servlet-jsr369</module>
+
+        <module>rfsc/play</module>
     </modules>
 
 </project>

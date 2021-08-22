@@ -93,7 +93,7 @@ public class Du {
 
         try {
             long t1 = System.nanoTime();
-            producers.execute(new Producer(new File("/opt/rootfs/lts")));
+                producers.execute(new Producer(new File("/opt/rootfs/codes")));
             for (int i = 0; i < CORE_SIZE; i++) {
                 consumers.execute(new Consumer());
             }

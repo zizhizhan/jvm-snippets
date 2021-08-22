@@ -90,12 +90,12 @@ public class Du2 {
 
     public static void main(String[] args) throws Exception {
         long t1 = System.nanoTime();
-        long total =  compute(new File("/opt/rootfs/lts"));
+        long total =  compute(new File("/opt/rootfs/codes"));
         long t2 = System.nanoTime();
         System.out.format("Total: %d, time: %d\n", total, t2 - t1);
 
         t1 = System.nanoTime();
-        total =  asyncCompute(new File("/opt/rootfs/lts"));
+        total =  asyncCompute(new File("/opt/rootfs/codes"));
         t2 = System.nanoTime();
         System.out.format("Total: %d, time: %d\n", total, t2 - t1);
     }

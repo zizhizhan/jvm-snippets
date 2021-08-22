@@ -40,7 +40,7 @@ public class GetJarPath {
         // SystemClassLoader is equal to AppClassloader
     }
 
-    private static void showClassJarPath(Class clazz) {
+    private static void showClassJarPath(Class<?> clazz) {
         ProtectionDomain domain = clazz.getProtectionDomain();
         if (domain != null) {
             CodeSource codeSource = domain.getCodeSource();
