@@ -10,8 +10,8 @@ public class LeftRightDeadLock {
 	private final Object right = new Object();
 	
 	public void leftRight() throws InterruptedException{
-		
 		synchronized (left) {
+			log.info("Get left and try to get right");
 			Thread.sleep(1);
 			synchronized (right) {
 				System.out.println("leftRight");
@@ -21,6 +21,7 @@ public class LeftRightDeadLock {
 	
 	public void rightLeft() throws InterruptedException{
 		synchronized (right) {
+			log.info("Get right and try to get left");
 			Thread.sleep(1);
 			synchronized (left) {
 				System.out.println("rightLeft");
