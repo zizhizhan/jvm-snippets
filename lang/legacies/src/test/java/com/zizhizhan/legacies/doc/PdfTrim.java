@@ -54,10 +54,10 @@ public class PdfTrim {
     }
 
     private static void print(Rectangle rectangle) {
-        LOGGER.info("[{}, {}, {}, {}] border: [{}, {}, {}, {}]", rectangle.getTop(), rectangle.getRight(),
-                rectangle.getBottom(), rectangle.getLeft(), rectangle.getBackgroundColor(),
-                rectangle.getBorderWidthRight(), rectangle.getBorderWidthBottom(), rectangle.getBorderWidthLeft(),
-                rectangle.getBackgroundColor());
+        LOGGER.info("[{}, {}, {}, {}] border: [{}, {}, {}, {}], {}",
+                rectangle.getTop(), rectangle.getRight(), rectangle.getBottom(), rectangle.getLeft(),
+                rectangle.getBorderWidthTop(), rectangle.getBorderWidthRight(), rectangle.getBorderWidthBottom(),
+                rectangle.getBorderWidthLeft(), rectangle.getBackgroundColor());
     }
 
 
