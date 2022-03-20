@@ -17,8 +17,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.test.skip>true</maven.test.skip>
-        <junit.version>4.11</junit.version>
-        <guava.version>29.0-jre</guava.version>
+        <junit.version>4.13.1</junit.version>
+        <guava.version>31.1-jre</guava.version>
         <lombok.version>1.18.12</lombok.version>
         <slf4j.version>1.7.30</slf4j.version>
         <logback.version>1.2.3</logback.version>
@@ -192,20 +192,6 @@
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>3.0.2</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.7.0</version>
-                    <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                        <fork>true</fork>
-                        <compilerArgs>
-                            <arg>-XDignore.symbol.file</arg>
-                        </compilerArgs>
-                        <verbose>true</verbose>
-                    </configuration>
-                </plugin>
 
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -228,13 +214,12 @@
     </build>
 
     <modules>
-        <module>lang/local-test-support</module>
-        <module>lang/lang-basic</module>
         <module>lang/memory</module>
         <module>lang/reflections</module>
         <module>lang/legacies</module>
         <module>lang/compiler-theory</module>
         <module>lang/clojure</module>
+        <module>jsr/jsr-codes</module>
         <module>incubator/lib-compress-lzma</module>
         <module>hobbies/tank-games</module>
         <module>hobbies/bookshelf-app</module>
@@ -243,12 +228,7 @@
         <module>reflections/javassist-snippets</module>
         <module>reflections/asm-snippets</module>
         <module>reflections/mvel-snippets</module>
-        <module>jsr/jsr-codes</module>
-        <module>jsr/cache-jsr107</module>
-        <module>jsr/jdbc-jsr221</module>
-        <module>jsr/servlet-jsr369</module>
         <module>rfsc/rfsc-play</module>
-        <module>rfsc/textify</module>
     </modules>
 
 </project>

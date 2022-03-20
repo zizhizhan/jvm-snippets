@@ -11,7 +11,7 @@ import java.util.HashMap;
  */
 public class GCTimeTest {
 
-    private static HashMap<Long, Object> map = new HashMap<>();
+    private static final HashMap<Long, Object> map = new HashMap<>();
 
     public static void main(String[] args) {
         long timeStart = System.currentTimeMillis();
